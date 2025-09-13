@@ -12,32 +12,26 @@ namespace Player
 
         [SerializeField] private PlayerAnimation playerAnimation;
 
+        private InputEvents _inputEvents;
         private float _turnSmoothVelocity;
 
-        private InputManager inputManager;
+        private NavMeshAgent _agent;
 
-        private NavMeshAgent agent;
+        private void Awake()
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
 
         [Inject]
         public void Construct(InputManager inputManager)
         {
-            this.inputManager = inputManager;
+            _inputEvents = inputManager.InputEvents;
+            inputManager.InputEvents.OnMoveButtonPressed += Move;
+            inputManager.InputEvents.OnAttackButtonPressed += Attack;
         }
 
-        private void Awake()
+        private void Move(Vector2 moveInput)
         {
-            agent = GetComponent<NavMeshAgent>();
-        }
-
-        private void Update()
-        {
-            Move();
-        }
-
-        private void Move()
-        {
-            Vector2 moveInput = inputManager.GetMovementInput();
-
             bool isMove = moveInput != Vector2.zero;
 
             playerAnimation.SetMoveAnimation(isMove);
@@ -46,7 +40,7 @@ namespace Player
 
             Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
-            agent.Move(moveDirection * (movementData.MovementSpeed * Time.deltaTime));
+            _agent.Move(moveDirection * (movementData.MovementSpeed * Time.deltaTime));
 
             Rotate(moveDirection);
         }
@@ -61,6 +55,17 @@ namespace Player
                                          movementData.RotationSpeed * Time.deltaTime);
 
              playerAnimation.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+        }
+
+        private void Attack()
+        {
+            playerAnimation.SetAttackAnimation();
+        }
+
+        private void OnDestroy()
+        {
+            _inputEvents.OnMoveButtonPressed -= Move;
+            _inputEvents.OnAttackButtonPressed -= Attack;
         }
     }
 }

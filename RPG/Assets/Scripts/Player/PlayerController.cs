@@ -12,6 +12,8 @@ namespace Player
 
         [SerializeField] private PlayerAnimation playerAnimation;
 
+        public Quaternion Rotation => playerAnimation.transform.rotation;
+
         private InputEvents _inputEvents;
         private float _turnSmoothVelocity;
 

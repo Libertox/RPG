@@ -1,3 +1,4 @@
+using InputSystem.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,20 +8,34 @@ namespace InputSystem
 {
     public class InputManager: IDisposable, ITickable
     {
-        private readonly InputActions inputActions;
+        public Action<ControllerType> OnControllerChanged;
         public InputEvents InputEvents { get; private set; }
 
-        public InputManager()
+        private readonly InputActions _inputActions;
+        private readonly InputIconsContainer _iconsContainer;
+
+        private ControllerType _currentControllerType = ControllerType.PC;
+        private ControllerType _lastControllerType;
+
+        public InputManager(InputIconsContainer inputIconsContainer)
         {
-            inputActions = new InputActions();
-            InputEvents = new InputEvents();
-            inputActions.Enable();
+            _inputActions = new();
+            InputEvents = new();
+            _iconsContainer = inputIconsContainer;
+
+            _inputActions.Enable();
             SubscribeInputAction();
         }
 
         private void SubscribeInputAction()
         {
-            inputActions.Player.Attack.performed += OnAttackButtonPerformed;
+            _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
+            _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
+        }
+
+        private void OnInteractButtonPerformed(InputAction.CallbackContext action)
+        {
+            InputEvents.InvokeOnInteractButtonPressed();
         }
 
         private void OnAttackButtonPerformed(InputAction.CallbackContext action)
@@ -28,14 +43,43 @@ namespace InputSystem
             InputEvents.InvokeOnAttackButtonPressed();
         }
 
+        public Sprite GetIconForPromptType(PromptType promptType)
+        {
+            return _iconsContainer.GetInputIcons(promptType, _currentControllerType);
+        }
+
+
         public void Tick()
         {
             HandleMoveAction();
+
+            SetActiveController();
+        }
+
+        private void SetActiveController()
+        {
+            foreach (var device in UnityEngine.InputSystem.InputSystem.devices)
+            {
+                if (device.wasUpdatedThisFrame)
+                {
+                    if (device.displayName == "Mouse" || device.displayName == "Keyboard")
+                        _currentControllerType = ControllerType.PC;
+                    else
+                        _currentControllerType = ControllerType.PSGamePad;
+
+                    if(_lastControllerType != _currentControllerType)
+                    {
+                        OnControllerChanged?.Invoke(_currentControllerType);
+                    }
+                        
+                    _lastControllerType = _currentControllerType;
+                }
+            }
         }
 
         private void HandleMoveAction()
         {
-            var moveActionInput = inputActions.Player.Move.ReadValue<Vector2>();
+            var moveActionInput = _inputActions.Player.Move.ReadValue<Vector2>();
 
             InputEvents.InvokeOnMoveButtonPressed(moveActionInput);
         }
@@ -43,7 +87,7 @@ namespace InputSystem
 
         public void Dispose()
         {
-            inputActions.Dispose();
+            _inputActions.Dispose();
         }
 
        

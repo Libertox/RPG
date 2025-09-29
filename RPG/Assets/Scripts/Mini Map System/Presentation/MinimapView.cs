@@ -15,7 +15,7 @@ namespace MiniMapSystem.Presentation
         [SerializeField] private MinimapIcon iconPrefab;
 
         private Vector2 _miniMapScale;
-        private PlayerController _playerController;
+        private IMotionController _playerController;
         private MinimapController _minimapController;
         private MinimapIconPool _iconPool;
 
@@ -23,7 +23,7 @@ namespace MiniMapSystem.Presentation
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _dynamicIcons = new();
 
         [Inject]
-        public void Construct(PlayerController playerController, MinimapController minimapController)
+        public void Construct(IMotionController playerController, MinimapController minimapController)
         {
             _playerController = playerController;
             _minimapController = minimapController;
@@ -86,7 +86,7 @@ namespace MiniMapSystem.Presentation
 
         private void UpdateMapPosition()
         {
-            var miniMapPosition = ConvertWorldPositionToMinimapPosition(-_playerController.transform.position);
+            var miniMapPosition = ConvertWorldPositionToMinimapPosition(-_playerController.Position);
             mapTexture.anchoredPosition = miniMapPosition;
         }
 

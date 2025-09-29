@@ -7,7 +7,7 @@ namespace InputSystem
     {
         public event Action<Vector2> OnMoveButtonPressed;
         public event Action OnAttackButtonPressed;
-
+        public event Action OnInteractButtonPressed;
 
         public void InvokeOnMoveButtonPressed(Vector2 moveInput)
         {
@@ -17,6 +17,11 @@ namespace InputSystem
         public void InvokeOnAttackButtonPressed()
         {
             OnAttackButtonPressed?.Invoke();
+        }
+
+        public void InvokeOnInteractButtonPressed()
+        {
+            OnInteractButtonPressed?.Invoke();
         }
 
     }

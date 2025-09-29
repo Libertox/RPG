@@ -6,13 +6,14 @@ using Zenject;
 
 namespace Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerMotionController : MonoBehaviour, IMotionController
     {
         [SerializeField] private PlayerMovementData movementData;
 
         [SerializeField] private PlayerAnimation playerAnimation;
 
         public Quaternion Rotation => playerAnimation.transform.rotation;
+        public Vector3 Position => transform.position;
 
         private InputEvents _inputEvents;
         private float _turnSmoothVelocity;
@@ -29,10 +30,9 @@ namespace Player
         {
             _inputEvents = inputManager.InputEvents;
             inputManager.InputEvents.OnMoveButtonPressed += Move;
-            inputManager.InputEvents.OnAttackButtonPressed += Attack;
         }
 
-        private void Move(Vector2 moveInput)
+        public void Move(Vector2 moveInput)
         {
             bool isMove = moveInput != Vector2.zero;
 
@@ -47,7 +47,7 @@ namespace Player
             Rotate(moveDirection);
         }
 
-        private void Rotate(Vector3 rotationDirection)
+        public void Rotate(Vector3 rotationDirection)
         {
              float targetAngle = Mathf.Atan2(rotationDirection.x, rotationDirection.z) * Mathf.Rad2Deg;
              float smoothedAngle = Mathf.SmoothDampAngle(
@@ -59,15 +59,9 @@ namespace Player
              playerAnimation.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
         }
 
-        private void Attack()
-        {
-            playerAnimation.SetAttackAnimation();
-        }
-
         private void OnDestroy()
         {
             _inputEvents.OnMoveButtonPressed -= Move;
-            _inputEvents.OnAttackButtonPressed -= Attack;
         }
     }
 }

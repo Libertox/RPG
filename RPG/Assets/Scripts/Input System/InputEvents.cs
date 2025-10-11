@@ -9,6 +9,9 @@ namespace InputSystem
         public event Action OnAttackButtonPressed;
         public event Action OnInteractButtonPressed;
 
+        public event Action OnSubmitButtonPressed;
+        public event Action OnContinueButtonPressed;
+
         public void InvokeOnMoveButtonPressed(Vector2 moveInput)
         {
             OnMoveButtonPressed?.Invoke(moveInput);
@@ -22,6 +25,16 @@ namespace InputSystem
         public void InvokeOnInteractButtonPressed()
         {
             OnInteractButtonPressed?.Invoke();
+        }
+
+        public void InvokeOnSubmitButtonPressed()
+        {
+            OnSubmitButtonPressed?.Invoke();
+        }
+
+        public void InvokeOnContinueButtonPressed()
+        {
+            OnContinueButtonPressed?.Invoke();
         }
 
     }

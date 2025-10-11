@@ -3,8 +3,6 @@ using InteractionPromptSystem.Presentation;
 using Player;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using Utility;
 using Zenject;
 
 namespace InteractionPromptSystem
@@ -45,44 +43,56 @@ namespace InteractionPromptSystem
             _providers.Remove(promptProvider);
         }
 
- 
+
         private void Update()
         {
             foreach (var provider in _providers)
             {
                 float distance = Vector3.Distance(_playerMotionController.Position, provider.TargetPosition);
+                bool withinPromptRange = distance < _showPromptMaxDistance;
 
-                if(distance < _showPromptMaxDistance)
+                if (withinPromptRange)
                 {
-                    if (!_icons.ContainsKey(provider))
-                    {
-                        PromptIcon icon = _promptIconFactory.Get();
-                        icon.transform.position = provider.PromptPosition;
-                        _icons.Add(provider, icon);
-                    }
-
-                   _icons[provider].SetVisibility(Mathf.InverseLerp(_showPromptMaxDistance, _showPromptMinDistance, distance));
-                   _icons[provider].LookAtCameraPosition();
-
-                    if(distance < _interactionRange)
-                    {
-                        _icons[provider].SetIcon(_inputManager.GetIconForPromptType(provider.Type));
-                    }
-                    else
-                    {
-                        _icons[provider].ResetIcon();
-                    }
+                    HandlePrompt(provider, distance);
                 }
                 else
                 {
-                    if (_icons.ContainsKey(provider))
-                    {
-                        _promptIconFactory.Release(_icons[provider]);
-                        _icons.Remove(provider);
-                    }    
+                    RemovePrompt(provider);
                 }
             }
         }
 
+        private void HandlePrompt(IPromptProvider provider, float distance)
+        {
+            if (!_icons.TryGetValue(provider, out var icon))
+            {
+                icon = _promptIconFactory.Get();
+                icon.transform.position = provider.PromptPosition;
+                _icons.Add(provider, icon);
+            }
+
+            icon.SetVisibility(Mathf.InverseLerp(_showPromptMaxDistance, _showPromptMinDistance, distance));
+            icon.LookAtCameraPosition();
+
+            if (distance < _interactionRange)
+            {
+                icon.SetIcon(_inputManager.GetIconForPromptType(provider.Type));
+            }
+            else
+            {
+                icon.ResetIcon();
+            }
+        }
+
+        private void RemovePrompt(IPromptProvider provider)
+        {
+            if (_icons.TryGetValue(provider, out var icon))
+            {
+                _promptIconFactory.Release(icon);
+                _icons.Remove(provider);
+            }
+        }
+
     }
+
 }

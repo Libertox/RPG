@@ -140,6 +140,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: spritesheet-default_2
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 152
+        width: 62
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 22, y: 27, z: 17, w: 22}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c114278296646a64294abfe91315b1ab
+      internalID: -1159453562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet-default_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 472
+        width: 255
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c44de833f5d8204a886845d22bc6206
+      internalID: -1096948943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet-default_4
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 152
+        width: 65
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 21, y: 21, z: 20, w: 23}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb26a7fcc2d84604f929170c456a50e2
+      internalID: 1893244007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet-default_5
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d77448e5194652f4a9e492dd915f617b
+      internalID: -1847117933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -156,6 +244,10 @@ TextureImporter:
     nameFileIdTable:
       spritesheet-default_0: 2124351255
       spritesheet-default_1: -2120588595
+      spritesheet-default_2: -1159453562
+      spritesheet-default_3: -1096948943
+      spritesheet-default_4: 1893244007
+      spritesheet-default_5: -1847117933
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

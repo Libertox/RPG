@@ -24,6 +24,7 @@ namespace InputSystem
             _iconsContainer = inputIconsContainer;
 
             _inputActions.Enable();
+
             SubscribeInputAction();
         }
 
@@ -31,6 +32,19 @@ namespace InputSystem
         {
             _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
             _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
+
+            _inputActions.UI.Submit.performed += OnSubmitButtonPerformed;
+            _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
+        }
+
+        private void OnContinueButtonPerformed(InputAction.CallbackContext action)
+        {
+            InputEvents.InvokeOnContinueButtonPressed();
+        }
+
+        private void OnSubmitButtonPerformed(InputAction.CallbackContext action)
+        {
+            InputEvents.InvokeOnSubmitButtonPressed();
         }
 
         private void OnInteractButtonPerformed(InputAction.CallbackContext action)
@@ -43,11 +57,22 @@ namespace InputSystem
             InputEvents.InvokeOnAttackButtonPressed();
         }
 
+        public void EnableGameMap(bool enable = true)
+        {
+            if(enable) _inputActions.Player.Enable();
+            else _inputActions.Player.Disable();
+        }
+
+        public void EnableUIMap(bool enable = true)
+        {
+            if (enable) _inputActions.UI.Enable();
+            else _inputActions.UI.Disable();
+        }
+
         public Sprite GetIconForPromptType(PromptType promptType)
         {
             return _iconsContainer.GetInputIcons(promptType, _currentControllerType);
         }
-
 
         public void Tick()
         {

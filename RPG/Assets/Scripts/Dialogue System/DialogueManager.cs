@@ -1,5 +1,6 @@
-﻿using InputSystem;
-using System;
+﻿using System;
+using UI;
+using UI.DialogueView;
 using UnityEngine;
 using Zenject;
 
@@ -16,15 +17,15 @@ namespace DialogueSystem
 
         private int _currentDialogueLine;
 
-        private InputManager _inputManager;
+        private UIViewManager _viewManager;
 
         [Inject]
-        public void Construct(InputManager inputManager)
+        public void Construct(UIViewManager viewManager)
         {
-            _inputManager = inputManager;
+            _viewManager = viewManager;
         }
 
-        public void StartDialogue(DialogueContainer dialogueContainer)
+        public async void StartDialogue(DialogueContainer dialogueContainer)
         {
             _currentDialogue = dialogueContainer;
 
@@ -32,9 +33,9 @@ namespace DialogueSystem
 
             OnDialogueStarted?.Invoke();
 
-            _inputManager.EnableGameMap(false);
+            await _viewManager.TryOpenView<DialogueView>(true);
 
-            OnDialgoueLineChanged?.Invoke(_currentDialogue.Dialogues[_currentDialogueLine]);
+            OnDialgoueLineChanged?.Invoke(_currentDialogue.Dialogues[_currentDialogueLine]);       
         }
 
         public void ChangeToNextDialogueLine()
@@ -43,7 +44,6 @@ namespace DialogueSystem
 
             if (IsDialogueComplete())
             {
-                _inputManager.EnableGameMap(true);
                 OnDialogueCompleted?.Invoke();
                 return;
             }

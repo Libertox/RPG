@@ -1,14 +1,15 @@
-﻿using InputSystem;
-using System.Collections;
+﻿using DialogueSystem;
+using InputSystem;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace DialogueSystem.Presentation
+namespace UI.DialogueView
 {
-    public class DialogueView : MonoBehaviour
+    public class DialogueView : MonoBehaviour, IView
     {
         [SerializeField] private float typewriteAnimationDuration = 0.02f;
 
@@ -21,51 +22,80 @@ namespace DialogueSystem.Presentation
 
         private DialogueManager _dialogueManager;
         private InputManager _inputManager;
+        private UIViewManager _uIViewManager;
 
         private Coroutine _typingCoroutine;
 
         private TypewriterEffect _typewriterEffect;
 
         [Inject]
-        public void Construct(DialogueManager dialogueManager, InputManager inputManager)
+        public void Construct(DialogueManager dialogueManager, InputManager inputManager, UIViewManager uIViewManager)
         {
             _dialogueManager = dialogueManager;
             _inputManager = inputManager;
+            _uIViewManager = uIViewManager;
 
             SubscribeDialogueEvents();
         }
 
-        private void Awake()
+        public void Initialize()
         {
             continueButton.onClick.AddListener(OnContinueButtonClick);
 
             _typewriterEffect = new TypewriterEffect(typewriteAnimationDuration);
         }
 
-        private void SubscribeDialogueEvents()
+        public void Open()
         {
-            _dialogueManager.OnDialogueStarted += Open;
-            _dialogueManager.OnDialogueCompleted += Hide;
-            _dialogueManager.OnDialgoueLineChanged += UpdateContent;
+            gameObject.SetActive(true);
         }
 
-        private void UnsubscribeDialogueEvents()
+        public Task OpenAsync()
         {
-            _dialogueManager.OnDialogueStarted -= Open;
-            _dialogueManager.OnDialogueCompleted -= Hide;
-            _dialogueManager.OnDialgoueLineChanged -= UpdateContent;
+            Open();
+
+            return Task.CompletedTask;
         }
 
-        private void SubscribeInputEvents()
+        public void Close()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public Task CloseAsync()
+        {
+            Close();
+
+            return Task.CompletedTask;
+        }
+
+        public async void OpenPreviewView()
+        {
+            await _uIViewManager.OpenPreviousView();
+        }
+
+        public void SubscribeToInputEvents()
         {
             _inputManager.InputEvents.OnSubmitButtonPressed += ShowNextDialogueLine;
             _inputManager.InputEvents.OnContinueButtonPressed += ShowNextDialogueLine;
         }
 
-        private void UnsubscribeInputEvents()
+        public void UnsubscribeToInputEvents()
         {
             _inputManager.InputEvents.OnSubmitButtonPressed -= ShowNextDialogueLine;
             _inputManager.InputEvents.OnContinueButtonPressed -= ShowNextDialogueLine;
+        }
+
+        private void SubscribeDialogueEvents()
+        {
+            _dialogueManager.OnDialogueCompleted += OpenPreviewView;
+            _dialogueManager.OnDialgoueLineChanged += UpdateContent;
+        }
+
+        private void UnsubscribeDialogueEvents()
+        {
+            _dialogueManager.OnDialogueCompleted -= OpenPreviewView;
+            _dialogueManager.OnDialgoueLineChanged -= UpdateContent;
         }
 
     
@@ -109,23 +139,13 @@ namespace DialogueSystem.Presentation
 
             return true;
         }
-
-        private void Open()
-        {
-            SubscribeInputEvents();
-            gameObject.SetActive(true);
-        }
-
-        private void Hide()
-        {
-            UnsubscribeInputEvents();
-            gameObject.SetActive(false);
-        }
-
+     
         private void OnDestroy()
         {
             UnsubscribeDialogueEvents();
-            UnsubscribeInputEvents();
+            UnsubscribeToInputEvents();
         }
+
+       
     }
 }

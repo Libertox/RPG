@@ -40,6 +40,8 @@ namespace InteractionPromptSystem
 
         public void UnregisterPromptProvider(IPromptProvider promptProvider)
         {
+            RemovePrompt(promptProvider);
+
             _providers.Remove(promptProvider);
         }
 

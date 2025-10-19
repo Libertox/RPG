@@ -1,9 +1,10 @@
-﻿using Player;
+﻿using MiniMapSystem;
+using Player;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace MiniMapSystem.Presentation
+namespace UI.MinimapView
 {
     public class MinimapView : MonoBehaviour
     {
@@ -67,7 +68,7 @@ namespace MiniMapSystem.Presentation
             MinimapIcon icon = _iconPool.GetMinimapIcon()
                 .SetIcon(minimapEntity.MarkerData.Icon)
                 .SetSize(minimapEntity.MarkerData.Size)
-                .SetPosition(minimapEntity.Position);
+                .SetPosition(ConvertWorldPositionToMinimapPosition(minimapEntity.Position));
 
             if (minimapEntity.IsStatic)
                 _staticIcons.Add(minimapEntity, icon);

@@ -56,7 +56,7 @@ namespace QuestSystem
 
         private void TryInvokeDialogueDuringQuest()
         {
-            if (quest.IsInProgress() && enableMidQuestDialogue)
+            if (quest.IsInProgress() && enableMidQuestDialogue && !questStep.IsActive)
             {
                 _dialogueManager.StartDialogue(dialogueDuringQuest);
             }

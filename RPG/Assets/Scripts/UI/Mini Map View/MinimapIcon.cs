@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MiniMapSystem.Presentation
+namespace UI.MinimapView
 {
     public class MinimapIcon : MonoBehaviour
     {

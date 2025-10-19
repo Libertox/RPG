@@ -1,11 +1,9 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace DialogueSystem.Presentation
+namespace UI.DialogueView
 {
     public class TypewriterEffect
     {

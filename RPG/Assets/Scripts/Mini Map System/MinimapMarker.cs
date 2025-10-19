@@ -8,6 +8,8 @@ namespace MiniMapSystem
 {
     public class MinimapMarker : MonoBehaviour, IMinimapEntity
     {
+        [SerializeField] private bool registerMarkerOnAwake = true;
+
         [SerializeField] private bool isStaticMarker;
 
         [SerializeField] private MinimapMarkerData markerData;
@@ -15,6 +17,8 @@ namespace MiniMapSystem
         public bool IsStatic => isStaticMarker;
         public MinimapMarkerData MarkerData => markerData;
         public Vector3 Position => transform.position;
+        public MinimapController MinimapController => _minimapController;
+
 
 
         private MinimapController _minimapController;
@@ -25,12 +29,13 @@ namespace MiniMapSystem
             _minimapController = minimapController;
         }
 
-        private void Start()
+        protected virtual void Start()
         {
-            _minimapController.RegisterMinimapEntity(this);
+            if(registerMarkerOnAwake)
+                _minimapController.RegisterMinimapEntity(this);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             _minimapController?.UnregisterMinimapEntity(this);
         }

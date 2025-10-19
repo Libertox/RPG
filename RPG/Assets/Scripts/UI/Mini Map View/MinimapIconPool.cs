@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
 
-namespace MiniMapSystem.Presentation
+namespace UI.MinimapView
 {
     public class MinimapIconPool
     {

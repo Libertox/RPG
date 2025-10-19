@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b8a2ac8d6839240982a3d2a7bdf931, type: 3}
   m_Name: Quest_1
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Whispers of the Moonfern
   <QuestSteps>k__BackingField:
   - {fileID: 11400000, guid: 75ea60b7b442d0b4f9d5da450889c1b7, type: 2}
   - {fileID: 11400000, guid: e5e89f19d4b2edf4286c5b5ef8e227aa, type: 2}

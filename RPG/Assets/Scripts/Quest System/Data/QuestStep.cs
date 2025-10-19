@@ -11,6 +11,8 @@ namespace QuestSystem
         public event Action OnStarted;
         public event Action OnCompleted;
 
+        [field: SerializeField] public string StepName { get; private set; }
+
         public bool IsActive { get; private set; }
 
         public void StartStep()

@@ -11,6 +11,7 @@ namespace QuestSystem
 
         private QuestState _questState;
         public int CurrentStep { get; private set; } = 0;
+        public QuestStep CurrentQuestStep => QuestSteps[CurrentStep];
 
         public void Start()
         {

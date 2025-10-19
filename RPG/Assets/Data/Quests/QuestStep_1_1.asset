@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd94d957e7b6ee45ac4d346fc853fe9, type: 3}
   m_Name: QuestStep_1_1
   m_EditorClassIdentifier: 
+  <StepName>k__BackingField: Find unique herb

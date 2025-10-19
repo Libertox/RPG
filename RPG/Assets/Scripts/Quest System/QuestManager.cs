@@ -9,6 +9,8 @@ namespace QuestSystem
         public event Action<Quest> OnQuestStarted;
         public event Action<Quest> OnQuestCompleted;
 
+        public event Action<QuestStep> OnQuestStepChanged;
+
         [SerializeField] private Quest[] _quests;
 
         private Quest _activeQuest;
@@ -28,12 +30,17 @@ namespace QuestSystem
             newQuest.Start();
 
             OnQuestStarted?.Invoke(newQuest);
+
+            OnQuestStepChanged?.Invoke(newQuest.CurrentQuestStep);
         }
 
         public void TryMoveToNextQuestStep()
         {
             if (_activeQuest.CanMoveToNextStep())
+            {
                 _activeQuest.MoveToNextStep();
+                OnQuestStepChanged?.Invoke(_activeQuest.CurrentQuestStep);
+            }    
             else
                 FinishQuest(_activeQuest);
         }

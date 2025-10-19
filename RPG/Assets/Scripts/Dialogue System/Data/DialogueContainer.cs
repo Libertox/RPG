@@ -11,6 +11,7 @@ namespace DialogueSystem
     [System.Serializable]
     public struct DialogueLine
     {
+        [TextArea]
         public string Content;
         public DialogueActor DialogueActor;
     }

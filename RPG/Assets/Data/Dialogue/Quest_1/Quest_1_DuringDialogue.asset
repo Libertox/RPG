@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533e63046846d0442881d60099cfbcd7, type: 3}
+  m_Name: Quest_1_DuringDialogue
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Content: Have you found all the herbs yet?
+    DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}
+  - Content: "Not yet, I\u2019m still looking."
+    DialogueActor: {fileID: 11400000, guid: d91ea15a4a4624644b88258d397d7967, type: 2}
+  - Content: "Don\u2019t rush too much, but remember\u2014the forest doesn\u2019t
+      wait."
+    DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}

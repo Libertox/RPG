@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2a28093bf8a2c34a9a28325f5a0d91a, type: 3}
-  m_Name: DialogueActor
+  m_Name: DialogueActor_Knight
   m_EditorClassIdentifier: 
-  <ActorPortrait>k__BackingField: {fileID: 21300000, guid: 206e5788e34f85645bdd213c4afb14c7, type: 3}
-  <ActorName>k__BackingField: Elf
+  <ActorPortrait>k__BackingField: {fileID: 21300000, guid: a9f9189e7e9b81e4382e87e366d27104, type: 3}
+  <ActorName>k__BackingField: Knight

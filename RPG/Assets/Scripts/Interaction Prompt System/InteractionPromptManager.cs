@@ -13,8 +13,8 @@ namespace InteractionPromptSystem
         private IMotionController _playerMotionController;
         private InputManager _inputManager;
 
-        private List<IPromptProvider> _providers = new();
-        private Dictionary<IPromptProvider, PromptIcon> _icons = new();
+        private readonly List<IPromptProvider> _providers = new();
+        private readonly Dictionary<IPromptProvider, PromptIcon> _icons = new();
 
         private readonly float _showPromptMaxDistance = 8f;
         private readonly float _showPromptMinDistance = 1f;
@@ -48,12 +48,17 @@ namespace InteractionPromptSystem
 
         private void Update()
         {
+            UpdateInteractionPrompts();
+        }
+
+        private void UpdateInteractionPrompts()
+        {
             foreach (var provider in _providers)
             {
                 float distance = Vector3.Distance(_playerMotionController.Position, provider.TargetPosition);
                 bool withinPromptRange = distance < _showPromptMaxDistance;
 
-                if (withinPromptRange)
+                if (withinPromptRange && provider.CanInteract())
                 {
                     HandlePrompt(provider, distance);
                 }

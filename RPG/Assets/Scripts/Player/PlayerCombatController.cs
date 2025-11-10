@@ -8,13 +8,13 @@ namespace Player
     {
         [SerializeField] private PlayerAnimation playerAnimation;
 
-        private InputEvents _inputEvents;
+        private InputManager _inputManager;
 
         [Inject]
         public void Construct(InputManager inputManager)
         {
-            _inputEvents = inputManager.InputEvents;
-            inputManager.InputEvents.OnAttackButtonPressed += Attack;
+            _inputManager = inputManager;
+            inputManager.OnAttackButtonPressed += Attack;
         }
 
         public void Attack()
@@ -25,7 +25,7 @@ namespace Player
 
         private void OnDestroy()
         {
-            _inputEvents.OnAttackButtonPressed -= Attack;
+            _inputManager.OnAttackButtonPressed -= Attack;
         }
 
     }

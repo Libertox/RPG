@@ -19,8 +19,6 @@ namespace MiniMapSystem
         public Vector3 Position => transform.position;
         public MinimapController MinimapController => _minimapController;
 
-
-
         private MinimapController _minimapController;
 
         [Inject]

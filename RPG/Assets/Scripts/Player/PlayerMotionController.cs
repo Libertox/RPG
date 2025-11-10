@@ -15,7 +15,7 @@ namespace Player
         public Quaternion Rotation => playerAnimation.transform.rotation;
         public Vector3 Position => transform.position;
 
-        private InputEvents _inputEvents;
+        private InputManager _inputManager;
         private float _turnSmoothVelocity;
 
         private NavMeshAgent _agent;
@@ -28,8 +28,8 @@ namespace Player
         [Inject]
         public void Construct(InputManager inputManager)
         {
-            _inputEvents = inputManager.InputEvents;
-            inputManager.InputEvents.OnMoveButtonPressed += Move;
+            _inputManager = inputManager;
+            inputManager.OnMoveButtonPressed += Move;
         }
 
         public void Move(Vector2 moveInput)
@@ -61,7 +61,7 @@ namespace Player
 
         private void OnDestroy()
         {
-            _inputEvents.OnMoveButtonPressed -= Move;
+            _inputManager.OnMoveButtonPressed -= Move;
         }
     }
 }

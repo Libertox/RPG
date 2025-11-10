@@ -1,6 +1,8 @@
 ﻿
 
+
 using InputSystem;
+using Item;
 using UnityEngine;
 using Zenject;
 
@@ -15,8 +17,9 @@ namespace InteractionPromptSystem
         public Vector3 TargetPosition => transform.position;
         public Vector3 PromptPosition => promptPosition.position;
 
-
         private InteractionPromptManager _promptManager;
+
+        private IInteractable _interactable;
 
         [Inject]
         public void Construct(InteractionPromptManager interactionPromptManager)
@@ -27,11 +30,18 @@ namespace InteractionPromptSystem
         private void Start()
         {
             _promptManager.RegisterPromptProvider(this);
+
+            _interactable = GetComponent<IInteractable>();
         }
 
         private void OnDestroy()
         {
             _promptManager.UnregisterPromptProvider(this);
+        }
+
+        public bool CanInteract()
+        {
+            return _interactable.CanInteract();
         }
 
     }

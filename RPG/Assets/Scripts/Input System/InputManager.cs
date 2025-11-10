@@ -6,10 +6,16 @@ using Zenject;
 
 namespace InputSystem
 {
-    public class InputManager: IDisposable, ITickable
+    public class InputManager : IDisposable, ITickable
     {
+        public event Action<Vector2> OnMoveButtonPressed;
+        public event Action OnAttackButtonPressed;
+        public event Action OnInteractButtonPressed;
+
+        public event Action OnSubmitButtonPressed;
+        public event Action OnContinueButtonPressed;
+
         public Action<ControllerType> OnControllerChanged;
-        public InputEvents InputEvents { get; private set; }
 
         private readonly InputActions _inputActions;
         private readonly InputIconsContainer _iconsContainer;
@@ -20,7 +26,6 @@ namespace InputSystem
         public InputManager(InputIconsContainer inputIconsContainer)
         {
             _inputActions = new();
-            InputEvents = new();
             _iconsContainer = inputIconsContainer;
 
             _inputActions.Enable();
@@ -39,22 +44,22 @@ namespace InputSystem
 
         private void OnContinueButtonPerformed(InputAction.CallbackContext action)
         {
-            InputEvents.InvokeOnContinueButtonPressed();
+            OnContinueButtonPressed?.Invoke();
         }
 
         private void OnSubmitButtonPerformed(InputAction.CallbackContext action)
         {
-            InputEvents.InvokeOnSubmitButtonPressed();
+            OnSubmitButtonPressed?.Invoke();
         }
 
         private void OnInteractButtonPerformed(InputAction.CallbackContext action)
         {
-            InputEvents.InvokeOnInteractButtonPressed();
+            OnInteractButtonPressed?.Invoke();
         }
 
         private void OnAttackButtonPerformed(InputAction.CallbackContext action)
         {
-            InputEvents.InvokeOnAttackButtonPressed();
+            OnAttackButtonPressed?.Invoke();
         }
 
         public void EnableGameMap(bool enable = true)
@@ -106,7 +111,7 @@ namespace InputSystem
         {
             var moveActionInput = _inputActions.Player.Move.ReadValue<Vector2>();
 
-            InputEvents.InvokeOnMoveButtonPressed(moveActionInput);
+            OnMoveButtonPressed?.Invoke(moveActionInput);
         }
 
 

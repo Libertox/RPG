@@ -9,7 +9,7 @@ namespace Player
     {
         private const int MAX_INTERACT = 10;
 
-        private InputEvents _inputEvents;
+        private InputManager _inputManager;
 
         private Collider[] _colliders;
 
@@ -21,8 +21,8 @@ namespace Player
         [Inject]
         public void Construct(InputManager inputManager)
         {
-            _inputEvents = inputManager.InputEvents;
-            _inputEvents.OnInteractButtonPressed += TryInteractWithInteractableObject;
+            _inputManager = inputManager;
+            _inputManager.OnInteractButtonPressed += TryInteractWithInteractableObject;
         }
 
         public void TryInteractWithInteractableObject()
@@ -40,7 +40,7 @@ namespace Player
 
         private void OnDestroy()
         {
-            _inputEvents.OnInteractButtonPressed -= TryInteractWithInteractableObject;
+            _inputManager.OnInteractButtonPressed -= TryInteractWithInteractableObject;
         }
     }
 }

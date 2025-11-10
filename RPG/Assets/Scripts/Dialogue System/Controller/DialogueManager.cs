@@ -10,14 +10,13 @@ namespace DialogueSystem
     {
         public event Action OnDialogueStarted;
         public event Action OnDialogueCompleted;
-
         public event Action<DialogueLine> OnDialgoueLineChanged;
 
         private DialogueContainer _currentDialogue;
-
         private int _currentDialogueLine;
 
         private UIViewManager _viewManager;
+    
 
         [Inject]
         public void Construct(UIViewManager viewManager)
@@ -51,7 +50,7 @@ namespace DialogueSystem
             OnDialgoueLineChanged?.Invoke(_currentDialogue.Dialogues[_currentDialogueLine]);
         }
 
-        public bool IsDialogueComplete()
+        private bool IsDialogueComplete()
         {
             return _currentDialogueLine >= _currentDialogue.Dialogues.Length;
         }

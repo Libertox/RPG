@@ -2,47 +2,36 @@
 using Player.Data;
 using UnityEngine;
 using UnityEngine.AI;
-using Zenject;
 
 namespace Player
 {
-    public class PlayerMotionController : MonoBehaviour, IMotionController
+    public class PlayerMotionController : IMotionController
     {
-        [SerializeField] private PlayerMovementData movementData;
+        private readonly InputManager _inputManager;
+        private readonly NavMeshAgent _agent;
+        private readonly PlayerMovementData _movementData;
+        private readonly Transform _playerPresentation;
 
-        [SerializeField] private PlayerAnimation playerAnimation;
-
-        public Quaternion Rotation => playerAnimation.transform.rotation;
-        public Vector3 Position => transform.position;
-
-        private InputManager _inputManager;
         private float _turnSmoothVelocity;
 
-        private NavMeshAgent _agent;
-
-        private void Awake()
+        public PlayerMotionController(PlayerController controller, InputManager inputManager, 
+            PlayerMovementData playerMovementData, Transform playerPresentation)
         {
-            _agent = GetComponent<NavMeshAgent>();
-        }
-
-        [Inject]
-        public void Construct(InputManager inputManager)
-        {
+            _agent = controller.GetComponent<NavMeshAgent>();
             _inputManager = inputManager;
-            inputManager.OnMoveButtonPressed += Move;
+            _movementData = playerMovementData;
+            _playerPresentation = playerPresentation;
         }
-
-        public void Move(Vector2 moveInput)
+      
+        public void Move()
         {
-            bool isMove = moveInput != Vector2.zero;
-
-            playerAnimation.SetMoveAnimation(isMove);
+            bool isMove = _inputManager.MoveDirection != Vector2.zero;
 
             if (!isMove) return;
 
-            Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+            Vector3 moveDirection = new Vector3(_inputManager.MoveDirection.x, 0, _inputManager.MoveDirection.y).normalized;
 
-            _agent.Move(moveDirection * (movementData.MovementSpeed * Time.deltaTime));
+            _agent.Move(moveDirection * (_movementData.MovementSpeed * Time.deltaTime));
 
             Rotate(moveDirection);
         }
@@ -51,17 +40,12 @@ namespace Player
         {
              float targetAngle = Mathf.Atan2(rotationDirection.x, rotationDirection.z) * Mathf.Rad2Deg;
              float smoothedAngle = Mathf.SmoothDampAngle(
-                                         playerAnimation.transform.eulerAngles.y,
+                                         _playerPresentation.transform.eulerAngles.y,
                                          targetAngle,
                                          ref _turnSmoothVelocity,
-                                         movementData.RotationSpeed * Time.deltaTime);
+                                         _movementData.RotationSpeed * Time.deltaTime);
 
-             playerAnimation.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
-        }
-
-        private void OnDestroy()
-        {
-            _inputManager.OnMoveButtonPressed -= Move;
+            _playerPresentation.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
         }
     }
 }

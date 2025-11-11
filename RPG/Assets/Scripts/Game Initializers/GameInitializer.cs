@@ -12,7 +12,7 @@ namespace GameInitializers
 {
     public class GameInitializer : MonoInstaller<GameInitializer>
     {
-        [SerializeField] private PlayerMotionController playerController;
+        [SerializeField] private PlayerController playerController;
 
         [SerializeField] private InteractionPromptManager interactionPromptManager;
 
@@ -28,7 +28,7 @@ namespace GameInitializers
         {
             Container.BindInterfacesAndSelfTo<InputManager>().AsSingle().WithArguments(iconsContainer);
 
-            Container.BindInstance<IMotionController>(playerController);
+            Container.BindInstance(playerController);
             Container.BindInstance(interactionPromptManager).AsSingle();
             Container.BindInstance(dialogueManager).AsSingle();
             Container.BindInstance(questManager).AsSingle();

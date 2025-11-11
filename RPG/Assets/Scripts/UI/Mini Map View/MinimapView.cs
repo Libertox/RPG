@@ -16,7 +16,7 @@ namespace UI.MinimapView
         [SerializeField] private MinimapIcon iconPrefab;
 
         private Vector2 _miniMapScale;
-        private IMotionController _playerController;
+        private PlayerController _playerController;
         private MinimapController _minimapController;
         private MinimapIconPool _iconPool;
 
@@ -24,7 +24,7 @@ namespace UI.MinimapView
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _dynamicIcons = new();
 
         [Inject]
-        public void Construct(IMotionController playerController, MinimapController minimapController)
+        public void Construct(PlayerController playerController, MinimapController minimapController)
         {
             _playerController = playerController;
             _minimapController = minimapController;

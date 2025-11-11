@@ -6,7 +6,7 @@ namespace Player
 {
     public class PlayerCombatController : MonoBehaviour, ICombatController
     {
-        [SerializeField] private PlayerAnimation playerAnimation;
+        [SerializeField] private PlayerAnimationController playerAnimation;
 
         private InputManager _inputManager;
 
@@ -14,7 +14,7 @@ namespace Player
         public void Construct(InputManager inputManager)
         {
             _inputManager = inputManager;
-            inputManager.OnAttackButtonPressed += Attack;
+            //inputManager.OnAttackButtonPressed += Attack;
         }
 
         public void Attack()

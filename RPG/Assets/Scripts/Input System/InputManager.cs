@@ -8,7 +8,9 @@ namespace InputSystem
 {
     public class InputManager : IDisposable, ITickable
     {
-        public event Action<Vector2> OnMoveButtonPressed;
+        public event Action OnMoveStarted;
+        public event Action OnMoveEnded;
+
         public event Action OnAttackButtonPressed;
         public event Action OnInteractButtonPressed;
 
@@ -23,6 +25,8 @@ namespace InputSystem
         private ControllerType _currentControllerType = ControllerType.PC;
         private ControllerType _lastControllerType;
 
+        public Vector2 MoveDirection => _inputActions.Player.Move.ReadValue<Vector2>();
+
         public InputManager(InputIconsContainer inputIconsContainer)
         {
             _inputActions = new();
@@ -35,11 +39,24 @@ namespace InputSystem
 
         private void SubscribeInputAction()
         {
+            _inputActions.Player.Move.performed += OnMoveButtonStarted;
+            _inputActions.Player.Move.canceled += OnMoveButtonCanceled;
+
             _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
             _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
 
             _inputActions.UI.Submit.performed += OnSubmitButtonPerformed;
             _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
+        }
+
+        private void OnMoveButtonCanceled(InputAction.CallbackContext obj)
+        {
+            OnMoveEnded?.Invoke();
+        }
+
+        private void OnMoveButtonStarted(InputAction.CallbackContext action)
+        {
+            OnMoveStarted?.Invoke();
         }
 
         private void OnContinueButtonPerformed(InputAction.CallbackContext action)
@@ -81,8 +98,6 @@ namespace InputSystem
 
         public void Tick()
         {
-            HandleMoveAction();
-
             SetActiveController();
         }
 
@@ -106,15 +121,6 @@ namespace InputSystem
                 }
             }
         }
-
-        private void HandleMoveAction()
-        {
-            var moveActionInput = _inputActions.Player.Move.ReadValue<Vector2>();
-
-            OnMoveButtonPressed?.Invoke(moveActionInput);
-        }
-
-
         public void Dispose()
         {
             _inputActions.Dispose();

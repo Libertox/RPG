@@ -10,7 +10,7 @@ namespace InteractionPromptSystem
     public class InteractionPromptManager : MonoBehaviour
     {
         private PromptIconFactory _promptIconFactory;
-        private IMotionController _playerMotionController;
+        private PlayerController _playerMotionController;
         private InputManager _inputManager;
 
         private readonly List<IPromptProvider> _providers = new();
@@ -27,7 +27,7 @@ namespace InteractionPromptSystem
         }
 
         [Inject]
-        private void Construct(IMotionController motionController, InputManager inputManager)
+        private void Construct(PlayerController motionController, InputManager inputManager)
         {
             _playerMotionController = motionController;
             _inputManager = inputManager;

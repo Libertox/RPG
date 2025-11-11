@@ -1,5 +1,6 @@
 ﻿using InputSystem;
 using Item;
+using Player.Data;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,8 @@ namespace Player
     public class PlayerInteractionController : MonoBehaviour, IInteractionController
     {
         private const int MAX_INTERACT = 10;
+
+        [SerializeField] private PlayerInteractionData interactionData;
 
         private InputManager _inputManager;
 
@@ -27,7 +30,7 @@ namespace Player
 
         public void TryInteractWithInteractableObject()
         {
-            int interactAmount = Physics.OverlapSphereNonAlloc(transform.position, 2f, _colliders, LayerMask.NameToLayer("Interactable"));
+            int interactAmount = Physics.OverlapSphereNonAlloc(transform.position, interactionData.InteractionRange, _colliders, interactionData.TargetLayerMask);
 
             for(int i = 0;  i < interactAmount; i++)
             {

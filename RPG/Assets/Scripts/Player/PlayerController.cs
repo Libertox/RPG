@@ -2,6 +2,7 @@
 using Player.Data;
 using StateMachines;
 using UnityEngine;
+using UnityEngine.AI;
 using Zenject;
 
 namespace Player
@@ -10,11 +11,14 @@ namespace Player
     {
         [SerializeField] private Transform playerPresentation;
 
+        [SerializeField] private Transform attackCollisionPoint;
+
         [Header("Settings")]
         [SerializeField] private PlayerMovementData movementData;
-        public Vector2 Position => transform.position;
-        public Quaternion Rotation => playerPresentation.rotation;
+        [SerializeField] private PlayerCombatData combatData;
 
+        public Vector3 Position => transform.localPosition;
+        public Quaternion Rotation => playerPresentation.rotation;
 
         private IState _idleState;
         private IState _locomotionState;
@@ -44,8 +48,6 @@ namespace Player
 
         private void OnAttackButtonPressed()
         {
-            Debug.Log("Set Attack State");
-
             _isAttacking = true;
         }
 
@@ -69,7 +71,7 @@ namespace Player
         {
             _animationController = new PlayerAnimationController(playerPresentation.GetComponent<Animator>());
             _motionController = new PlayerMotionController(this, _inputManager, movementData, playerPresentation);
-            _combatController = new PlayerCombatController();
+            _combatController = new PlayerCombatController(attackCollisionPoint, combatData);
         }
 
         private void SetupStateMachine()

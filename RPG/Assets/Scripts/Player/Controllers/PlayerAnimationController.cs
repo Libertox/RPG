@@ -1,6 +1,4 @@
-﻿
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Player
 {
@@ -10,10 +8,12 @@ namespace Player
         private readonly int _moveAnimationHash = Animator.StringToHash("Move");
         private readonly int _attackAnimationHash = Animator.StringToHash("Attack");
 
-        private readonly float _crossFadeDuration = 0.2f;
+        private readonly int _randomParameterHash = Animator.StringToHash("Random");
 
-        private Animator _animator;
-        public Animator Animator => _animator;
+        private readonly float _crossFadeDuration = 0.2f;
+        private readonly int _attackAnimationCount = 3;
+
+        private readonly Animator _animator;
 
         public PlayerAnimationController(Animator animator)
         {
@@ -32,8 +32,16 @@ namespace Player
 
         public void SetAttackAnimation()
         {
+            int randomIndex = Random.Range(0, _attackAnimationCount);
+
+            _animator.SetFloat(_randomParameterHash, randomIndex);
+
             _animator.CrossFade(_attackAnimationHash, _crossFadeDuration);
         }
+
+        public AnimatorStateInfo GetCurrentAnimatorStateInfo() => _animator.GetCurrentAnimatorStateInfo(0);
+
+   
 
     }
 }

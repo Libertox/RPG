@@ -18,6 +18,7 @@ namespace Player
 
         private IState _idleState;
         private IState _locomotionState;
+        private IState _attackState;
 
         private StateMachine _stateMachine;
 
@@ -25,8 +26,10 @@ namespace Player
 
         private IAnimationController _animationController;
         private IMotionController _motionController;
+        private ICombatController _combatController;
 
         private bool _isMoving;
+        public bool _isAttacking;
 
 
         [Inject]
@@ -36,6 +39,14 @@ namespace Player
 
             _inputManager.OnMoveStarted += OnMoveStarted;
             _inputManager.OnMoveEnded += OnMoveEnded;
+            _inputManager.OnAttackButtonPressed += OnAttackButtonPressed;
+        }
+
+        private void OnAttackButtonPressed()
+        {
+            Debug.Log("Set Attack State");
+
+            _isAttacking = true;
         }
 
         private void OnMoveEnded()
@@ -58,6 +69,7 @@ namespace Player
         {
             _animationController = new PlayerAnimationController(playerPresentation.GetComponent<Animator>());
             _motionController = new PlayerMotionController(this, _inputManager, movementData, playerPresentation);
+            _combatController = new PlayerCombatController();
         }
 
         private void SetupStateMachine()
@@ -66,9 +78,15 @@ namespace Player
 
             _idleState = new IdleState(_animationController);
             _locomotionState = new LocomotionState(_animationController, _motionController);
+            _attackState = new AttackState(_animationController, this, _combatController);
 
             _stateMachine.AddTransition(_idleState, _locomotionState, new FuncPredicate(() => _isMoving));
             _stateMachine.AddTransition(_locomotionState, _idleState, new FuncPredicate(() => !_isMoving));
+
+            _stateMachine.AddTransition(_idleState, _attackState, new FuncPredicate(() => _isAttacking));
+            _stateMachine.AddTransition(_locomotionState, _attackState, new FuncPredicate(() => _isAttacking));
+
+            _stateMachine.AddTransition(_attackState, _idleState, new FuncPredicate(() => !_isAttacking));
 
             _stateMachine.SetState(_idleState);
         }

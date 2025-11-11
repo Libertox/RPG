@@ -41,8 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8603425933299631374}
   - component: {fileID: 9062629941647329015}
-  - component: {fileID: 3753575135069462027}
-  - component: {fileID: 943547942362708731}
+  - component: {fileID: 2865087963724332008}
   - component: {fileID: 3605570324687053527}
   - component: {fileID: 2577112384445274926}
   m_Layer: 0
@@ -82,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPresentation: {fileID: 86334268435367112}
   movementData: {fileID: 11400000, guid: 17fc9913447d7394b9e09b92006f2f75, type: 2}
---- !u!114 &3753575135069462027
+--- !u!114 &2865087963724332008
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,19 +90,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6297428251163025965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b586145b972dcd745bc8620666a1b953, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &943547942362708731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6297428251163025965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 003d171867db2bd44bdcba02309b6ece, type: 3}
+  m_Script: {fileID: 11500000, guid: 222e417f238d8d74385aa30d20e1d162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!136 &3605570324687053527

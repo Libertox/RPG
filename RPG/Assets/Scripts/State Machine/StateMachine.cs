@@ -18,7 +18,7 @@ namespace StateMachines
 
             _current.State?.Update();
 
-            Debug.Log(_current?.State.ToString());
+            //Debug.Log(_current?.State.ToString());
         }
 
         public void FixedUpdate()

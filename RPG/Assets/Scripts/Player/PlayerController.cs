@@ -33,7 +33,7 @@ namespace Player
         private ICombatController _combatController;
 
         private bool _isMoving;
-        public bool _isAttacking;
+        private bool _isAttacking;
 
 
         [Inject]
@@ -48,7 +48,9 @@ namespace Player
 
         private void OnAttackButtonPressed()
         {
-            _isAttacking = true;
+            if (_isAttacking || _animationController.IsWaitingForEndAnimation) return;
+
+            SetIsAttacking(true);
         }
 
         private void OnMoveEnded()
@@ -101,6 +103,11 @@ namespace Player
         private void FixedUpdate()
         {
             _stateMachine.FixedUpdate();
+        }
+
+        public void SetIsAttacking(bool isAttacking)
+        {
+            _isAttacking = isAttacking;
         }
     }
 }

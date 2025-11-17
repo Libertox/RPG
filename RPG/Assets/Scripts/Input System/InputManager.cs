@@ -42,7 +42,7 @@ namespace InputSystem
             _inputActions.Player.Move.performed += OnMoveButtonStarted;
             _inputActions.Player.Move.canceled += OnMoveButtonCanceled;
 
-            _inputActions.Player.Attack.started += OnAttackButtonPerformed;
+            _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
             _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
 
             _inputActions.UI.Submit.performed += OnSubmitButtonPerformed;

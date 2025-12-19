@@ -1,5 +1,5 @@
 ﻿using MiniMapSystem;
-using Player;
+using Entity.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;

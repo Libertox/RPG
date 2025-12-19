@@ -1,6 +1,6 @@
 ﻿using InputSystem;
 using InteractionPromptSystem.Presentation;
-using Player;
+using Entity.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;

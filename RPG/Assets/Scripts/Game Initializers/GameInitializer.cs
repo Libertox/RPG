@@ -1,7 +1,7 @@
 ﻿using InputSystem;
 using Zenject;
 using UnityEngine;
-using Player;
+using Entity.Player;
 using MiniMapSystem;
 using InteractionPromptSystem;
 using DialogueSystem;

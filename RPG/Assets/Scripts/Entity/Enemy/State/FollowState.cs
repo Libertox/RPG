@@ -1,7 +1,4 @@
 ﻿
-
-using Entity.Player;
-
 namespace Entity.Enemy
 {
     public class FollowState : BaseState
@@ -27,6 +24,8 @@ namespace Entity.Enemy
   
             if (_enemyController.IsOnDestination())
             {
+                _enemyController.RotateTowardsTarget();
+
                 _enemyController.CombatController.SetIsAttacking(true);
             }
         }

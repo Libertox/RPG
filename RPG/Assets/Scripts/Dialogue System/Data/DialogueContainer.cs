@@ -5,7 +5,7 @@ namespace DialogueSystem
     [CreateAssetMenu(fileName = nameof(DialogueContainer), menuName = "ScriptableObjects/DialogueSystem/"+nameof(DialogueContainer))]
     public class DialogueContainer : ScriptableObject
     {
-        [field: SerializeField] public DialogueLine[] Dialogues;
+        [field: SerializeField] public DialogueLine[] Dialogues { get; private set; }
     }
 
     [System.Serializable]

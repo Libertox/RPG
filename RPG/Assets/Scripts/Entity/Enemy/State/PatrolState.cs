@@ -30,7 +30,5 @@ namespace Entity.Enemy
                 _enemyController.SetPatroling(false);
         }
 
-
-     
     }
 }

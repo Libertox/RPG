@@ -124,7 +124,12 @@ namespace Entity.Enemy
 
         public void MoveTowardsTarget()
         {
-            SetDestination(_playerController.transform.position);
+            SetDestination(_playerController.transform.position);  
+        }
+
+        public void RotateTowardsTarget()
+        {
+            transform.rotation = Quaternion.LookRotation(_playerController.transform.position - transform.position, Vector3.up);
         }
 
         public void TakeDamage(float damage)

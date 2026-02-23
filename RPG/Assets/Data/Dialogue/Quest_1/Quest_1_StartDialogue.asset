@@ -12,17 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 533e63046846d0442881d60099cfbcd7, type: 3}
   m_Name: Quest_1_StartDialogue
   m_EditorClassIdentifier: 
-  Dialogues:
-  - Content: "Greetings, traveler\u2026 Your presence is like a breath of spring
-      in my forest."
-    DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}
-  - Content: Would you be willing to collect a set of herbs for me? They are essential
-      for preparing a protective potion.
-    DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}
-  - Content: I need your help. The healing herbs in our valley are scarce, and I
-      cannot gather them alone.
-    DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}
-  - Content: "Herbs? Sounds easy, I\u2019ll get to it."
-    DialogueActor: {fileID: 11400000, guid: d91ea15a4a4624644b88258d397d7967, type: 2}
-  - Content: Be careful, the forest is full of dangers, but I trust you can do it.
+  <Dialogues>k__BackingField:
+  - Content: Help me to find herbs
     DialogueActor: {fileID: 11400000, guid: 70e9471fe72f4c9438024ab1165582cc, type: 2}

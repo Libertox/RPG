@@ -7,6 +7,7 @@ using InteractionPromptSystem;
 using DialogueSystem;
 using QuestSystem;
 using UI;
+using InventorySystem;
 
 namespace GameInitializers
 {

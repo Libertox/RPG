@@ -1,3 +1,4 @@
+using Entity.Player;
 using Item;
 using UnityEngine;
 using Zenject;
@@ -21,7 +22,7 @@ namespace DialogueSystem
             return true;
         }
 
-        public void Interact()
+        public void Interact(PlayerController playerController)
         {
             _dialogueManager.StartDialogue(dialogue);
         }

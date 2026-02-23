@@ -16,11 +16,12 @@ namespace Entity.Player
         [SerializeField] private Transform attackCollisionPoint;
 
         [Header("Settings")]
-        [SerializeField] private PlayerMovementData movementData;
         [SerializeField] private PlayerData playerData;
 
         public Vector3 Position => transform.localPosition;
         public Quaternion Rotation => playerPresentation.rotation;
+
+        public PlayerData PlayerData => playerData;
 
         private IState _idleState;
         private IState _locomotionState;
@@ -80,7 +81,7 @@ namespace Entity.Player
         private void SetupRefernces()
         {
             _animationController = new PlayerAnimationController(playerPresentation.GetComponent<Animator>());
-            _motionController = new PlayerMotionController(this, _inputManager, movementData, playerPresentation);
+            _motionController = new PlayerMotionController(this, _inputManager, playerData, playerPresentation);
             _combatController = new MeleeCombatController(attackCollisionPoint, playerData.CombatData);
         }
 

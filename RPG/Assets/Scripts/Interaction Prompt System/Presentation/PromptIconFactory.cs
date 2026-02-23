@@ -27,7 +27,8 @@ namespace InteractionPromptSystem.Presentation
 
         public void Release(PromptIcon promptIcon)
         {
-            _iconsPool.Release(promptIcon);
+            if(promptIcon != null)
+                _iconsPool.Release(promptIcon);
         }
 
         private PromptIcon OnCreateIcon()

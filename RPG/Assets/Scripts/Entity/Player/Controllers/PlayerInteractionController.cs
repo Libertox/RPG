@@ -9,15 +9,19 @@ namespace Entity.Player
     {
         private const int MAX_INTERACT = 10;
 
-        [SerializeField] private PlayerInteractionData interactionData;
+        [field: SerializeField] public LayerMask TargetLayerMask { get; private set; }
+        [field: SerializeField] public float InteractionRange { get; private set; }
 
         private InputManager _inputManager;
+        private PlayerController _playerController;
 
         private Collider[] _colliders;
 
         private void Awake()
         {
             _colliders = new Collider[MAX_INTERACT];
+
+            _playerController = GetComponent<PlayerController>();
         }
 
         [Inject]
@@ -29,13 +33,13 @@ namespace Entity.Player
 
         public void TryInteractWithInteractableObject()
         {
-            int interactAmount = Physics.OverlapSphereNonAlloc(transform.position, interactionData.InteractionRange, _colliders, interactionData.TargetLayerMask);
+            int interactAmount = Physics.OverlapSphereNonAlloc(transform.position, InteractionRange, _colliders, TargetLayerMask);
 
             for(int i = 0;  i < interactAmount; i++)
             {
-                if (_colliders[i].gameObject.TryGetComponent(out IInteractable interactable))
+                if (_colliders[i].gameObject.TryGetComponent(out IInteractable interactable) || _colliders[i].transform.parent.TryGetComponent(out interactable))
                 {
-                    interactable.Interact();
+                    interactable.Interact(_playerController);
                 }
             }
         }

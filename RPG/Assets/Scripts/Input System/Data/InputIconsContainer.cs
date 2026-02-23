@@ -1,5 +1,4 @@
 ﻿using InputSystem.Enums;
-using InteractionPromptSystem;
 using UnityEngine;
 using Utility;
 

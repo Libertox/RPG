@@ -1,5 +1,6 @@
 ﻿
 
+using Entity.Player;
 using UnityEngine;
 
 namespace Item
@@ -11,7 +12,7 @@ namespace Item
             return true;
         }
 
-        public void Interact()
+        public void Interact(PlayerController playerController)
         {
             if (!CanInteract()) return;
 

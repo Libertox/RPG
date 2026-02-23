@@ -1,4 +1,5 @@
 ﻿using DialogueSystem;
+using Entity.Player;
 using Item;
 using UnityEngine;
 using Utility.Attribute;
@@ -36,7 +37,7 @@ namespace QuestSystem
             return !quest.IsFinished();
         }
 
-        public void Interact()
+        public void Interact(PlayerController playerController)
         {
             if(!CanInteract()) return;
 

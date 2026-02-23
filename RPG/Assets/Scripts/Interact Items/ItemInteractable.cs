@@ -1,4 +1,6 @@
-﻿using Item;
+﻿using Entity.Player;
+using InventorySystem;
+using Item;
 using UnityEngine;
 using Zenject;
 
@@ -6,25 +8,20 @@ namespace QuestSystem
 {
     public class ItemInteractable : MonoBehaviour, IInteractable
     {
-        private QuestManager _questManager;
+        [SerializeField] private ItemBase itemBase;
 
-        [Inject]
-        private void Construct(QuestManager questManager)
-        {
-            _questManager = questManager;
-        }
-  
         public bool CanInteract()
         {
             return true;
         }
 
-        public void Interact()
+        public void Interact(PlayerController playerController)
         {
             if (!CanInteract()) return;
 
-            _questManager.TryMoveToNextQuestStep();
+            playerController.PlayerData.Inventory.AddItem(itemBase);
 
+            ///Change to ppol
             Destroy(gameObject);
         }
     }

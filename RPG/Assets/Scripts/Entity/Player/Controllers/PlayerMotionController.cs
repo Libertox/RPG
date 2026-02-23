@@ -8,13 +8,13 @@ namespace Entity.Player
     {
         private readonly InputManager _inputManager;
         private readonly NavMeshAgent _agent;
-        private readonly PlayerMovementData _movementData;
+        private readonly PlayerData _movementData;
         private readonly Transform _playerPresentation;
 
         private float _turnSmoothVelocity;
 
-        public PlayerMotionController(PlayerController controller, InputManager inputManager, 
-            PlayerMovementData playerMovementData, Transform playerPresentation)
+        public PlayerMotionController(PlayerController controller, InputManager inputManager,
+            PlayerData playerMovementData, Transform playerPresentation)
         {
             _agent = controller.GetComponent<NavMeshAgent>();
             _inputManager = inputManager;
@@ -30,7 +30,7 @@ namespace Entity.Player
 
             Vector3 moveDirection = new Vector3(_inputManager.MoveDirection.x, 0, _inputManager.MoveDirection.y).normalized;
 
-            _agent.Move(moveDirection * (_movementData.MovementSpeed * Time.deltaTime));
+            _agent.Move(moveDirection * (_movementData.GetMovementSpeed() * Time.deltaTime));
 
             Rotate(moveDirection);
         }

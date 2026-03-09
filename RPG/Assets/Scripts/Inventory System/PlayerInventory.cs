@@ -10,30 +10,32 @@ namespace InventorySystem
         public event Action<ItemBase> OnItemAdded;
         public event Action<ItemBase> OnItemRemoved;
 
-        public int LiftingCapacity { get; private set; }
+        public event Action<int> OnGoldChanged;
+
+        public float LiftingCapacity { get; private set; }
         public int Gold { get; private set; }
-        public Dictionary<ItemType, Dictionary<ItemBase, int>> Items { get; private set; }
+        public Dictionary<ItemCategory, List<ItemInventory>> Items { get; private set; }
 
         public PlayerInventory()
         {
             Items = new();
         }
 
-        public void AddItem(ItemBase item)
+        public void AddItem(ItemBase item, int amount = 1)
         {
             if (item == null) return;
 
             if(!Items.ContainsKey(item.Type))
-                Items.Add(item.Type, new Dictionary<ItemBase, int>());
+                Items.Add(item.Type, new());
 
-            if (!Items[item.Type].ContainsKey(item))
-                Items[item.Type].Add(item, 1);
+            if (!ContainItem(item))
+                Items[item.Type].Add(new ItemInventory(item, amount));
             else
-                Items[item.Type][item]++;
+                GetItemInventory(item).Amount += amount;
 
             Debug.Log(item.Name + " added to inventory");
 
-            LiftingCapacity += item.Weight;
+            AddLiftingCapacity(item.Weight);
 
             OnItemAdded?.Invoke(item);
         }
@@ -42,21 +44,91 @@ namespace InventorySystem
         {
             if (item == null) return;
 
-            if (!Items.ContainsKey(item.Type) || !Items[item.Type].ContainsKey(item))
+            if (!Items.ContainsKey(item.Type) || !ContainItem(item))
                 return;
 
-            LiftingCapacity -= item.Weight;
+            SubstractLiftingCapacity(item.Weight);
 
-            Items[item.Type][item]--;
+            ItemInventory itemInventory = GetItemInventory(item);
 
-            if (Items[item.Type][item] <= 0)
-                Items[item.Type].Remove(item);
+            itemInventory.Amount--;
+
+            if (itemInventory.Amount <= 0)
+                Items[item.Type].Remove(itemInventory);
 
             Debug.Log(item.Name + " removed from inventory");
 
             OnItemRemoved?.Invoke(item);
         }
 
+        private ItemInventory GetItemInventory(ItemBase item)
+        {
+            if (item == null) return null;
 
+            for (int i = 0; i < Items[item.Type].Count; i++)
+            {
+                if (Items[item.Type][i].ItemBase == item) return Items[item.Type][i];
+            }
+
+            return null;
+        }
+
+        private bool ContainItem(ItemBase item)
+        {
+            if (item == null) return false;
+
+            for (int i = 0; i < Items[item.Type].Count; i++)
+            {
+                if (Items[item.Type][i].ItemBase == item) return true;
+            }
+
+            return false;
+        }
+
+        private void AddLiftingCapacity(float value)
+        {
+            LiftingCapacity += value;
+        }
+
+        private void SubstractLiftingCapacity(float value)
+        {
+            LiftingCapacity -= value;
+
+            if (LiftingCapacity < 0)
+                LiftingCapacity = 0;
+        }
+
+        public void AddGold(int amount)
+        {
+            Gold += amount;
+
+            Debug.Log(amount + "gold added");
+
+            OnGoldChanged?.Invoke(Gold);
+        }
+
+        public void RemoveGold(int amount)
+        {
+            Gold -= amount;
+
+            if(Gold < 0)
+                Gold = 0;
+
+            Debug.Log(amount + "gold removed");
+
+            OnGoldChanged?.Invoke(Gold);
+        }
+    }
+
+    public class ItemInventory
+    {
+        public ItemBase ItemBase;
+        public int Amount;
+
+        public ItemInventory(ItemBase itemBase, int amount)
+        {
+            ItemBase = itemBase;
+            Amount = amount;
+        }
     }
 }

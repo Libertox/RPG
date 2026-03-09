@@ -15,7 +15,7 @@ namespace Entity.Player
 
         [field: SerializeField] public CombatData CombatData { get; private set; }
 
-        [SerializeField] private float maxLiftingCapacity;
+        [field: SerializeField] public float MaxLiftingCapacity { get; private set; }
 
         public PlayerInventory Inventory { get; private set; }
 
@@ -26,7 +26,7 @@ namespace Entity.Player
 
         public float GetMovementSpeed()
         {
-            float speed = Inventory.LiftingCapacity >= maxLiftingCapacity ? encumberedSpeed : movementSpeed;
+            float speed = Inventory.LiftingCapacity >= MaxLiftingCapacity ? encumberedSpeed : movementSpeed;
 
             return speed;
         }

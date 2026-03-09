@@ -2,7 +2,7 @@
 
 namespace InventorySystem
 {
-    public enum ItemType
+    public enum ItemCategory
     {
         Weapon,
         Armor,

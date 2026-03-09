@@ -2,7 +2,6 @@
 using InventorySystem;
 using Item;
 using UnityEngine;
-using Zenject;
 
 namespace QuestSystem
 {

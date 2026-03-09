@@ -13,9 +13,11 @@ namespace InputSystem
 
         public event Action OnAttackButtonPressed;
         public event Action OnInteractButtonPressed;
+        public event Action OnInventoryButtonPressed;
 
-        public event Action OnSubmitButtonPressed;
-        public event Action OnContinueButtonPressed;
+        public event Action OnSubmitUIButtonPressed;
+        public event Action OnContinueUIButtonPressed;
+        public event Action OnCancelUIButtonPressed;
 
         public Action<ControllerType> OnControllerChanged;
 
@@ -45,10 +47,13 @@ namespace InputSystem
             _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
             _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
 
+            _inputActions.Player.Inventory.performed += OnInventoryButtonPerformed;
+
             _inputActions.UI.Submit.performed += OnSubmitButtonPerformed;
             _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
-        }
+            _inputActions.UI.Cancel.performed += OnCancelButtonPerformed;
 
+        }
         private void OnMoveButtonCanceled(InputAction.CallbackContext obj)
         {
             OnMoveEnded?.Invoke();
@@ -61,12 +66,17 @@ namespace InputSystem
 
         private void OnContinueButtonPerformed(InputAction.CallbackContext action)
         {
-            OnContinueButtonPressed?.Invoke();
+            OnContinueUIButtonPressed?.Invoke();
         }
 
         private void OnSubmitButtonPerformed(InputAction.CallbackContext action)
         {
-            OnSubmitButtonPressed?.Invoke();
+            OnSubmitUIButtonPressed?.Invoke();
+        }
+
+        private void OnCancelButtonPerformed(InputAction.CallbackContext action)
+        {
+            OnCancelUIButtonPressed?.Invoke();
         }
 
         private void OnInteractButtonPerformed(InputAction.CallbackContext action)
@@ -77,6 +87,11 @@ namespace InputSystem
         private void OnAttackButtonPerformed(InputAction.CallbackContext action)
         {
             OnAttackButtonPressed?.Invoke();
+        }
+
+        private void OnInventoryButtonPerformed(InputAction.CallbackContext action)
+        {
+            OnInventoryButtonPressed?.Invoke();
         }
 
         public void EnableGameMap(bool enable = true)

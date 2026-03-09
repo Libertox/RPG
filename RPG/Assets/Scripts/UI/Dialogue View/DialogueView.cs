@@ -76,14 +76,14 @@ namespace UI.DialogueView
 
         public void SubscribeToInputEvents()
         {
-            _inputManager.OnSubmitButtonPressed += ShowNextDialogueLine;
-            _inputManager.OnContinueButtonPressed += ShowNextDialogueLine;
+            _inputManager.OnSubmitUIButtonPressed += ShowNextDialogueLine;
+            _inputManager.OnContinueUIButtonPressed += ShowNextDialogueLine;
         }
 
         public void UnsubscribeToInputEvents()
         {
-            _inputManager.OnSubmitButtonPressed -= ShowNextDialogueLine;
-            _inputManager.OnContinueButtonPressed -= ShowNextDialogueLine;
+            _inputManager.OnSubmitUIButtonPressed -= ShowNextDialogueLine;
+            _inputManager.OnContinueUIButtonPressed -= ShowNextDialogueLine;
         }
 
         private void SubscribeDialogueEvents()

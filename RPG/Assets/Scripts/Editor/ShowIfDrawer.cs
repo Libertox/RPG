@@ -12,6 +12,11 @@ namespace Editor
             ShowIfAttribute showIf = (ShowIfAttribute)attribute;
             SerializedProperty condition = property.serializedObject.FindProperty(showIf.conditionField);
 
+            if(condition == null || !condition.boolValue)
+            {
+               condition = property.serializedObject.FindProperty($"<{showIf.conditionField}>k__BackingField");
+            }
+
             if (condition != null && condition.boolValue)
             {
                 EditorGUI.PropertyField(position, property, label, true);

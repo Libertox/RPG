@@ -10,15 +10,22 @@ namespace InventorySystem
         public event Action<ItemBase> OnItemAdded;
         public event Action<ItemBase> OnItemRemoved;
 
+        public event Action<ItemInventory> OnItemEquiped;
+
         public event Action<int> OnGoldChanged;
 
         public float LiftingCapacity { get; private set; }
         public int Gold { get; private set; }
         public Dictionary<ItemCategory, List<ItemInventory>> Items { get; private set; }
 
+        public HashSet<ItemInventory> Equipment { get; private set; }
+        public List<ItemInventory> Consumable { get; private set; }
+
         public PlayerInventory()
         {
             Items = new();
+            Consumable = new();
+            Equipment = new();
         }
 
         public void AddItem(ItemBase item, int amount = 1)
@@ -61,7 +68,7 @@ namespace InventorySystem
             OnItemRemoved?.Invoke(item);
         }
 
-        private ItemInventory GetItemInventory(ItemBase item)
+        public ItemInventory GetItemInventory(ItemBase item)
         {
             if (item == null) return null;
 
@@ -72,7 +79,6 @@ namespace InventorySystem
 
             return null;
         }
-
         private bool ContainItem(ItemBase item)
         {
             if (item == null) return false;
@@ -83,6 +89,34 @@ namespace InventorySystem
             }
 
             return false;
+        }
+
+        public bool TryEquipItem(ItemBase item)
+        {
+            if (!item.CanEquip) return false;
+
+            var itemInventory = GetItemInventory(item);
+
+            if (itemInventory == null) return false;
+
+            Equipment.Add(itemInventory);
+
+            OnItemEquiped?.Invoke(itemInventory);
+
+            RemoveItem(item);
+
+            return true;
+        }
+
+        public bool TryUnequipItem(ItemInventory item)
+        {
+            if(item == null) return false;
+
+            AddItem(item.ItemBase);
+
+            Equipment.Remove(item);
+
+            return true;
         }
 
         private void AddLiftingCapacity(float value)

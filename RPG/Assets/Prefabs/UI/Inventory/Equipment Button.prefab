@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7620736601208423439}
   - component: {fileID: 2993635354629191359}
   - component: {fileID: 7577385303652248938}
+  - component: {fileID: 1463054051910547203}
   m_Layer: 5
   m_Name: Equipment Button
   m_TagString: Untagged
@@ -121,6 +122,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1463054051910547203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079060040439980492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e9c9da3374c46b40b6a11bd3bc285d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.EquipmentSlot
+  icon: {fileID: 2319896570985974133}
+  button: {fileID: 7577385303652248938}
+  baseIcon: {fileID: 21300000, guid: 728709007f0360249a1c6ae249c1ff85, type: 3}
+  category: 0
 --- !u!1 &7657305810348968796
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a727b43a441a4d46827f61473578add, type: 3}
-  m_Name: Mushroom
+  m_Name: Mushroom_2
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.ItemBase
   <Name>k__BackingField: Mushroom
   <Description>k__BackingField: Mushroom
@@ -19,4 +19,4 @@ MonoBehaviour:
   <Weight>k__BackingField: 11
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: 3
+  <EquipmentSlot>k__BackingField: 5

@@ -17,6 +17,6 @@ namespace InventorySystem
         [field: SerializeField] public Vector2Int InventorySize { get; private set; } = Vector2Int.one;
 
         [field: SerializeField] public bool CanEquip { get; private set; }
-        [field: SerializeField, ShowIf(nameof(CanEquip))] public EquipmentSlot EquipmentSlot { get; private set; }
+        [field: SerializeField, ShowIf(nameof(CanEquip))] public EquipmentSlotCategory EquipmentSlot { get; private set; }
     }
 }

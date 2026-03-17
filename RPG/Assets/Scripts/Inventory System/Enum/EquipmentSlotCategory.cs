@@ -2,11 +2,12 @@
 
 namespace InventorySystem
 {
-    public enum EquipmentSlot
+    public enum EquipmentSlotCategory
     {
         Weapon,
+        Shield,
         BodyArmor,
-        LegArmor,
+        HeadArmor,
         HandArmor,
         FootArmor,
         Consumable,

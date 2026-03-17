@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3996119339005260678}
   - component: {fileID: 2330925886478287256}
   - component: {fileID: 7650781881466351957}
-  - component: {fileID: 8721511819090516213}
   - component: {fileID: 89618530884820976}
+  - component: {fileID: 5004275990046135665}
   m_Layer: 5
   m_Name: Item Category Button
   m_TagString: Untagged
@@ -122,20 +122,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8721511819090516213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3627917075613617656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ecd48fb74242264192dd902cb6c4af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.ItemCategoryButton
-  itemCategory: 0
-  selector: {fileID: 0}
 --- !u!114 &89618530884820976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,3 +136,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.ButtonSelectionEffect
   _targetScale: 1.1
   _scaleDuration: 0.5
+--- !u!114 &5004275990046135665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3627917075613617656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2b90784411a7d489fdefdcbea4a235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.ItemCategoryButton
+  itemCategory: 0
+  selector: {fileID: 0}

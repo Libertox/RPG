@@ -19,4 +19,4 @@ MonoBehaviour:
   <Weight>k__BackingField: 11
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: 3
+  <EquipmentSlot>k__BackingField: 6

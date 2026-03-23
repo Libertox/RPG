@@ -1,16 +1,23 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace InventorySystem
 {
     public class PlayerInventory
     {
+        private const int ALL_CONSUMABLE_SLOT_OCCUPIED = -1;
+        private const int MAX_CONSUMABLE_ITEM = 4;
+
         public event Action<ItemBase> OnItemAdded;
         public event Action<ItemBase> OnItemRemoved;
 
         public event Action<ItemInventory> OnItemEquiped;
+        public event Action<ItemInventory, int> OnConsumableEquiped;
+
+        public event Action<ItemBase, ItemBase> OnItemSwaped;
 
         public event Action<int> OnGoldChanged;
 
@@ -19,20 +26,29 @@ namespace InventorySystem
         public Dictionary<ItemCategory, List<ItemInventory>> Items { get; private set; }
 
         public HashSet<ItemInventory> Equipment { get; private set; }
-        public List<ItemInventory> Consumable { get; private set; }
+        public ItemInventory[] Consumable { get; private set; }
 
         public PlayerInventory()
         {
             Items = new();
-            Consumable = new();
+            Consumable = new ItemInventory[MAX_CONSUMABLE_ITEM];
             Equipment = new();
+        }
+
+        public void AddItemAndUpdateInventory(ItemBase item, int amount = 1)
+        {
+            if (item == null) return;
+
+            AddItem(item, amount);
+
+            OnItemAdded?.Invoke(item);
         }
 
         public void AddItem(ItemBase item, int amount = 1)
         {
             if (item == null) return;
 
-            if(!Items.ContainsKey(item.Type))
+            if (!Items.ContainsKey(item.Type))
                 Items.Add(item.Type, new());
 
             if (!ContainItem(item))
@@ -43,8 +59,15 @@ namespace InventorySystem
             Debug.Log(item.Name + " added to inventory");
 
             AddLiftingCapacity(item.Weight);
+        }
 
-            OnItemAdded?.Invoke(item);
+        public void RemoveItemAndUpdateInventory(ItemBase item)
+        {
+            if (item == null) return;
+
+            RemoveItem(item);
+
+            OnItemRemoved?.Invoke(item);
         }
 
         public void RemoveItem(ItemBase item)
@@ -64,8 +87,6 @@ namespace InventorySystem
                 Items[item.Type].Remove(itemInventory);
 
             Debug.Log(item.Name + " removed from inventory");
-
-            OnItemRemoved?.Invoke(item);
         }
 
         public ItemInventory GetItemInventory(ItemBase item)
@@ -74,7 +95,8 @@ namespace InventorySystem
 
             for (int i = 0; i < Items[item.Type].Count; i++)
             {
-                if (Items[item.Type][i].ItemBase == item) return Items[item.Type][i];
+                if (Items[item.Type][i].ItemBase == item) 
+                    return Items[item.Type][i];
             }
 
             return null;
@@ -85,7 +107,8 @@ namespace InventorySystem
 
             for (int i = 0; i < Items[item.Type].Count; i++)
             {
-                if (Items[item.Type][i].ItemBase == item) return true;
+                if (Items[item.Type][i].ItemBase == item) 
+                    return true;
             }
 
             return false;
@@ -95,26 +118,118 @@ namespace InventorySystem
         {
             if (!item.CanEquip) return false;
 
+            if (item.EquipmentSlot == EquipmentSlotCategory.Consumable) return TryAddConsumable(item);
+            else return TryAddEquipment(item);
+        }
+
+        private bool TryAddEquipment(ItemBase item)
+        {
             var itemInventory = GetItemInventory(item);
 
             if (itemInventory == null) return false;
+
+            if (IsCategoryItemEquiped(item.EquipmentSlot))
+            {
+                var categoryItem = GetEquipedItemByCategory(item.EquipmentSlot);
+
+                AddItem(categoryItem.ItemBase);
+
+                RemoveItem(item);
+
+                Equipment.Remove(categoryItem);
+
+                OnItemSwaped?.Invoke(item, categoryItem.ItemBase);
+            }
+            else
+            {
+                RemoveItemAndUpdateInventory(item);
+            }
 
             Equipment.Add(itemInventory);
 
             OnItemEquiped?.Invoke(itemInventory);
 
-            RemoveItem(item);
+            return true;
+        }
+
+        private bool TryAddConsumable(ItemBase item)
+        {
+            var itemInventory = GetItemInventory(item);
+
+            if (itemInventory == null) return false;
+
+            int targetSlot = GetFreeConsumableItemSlotIndex();
+
+            Debug.Log(targetSlot);
+
+            if (targetSlot == ALL_CONSUMABLE_SLOT_OCCUPIED)
+            {
+                targetSlot = MAX_CONSUMABLE_ITEM - 1;
+
+                var categoryItem = Consumable[targetSlot];
+
+                AddItem(categoryItem.ItemBase);
+
+                RemoveItem(item);
+
+                OnItemSwaped?.Invoke(item, categoryItem.ItemBase);
+            }
+            else
+            {
+                RemoveItemAndUpdateInventory(item);
+            }
+
+            Consumable[targetSlot] = itemInventory;
+
+            OnConsumableEquiped?.Invoke(itemInventory, targetSlot);
 
             return true;
+        }
+
+        private int GetFreeConsumableItemSlotIndex()
+        {
+            for(int i = 0; i < MAX_CONSUMABLE_ITEM; i++)
+            {
+                if (Consumable[i] == null)
+                    return i;
+            }
+
+            return ALL_CONSUMABLE_SLOT_OCCUPIED;
+        }
+
+        private int GetIndexByConsumable(ItemInventory itemInventory)
+        {
+            for (int i = 0; i < Consumable.Length; i++)
+            {
+                if (Consumable[i] == itemInventory)
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public bool IsCategoryItemEquiped(EquipmentSlotCategory category)
+        {
+            var equipedItem = Equipment.FirstOrDefault((item) => item.ItemBase.EquipmentSlot == category);
+
+            return equipedItem != default;
+        }
+
+        public ItemInventory GetEquipedItemByCategory(EquipmentSlotCategory category)
+        {
+            return Equipment.First((item) => item.ItemBase.EquipmentSlot == category);
         }
 
         public bool TryUnequipItem(ItemInventory item)
         {
             if(item == null) return false;
 
-            AddItem(item.ItemBase);
+            AddItemAndUpdateInventory(item.ItemBase);
 
-            Equipment.Remove(item);
+            if (item.ItemBase.EquipmentSlot == EquipmentSlotCategory.Consumable)
+                Consumable[GetIndexByConsumable(item)] = null;
+            else
+                Equipment.Remove(item);
 
             return true;
         }

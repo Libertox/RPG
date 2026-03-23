@@ -67,6 +67,12 @@ namespace UI.Inventory
         {
             _playerData.Inventory.OnItemRemoved += OnItemRemovedFromInventory;
             _playerData.Inventory.OnItemAdded += OnItemAddedToInventory;
+            _playerData.Inventory.OnItemSwaped += OnItemSwapInInventory;
+        }
+
+        private void OnItemSwapInInventory(ItemBase newItem, ItemBase lastItem)
+        {
+            _invetoryGrids[newItem.Type].SetItemOnItemSlot(lastItem, newItem);
         }
 
         private void OnItemAddedToInventory(ItemBase item)
@@ -83,6 +89,7 @@ namespace UI.Inventory
         {
             _playerData.Inventory.OnItemRemoved -= OnItemRemovedFromInventory;
             _playerData.Inventory.OnItemAdded -= OnItemAddedToInventory;
+            _playerData.Inventory.OnItemSwaped -= OnItemSwapInInventory;
         }
 
         private void SetSelectedItemCategory(ItemCategory itemCategory)

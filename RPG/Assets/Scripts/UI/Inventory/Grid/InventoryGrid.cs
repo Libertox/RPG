@@ -66,6 +66,13 @@ namespace UI.Inventory
             return false;
         }
 
+        public void SetItemOnItemSlot(ItemBase newItem, ItemBase targetPosition)
+        {
+            var node = FindNodeByItem(targetPosition);
+
+            node.Slot.Initialize(newItem, _playerData.Inventory);
+        }
+
         public void RemoveItemFromGrid(ItemBase itemBase)
         {
             var nodes = FindNodesByItem(itemBase);

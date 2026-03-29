@@ -8,6 +8,7 @@ using DialogueSystem;
 using QuestSystem;
 using UI;
 using InventorySystem;
+using UI.Inventory;
 
 namespace GameInitializers
 {
@@ -24,6 +25,8 @@ namespace GameInitializers
         [SerializeField] private UIViewManager viewManager;
 
         [SerializeField] private GameObject itemPrefab;
+
+        [SerializeField] private GameObject slotPrefab;
          
         public override void InstallBindings()
         {
@@ -38,6 +41,9 @@ namespace GameInitializers
             Container.Bind<MinimapController>().AsSingle();
 
             Container.BindFactory<ItemInteractable, QuestItemFactory>().FromComponentInNewPrefab(itemPrefab);
+
+            Container.BindMemoryPool<InventoryItemSlot, InventoryItemSlotPool>().FromComponentInNewPrefab(slotPrefab);
+
         }
     }
 }

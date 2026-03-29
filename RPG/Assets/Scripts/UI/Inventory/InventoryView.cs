@@ -35,14 +35,15 @@ namespace UI.Inventory
         private ItemCategory _selectedItemCategory;
 
         private Dictionary<ItemCategory, InventoryGrid> _invetoryGrids;
-        private InventoryItemSlotFactory _inventoryItemSlotFactory;
+        private InventoryItemSlotPool _inventoryItemSlotFactory;
 
         [Inject]
-        public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager)
+        public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager, InventoryItemSlotPool inventoryItemSlotFactory)
         {
             _playerData = playerController.PlayerData;
             _inputManager = inputManager;
             _viewManager = viewManager;
+            _inventoryItemSlotFactory = inventoryItemSlotFactory;
         }
 
         public void Initialize()
@@ -59,7 +60,6 @@ namespace UI.Inventory
                 categoryButton.OnItemCategorySelected += SetSelectedItemCategory;
             }
 
-            _inventoryItemSlotFactory = new(inventoryItemSlotPrefab);
             _invetoryGrids = new();
         }
 
@@ -67,7 +67,7 @@ namespace UI.Inventory
         {
             _playerData.Inventory.OnItemRemoved += OnItemRemovedFromInventory;
             _playerData.Inventory.OnItemAdded += OnItemAddedToInventory;
-            _playerData.Inventory.OnItemSwaped += OnItemSwapInInventory;
+            _playerData.Inventory.OnItemSwapped += OnItemSwapInInventory;
         }
 
         private void OnItemSwapInInventory(ItemBase newItem, ItemBase lastItem)
@@ -89,7 +89,7 @@ namespace UI.Inventory
         {
             _playerData.Inventory.OnItemRemoved -= OnItemRemovedFromInventory;
             _playerData.Inventory.OnItemAdded -= OnItemAddedToInventory;
-            _playerData.Inventory.OnItemSwaped -= OnItemSwapInInventory;
+            _playerData.Inventory.OnItemSwapped -= OnItemSwapInInventory;
         }
 
         private void SetSelectedItemCategory(ItemCategory itemCategory)

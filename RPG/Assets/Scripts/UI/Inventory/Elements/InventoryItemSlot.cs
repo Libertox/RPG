@@ -1,11 +1,15 @@
-﻿using InventorySystem;
+﻿using Entity.Player;
+using InputSystem;
+using InventorySystem;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Inventory
 {
-    public class InventoryItemSlot : MonoBehaviour
+    public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
@@ -13,21 +17,23 @@ namespace UI.Inventory
         public ItemBase Item { get; private set; }
 
         private PlayerInventory _playerInventory;
+        private InputManager _inputManager;
 
         public RectTransform RectTransform => (RectTransform)transform;
 
-        private void Awake()
+        [Inject]
+        public void Construct(PlayerController playerController, InputManager inputManager)
         {
-            GetComponent<Button>().onClick.AddListener(OnClick);
+            _playerInventory = playerController.PlayerData.Inventory;
+            _inputManager = inputManager;
         }
 
-        public InventoryItemSlot Initialize(ItemBase item, PlayerInventory playerInventory)
+        public InventoryItemSlot Initialize(ItemBase item)
         {
             Item = item;
-            _playerInventory = playerInventory;
 
             icon.sprite = item.Icon;
-            amount.SetText(playerInventory.GetItemInventory(item).Amount.ToString());
+            amount.SetText(_playerInventory.GetItemInventory(item).Amount.ToString());
 
             return this;
         }
@@ -53,10 +59,32 @@ namespace UI.Inventory
             return this;
         }
 
-        private void OnClick()
+        private void EquipItem()
         {
             _playerInventory.TryEquipItem(Item);
+        }
 
+        private void DropItem()
+        {
+            _playerInventory.DropItem(Item);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            _inputManager.OnLeftMouseClicked += EquipItem;
+            _inputManager.OnRightMouseClicked += DropItem;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _inputManager.OnLeftMouseClicked -= EquipItem;
+            _inputManager.OnRightMouseClicked -= DropItem;
+        }
+
+        private void OnDisable()
+        {
+            _inputManager.OnLeftMouseClicked -= EquipItem;
+            _inputManager.OnRightMouseClicked -= DropItem;
         }
 
 

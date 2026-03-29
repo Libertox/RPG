@@ -14,11 +14,11 @@ namespace UI.Inventory
         private int _currentRow = 0;
         private int _currentColumn = 0;
 
-        private readonly InventoryItemSlotFactory _inventoryItemSlotFactory;
+        private readonly InventoryItemSlotPool _inventoryItemSlotFactory;
         private readonly PlayerData _playerData;
         private readonly RectTransform _slotsContainer;
 
-        public InventoryGrid(InventoryItemSlotFactory inventoryItemSlotFactory, PlayerData playerData, 
+        public InventoryGrid(InventoryItemSlotPool inventoryItemSlotFactory, PlayerData playerData, 
             InventoryGridConfig config, RectTransform slotsContainer)
         {
             _nodes = new();
@@ -39,7 +39,7 @@ namespace UI.Inventory
 
                 if (FindNodeByItem(itemSettings) != null) continue;
 
-                AddItemToGrid(itemSettings, _currentColumn, _currentRow);
+                AddItemToGrid(itemSettings, 0, 0);
             }
         }
 
@@ -70,7 +70,7 @@ namespace UI.Inventory
         {
             var node = FindNodeByItem(targetPosition);
 
-            node.Slot.Initialize(newItem, _playerData.Inventory);
+            node.Slot.Initialize(newItem);
         }
 
         public void RemoveItemFromGrid(ItemBase itemBase)
@@ -78,7 +78,7 @@ namespace UI.Inventory
             var nodes = FindNodesByItem(itemBase);
             if (nodes == null) return;
 
-            _inventoryItemSlotFactory.Destory(nodes[0].Slot);
+            _inventoryItemSlotFactory.Despawn(nodes[0].Slot);
 
             foreach (var node in nodes)
             {
@@ -100,8 +100,8 @@ namespace UI.Inventory
             Vector2 slotSize = new(itemSettings.InventorySize.x * _config.ItemSlotSize.x, itemSettings.InventorySize.y * _config.ItemSlotSize.y);
 
             InventoryItemSlot inventoryItemSlot = _inventoryItemSlotFactory
-                .Create()
-                .Initialize(itemSettings, _playerData.Inventory)
+                .Spawn()
+                .Initialize(itemSettings)
                 .SetParent(_slotsContainer)
                 .SetAnchoredPosition(slotPosition)
                 .SetSize(slotSize);

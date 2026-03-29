@@ -432,6 +432,7 @@ MonoBehaviour:
   questManager: {fileID: 335866926}
   viewManager: {fileID: 787109260}
   itemPrefab: {fileID: 5724940848610777338, guid: aa148eb4f17ad484b955bfdc9f82553f, type: 3}
+  slotPrefab: {fileID: 4011179909192808298, guid: c0b5ee0ee9bd6b34d94eef0635cacc64, type: 3}
 --- !u!114 &294306380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1489,6 +1490,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 844721606}
   m_CullTransparentMesh: 1
+--- !u!1 &893869135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 893869137}
+  - component: {fileID: 893869136}
+  m_Layer: 0
+  m_Name: Loot Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &893869136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893869135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f775ea0897a944ba0a2f8bb5dfe867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.LootFactory
+  lootPrefab: {fileID: 7465497781960408894, guid: ccfc9c6e2cd524e48a5f9d11372c0bde, type: 3}
+--- !u!4 &893869137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893869135}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &949731247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8603425933299631374, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
@@ -3373,9 +3419,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1712001998656139361, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6661819237477692141, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.106
+      objectReference: {fileID: 0}
+    - target: {fileID: 8560191391898738384, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8603425933299631374, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3893,3 +3951,4 @@ SceneRoots:
   - {fileID: 1623233934}
   - {fileID: 240696973}
   - {fileID: 2062720102}
+  - {fileID: 893869137}

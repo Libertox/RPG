@@ -24,7 +24,7 @@ namespace UI.Inventory
         {
             _inventory = playerController.PlayerData.Inventory;
 
-            _inventory.OnItemEquiped += OnItemEquiped;
+            _inventory.OnItemEquipped += OnItemEquiped;
         }
 
         private void Awake()

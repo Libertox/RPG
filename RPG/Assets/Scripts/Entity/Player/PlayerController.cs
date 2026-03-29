@@ -3,6 +3,7 @@ using StateMachines;
 using System;
 using UI;
 using UnityEngine;
+using UnityEngine.AI;
 using Zenject;
 
 namespace Entity.Player

@@ -19,6 +19,9 @@ namespace InputSystem
         public event Action OnContinueUIButtonPressed;
         public event Action OnCancelUIButtonPressed;
 
+        public event Action OnLeftMouseClicked;
+        public event Action OnRightMouseClicked;
+
         public Action<ControllerType> OnControllerChanged;
 
         private readonly InputActions _inputActions;
@@ -53,8 +56,22 @@ namespace InputSystem
             _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
             _inputActions.UI.Cancel.performed += OnCancelButtonPerformed;
 
+            _inputActions.UI.Click.performed += OnLeftMouseButtonPerformed;
+            _inputActions.UI.RightClick.performed += OnRightMouseButtonPerformed;
+
         }
-        private void OnMoveButtonCanceled(InputAction.CallbackContext obj)
+
+        private void OnRightMouseButtonPerformed(InputAction.CallbackContext obj)
+        {
+            OnRightMouseClicked?.Invoke();
+        }
+
+        private void OnLeftMouseButtonPerformed(InputAction.CallbackContext action)
+        {
+            OnLeftMouseClicked?.Invoke();
+        }
+
+        private void OnMoveButtonCanceled(InputAction.CallbackContext action)
         {
             OnMoveEnded?.Invoke();
         }

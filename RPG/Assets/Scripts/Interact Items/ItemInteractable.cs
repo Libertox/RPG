@@ -1,13 +1,13 @@
 ﻿using Entity.Player;
 using InventorySystem;
-using Item;
+using InteractionSystem;
 using UnityEngine;
 
 namespace QuestSystem
 {
     public class ItemInteractable : MonoBehaviour, IInteractable
     {
-        [SerializeField] private ItemBase itemBase;
+        [SerializeField] private ItemConfigBase itemBase;
 
         public bool CanInteract()
         {

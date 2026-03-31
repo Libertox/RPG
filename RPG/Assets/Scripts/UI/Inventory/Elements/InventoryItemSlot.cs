@@ -1,7 +1,9 @@
 ﻿using Entity.Player;
 using InputSystem;
 using InventorySystem;
+using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,10 +13,13 @@ namespace UI.Inventory
 {
     public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        public event Action<ItemConfigBase> OnSelected;
+        public event Action OnDeselected;
+
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
 
-        public ItemBase Item { get; private set; }
+        public ItemConfigBase Item { get; private set; }
 
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
@@ -28,7 +33,7 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public InventoryItemSlot Initialize(ItemBase item)
+        public InventoryItemSlot Initialize(ItemConfigBase item)
         {
             Item = item;
 
@@ -71,12 +76,16 @@ namespace UI.Inventory
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            OnSelected?.Invoke(Item);
+
             _inputManager.OnLeftMouseClicked += EquipItem;
             _inputManager.OnRightMouseClicked += DropItem;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            OnDeselected?.Invoke();
+
             _inputManager.OnLeftMouseClicked -= EquipItem;
             _inputManager.OnRightMouseClicked -= DropItem;
         }

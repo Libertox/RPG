@@ -2,7 +2,7 @@
 
 
 using InputSystem;
-using Item;
+using InteractionSystem;
 using UnityEngine;
 using Zenject;
 
@@ -41,7 +41,7 @@ namespace InteractionPromptSystem
 
         public bool CanInteract()
         {
-            return _interactable.CanInteract();
+            return gameObject.activeSelf && _interactable.CanInteract();
         }
 
     }

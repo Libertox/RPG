@@ -42,7 +42,7 @@ namespace GameInitializers
 
             Container.BindFactory<ItemInteractable, QuestItemFactory>().FromComponentInNewPrefab(itemPrefab);
 
-            Container.BindMemoryPool<InventoryItemSlot, InventoryItemSlotPool>().FromComponentInNewPrefab(slotPrefab);
+            Container.BindMemoryPool<InventoryItemSlot, InventoryItemSlotPool>().FromComponentInNewPrefab(slotPrefab).AsSingle();
 
         }
     }

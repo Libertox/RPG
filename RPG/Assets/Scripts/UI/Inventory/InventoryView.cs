@@ -15,8 +15,9 @@ namespace UI.Inventory
     public class InventoryView : MonoBehaviour, IView
     {
         [Header("Refernces")]
+        [SerializeField] private ItemCategory defaultCategorySelected;
         [SerializeField] private InventoryItemSlot inventoryItemSlotPrefab;
-        [SerializeField] private SerializableDictionary<ItemCategory, RectTransform> itemSlotsContainer;
+        [SerializeField] private SerializableDictionary<ItemCategory, InventoryGrid> itemGrids;
         [SerializeField] private ScrollRect scrollArea;
         [SerializeField] private ItemCategoryButton[] itemCategoryButtons;
 
@@ -27,14 +28,12 @@ namespace UI.Inventory
         [Header("Item List Parameters")]
         [SerializeField] private InventoryGridConfig gridConfig;
 
-
         private PlayerData _playerData;
         private InputManager _inputManager;
         private UIViewManager _viewManager;
 
         private ItemCategory _selectedItemCategory;
 
-        private Dictionary<ItemCategory, InventoryGrid> _invetoryGrids;
         private InventoryItemSlotPool _inventoryItemSlotFactory;
 
         [Inject]
@@ -48,19 +47,17 @@ namespace UI.Inventory
 
         public void Initialize()
         {
-            foreach(var item in itemSlotsContainer.Values)
+            foreach(var item in itemGrids.Values)
             {
                 item.gameObject.SetActive(false);
             }
 
-            SetSelectedItemCategory(ItemCategory.Weapon);
+            SetSelectedItemCategory(defaultCategorySelected);
 
             foreach(var categoryButton in itemCategoryButtons)
             {
                 categoryButton.OnItemCategorySelected += SetSelectedItemCategory;
             }
-
-            _invetoryGrids = new();
         }
 
         private void OnEnable()
@@ -70,19 +67,19 @@ namespace UI.Inventory
             _playerData.Inventory.OnItemSwapped += OnItemSwapInInventory;
         }
 
-        private void OnItemSwapInInventory(ItemBase newItem, ItemBase lastItem)
+        private void OnItemSwapInInventory(ItemConfigBase newItem, ItemConfigBase lastItem)
         {
-            _invetoryGrids[newItem.Type].SetItemOnItemSlot(lastItem, newItem);
+            itemGrids[newItem.Category].SetItemOnItemSlot(lastItem, newItem);
         }
 
-        private void OnItemAddedToInventory(ItemBase item)
+        private void OnItemAddedToInventory(ItemConfigBase item)
         {
-            _invetoryGrids[item.Type].AddItemToGrid(item);
+            itemGrids[item.Category].AddItemToGrid(item);
         }
 
-        private void OnItemRemovedFromInventory(ItemBase item)
+        private void OnItemRemovedFromInventory(ItemConfigBase item)
         {
-            _invetoryGrids[item.Type].RemoveItemFromGrid(item);
+            itemGrids[item.Category].RemoveItemFromGrid(item);
         }
 
         private void OnDisable()
@@ -97,21 +94,25 @@ namespace UI.Inventory
             EnableItemSlots(false);
 
             _selectedItemCategory = itemCategory;
-            scrollArea.content = itemSlotsContainer[_selectedItemCategory];
+            scrollArea.content = itemGrids[_selectedItemCategory].SlotsContainer;
 
             EnableItemSlots(true);
+
+            GenerateInvetory(_selectedItemCategory);
         }
 
         private void EnableItemSlots(bool enable = true)
         {
-            itemSlotsContainer[_selectedItemCategory].gameObject.SetActive(enable);
+            if (_selectedItemCategory == null) return;
+
+            itemGrids[_selectedItemCategory].gameObject.SetActive(enable);
         }
 
         public void Open()
         {
-            UpdateInventory();
-
             gameObject.SetActive(true);
+
+            UpdateInventory();
         }
 
         public Task OpenAsync()
@@ -157,7 +158,7 @@ namespace UI.Inventory
             UpdateGoldValue(_playerData.Inventory.Gold);
             UpdateLiftingCapacityValue(_playerData.Inventory.LiftingCapacity, _playerData.MaxLiftingCapacity);
 
-            GenerateInvetory();
+            GenerateInvetory(_selectedItemCategory);
         }
 
         private void UpdateGoldValue(int value)
@@ -170,22 +171,11 @@ namespace UI.Inventory
             liftingCapacityValue.SetText($"{value}/{maxValue}");
         }
 
-        private void GenerateInvetory()
+        private void GenerateInvetory(ItemCategory category)
         {
-            foreach(ItemCategory type in Enum.GetValues(typeof(ItemCategory)))
-            {
-                if (!_playerData.Inventory.Items.ContainsKey(type)) continue;
+            if (!_playerData.Inventory.Items.ContainsKey(category)) return;
 
-                if (!_invetoryGrids.ContainsKey(type))
-                    _invetoryGrids.Add(type, new(
-                        _inventoryItemSlotFactory,
-                        _playerData,
-                        gridConfig,
-                        itemSlotsContainer[type]
-                    ));
-
-                _invetoryGrids[type].GenerateItemSlots(_playerData.Inventory.Items[type]);
-            }
+            itemGrids[category].GenerateItemSlots(_playerData.Inventory.Items[category]);
         }
 
     }

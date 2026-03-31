@@ -3,7 +3,7 @@
 using Entity.Player;
 using UnityEngine;
 
-namespace Item
+namespace InteractionSystem
 {
     public class NPC : MonoBehaviour, IInteractable
     {

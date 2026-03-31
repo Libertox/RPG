@@ -1,6 +1,6 @@
 ﻿using DialogueSystem;
 using Entity.Player;
-using Item;
+using InteractionSystem;
 using UnityEngine;
 using Utility.Attribute;
 using Zenject;

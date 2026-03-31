@@ -1,37 +1,38 @@
-﻿using Entity.Player;
-using InventorySystem;
+﻿using InventorySystem;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace UI.Inventory
 {
-    public class InventoryGrid
+    public class InventoryGrid : MonoBehaviour
     {
-        private readonly List<InventoryGridNode> _nodes;
+        [SerializeField] private InventoryGridConfig config;
 
-        private readonly InventoryGridConfig _config;
+        [SerializeField] private ItemDescriptionView itemDescription;
+
+        [field: SerializeField] public RectTransform SlotsContainer { get; private set; }
 
         private int _currentRow = 0;
         private int _currentColumn = 0;
 
-        private readonly InventoryItemSlotPool _inventoryItemSlotFactory;
-        private readonly PlayerData _playerData;
-        private readonly RectTransform _slotsContainer;
+        private List<InventoryGridNode> _nodes;
+        private InventoryItemSlotPool _inventoryItemSlotFactory;
 
-        public InventoryGrid(InventoryItemSlotPool inventoryItemSlotFactory, PlayerData playerData, 
-            InventoryGridConfig config, RectTransform slotsContainer)
+        [Inject]
+        private void Construct(InventoryItemSlotPool inventoryItemSlotFactory)
+        {
+            _inventoryItemSlotFactory = inventoryItemSlotFactory;
+        }
+
+        private void Awake()
         {
             _nodes = new();
-
-            _inventoryItemSlotFactory = inventoryItemSlotFactory;
-            _playerData = playerData;
-            _config = config;
-            _slotsContainer = slotsContainer;
         }
 
         public void GenerateItemSlots(List<ItemInventory> items)
         {
-            _slotsContainer.sizeDelta = new Vector2(_slotsContainer.sizeDelta.x, 15);
+            SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, 15);
 
             for (int i = 0; i < items.Count; i++)
             {
@@ -66,17 +67,20 @@ namespace UI.Inventory
             return false;
         }
 
-        public void SetItemOnItemSlot(ItemBase newItem, ItemBase targetPosition)
+        public void SetItemOnItemSlot(ItemConfigBase newItem, ItemConfigBase targetPosition)
         {
             var node = FindNodeByItem(targetPosition);
 
             node.Slot.Initialize(newItem);
         }
 
-        public void RemoveItemFromGrid(ItemBase itemBase)
+        public void RemoveItemFromGrid(ItemConfigBase itemBase)
         {
             var nodes = FindNodesByItem(itemBase);
             if (nodes == null) return;
+
+            nodes[0].Slot.OnSelected -= OnItemSlotSelected;
+            nodes[0].Slot.OnDeselected -= OnItemSlotDeselected;
 
             _inventoryItemSlotFactory.Despawn(nodes[0].Slot);
 
@@ -86,7 +90,7 @@ namespace UI.Inventory
             }   
         }
 
-        public void AddItemToGrid(ItemBase itemSettings, int column = 0, int row = 0)
+        public void AddItemToGrid(ItemConfigBase itemSettings, int column = 0, int row = 0)
         {
             _currentColumn = column;
             _currentRow = row;
@@ -96,27 +100,30 @@ namespace UI.Inventory
                 IncreaseColumnCount();
             }
 
-            Vector2 slotPosition = new(_currentColumn * _config.ItemSlotSize.x + _config.LeftPadding, -(_currentRow * _config.ItemSlotSize.y + _config.TopPadding));
-            Vector2 slotSize = new(itemSettings.InventorySize.x * _config.ItemSlotSize.x, itemSettings.InventorySize.y * _config.ItemSlotSize.y);
+            Vector2 slotPosition = new(_currentColumn * config.ItemSlotSize.x + config.LeftPadding, -(_currentRow * config.ItemSlotSize.y + config.TopPadding));
+            Vector2 slotSize = new(itemSettings.InventorySize.x * config.ItemSlotSize.x, itemSettings.InventorySize.y * config.ItemSlotSize.y);
 
             InventoryItemSlot inventoryItemSlot = _inventoryItemSlotFactory
                 .Spawn()
                 .Initialize(itemSettings)
-                .SetParent(_slotsContainer)
+                .SetParent(SlotsContainer)
                 .SetAnchoredPosition(slotPosition)
                 .SetSize(slotSize);
 
+            inventoryItemSlot.OnSelected += OnItemSlotSelected;
+            inventoryItemSlot.OnDeselected += OnItemSlotDeselected;
+
             if (_currentColumn != 0)
-                inventoryItemSlot.RectTransform.anchoredPosition += new Vector2(_config.ItemPadding, 0f) * _currentColumn;
+                inventoryItemSlot.RectTransform.anchoredPosition += new Vector2(config.ItemPadding, 0f) * _currentColumn;
 
             if (_currentRow != 0)
-                inventoryItemSlot.RectTransform.anchoredPosition -= new Vector2(0, _config.ItemPadding) * _currentRow;
+                inventoryItemSlot.RectTransform.anchoredPosition -= new Vector2(0, config.ItemPadding) * _currentRow;
 
             for (int j = 0; j < itemSettings.InventorySize.x - 1; j++)
-                inventoryItemSlot.RectTransform.sizeDelta += new Vector2(_config.ItemPadding, 0);
+                inventoryItemSlot.RectTransform.sizeDelta += new Vector2(config.ItemPadding, 0);
 
             for (int j = 0; j < itemSettings.InventorySize.y - 1; j++)
-                inventoryItemSlot.RectTransform.sizeDelta += new Vector2(0, _config.ItemPadding);
+                inventoryItemSlot.RectTransform.sizeDelta += new Vector2(0, config.ItemPadding);
 
 
             for (int j = 0; j < itemSettings.InventorySize.x; j++)
@@ -132,24 +139,34 @@ namespace UI.Inventory
             IncreaseColumnCount();
         }
 
+        private void OnItemSlotDeselected()
+        {
+            itemDescription.Hide();
+        }
+
+        private void OnItemSlotSelected(ItemConfigBase item)
+        {
+            itemDescription.Setup(item);
+        }
+
         private void IncreaseColumnCount()
         {
             _currentColumn++;
 
-            if (_currentColumn == _config.ColumnNumber)
+            if (_currentColumn == config.ColumnNumber)
             {
                 _currentColumn = 0;
                 _currentRow++;
-                _slotsContainer.sizeDelta += new Vector2(0, _config.ItemSlotSize.y);
+                SlotsContainer.sizeDelta += new Vector2(0, config.ItemSlotSize.y);
             }
         }
 
-        private InventoryGridNode FindNodeByItem(ItemBase item)
+        private InventoryGridNode FindNodeByItem(ItemConfigBase item)
         {
             return _nodes.Find((node) => node.Slot.Item == item);
         }
 
-        private List<InventoryGridNode> FindNodesByItem(ItemBase item)
+        private List<InventoryGridNode> FindNodesByItem(ItemConfigBase item)
         {
             return _nodes.FindAll((node) => node.Slot.Item == item);
         }

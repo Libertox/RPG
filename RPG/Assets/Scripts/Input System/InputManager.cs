@@ -128,6 +128,11 @@ namespace InputSystem
             return _iconsContainer.GetInputIcons(promptType, _currentControllerType);
         }
 
+        public Vector2 GetMousePosition()
+        {
+            return Mouse.current.position.value;
+        }
+
         public void Tick()
         {
             SetActiveController();

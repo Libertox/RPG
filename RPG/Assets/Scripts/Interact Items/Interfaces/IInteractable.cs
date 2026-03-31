@@ -2,7 +2,7 @@
 
 using Entity.Player;
 
-namespace Item
+namespace InteractionSystem
 {
     public interface IInteractable
     {

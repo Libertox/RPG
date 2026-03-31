@@ -1,29 +1,21 @@
 ﻿using Entity.Player;
-using Item;
+using InteractionSystem;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace InventorySystem
 {
-    public class Loot : MonoBehaviour, IInteractable
+    public class Loot : InteractionBase
     {
         private List<ItemInventory> _items;
 
         private LootFactory _factory;
 
-        public bool CanInteract()
-        {
-            return gameObject.activeSelf;
-        }
-
-        public void Interact(PlayerController playerController)
+        public override void Interact(PlayerController playerController)
         {
             if (!CanInteract()) return;
 
             foreach(var item in _items)
             {
-                Debug.Log(item.Amount);
-
                 playerController.PlayerData.Inventory.AddItem(item.ItemBase, item.Amount);
             }
 

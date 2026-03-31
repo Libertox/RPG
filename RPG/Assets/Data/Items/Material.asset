@@ -15,8 +15,8 @@ MonoBehaviour:
   <Name>k__BackingField: Mushroom
   <Description>k__BackingField: Mushroom
   <Icon>k__BackingField: {fileID: 21300000, guid: 040dd1e3781b0984cb373645ed452c28, type: 3}
-  <Type>k__BackingField: 0
+  <Category>k__BackingField: {fileID: 11400000, guid: f6470ca25b8476640ba62eb93eb7ce21, type: 2}
   <Weight>k__BackingField: 11
   <InventorySize>k__BackingField: {x: 1, y: 1}
-  <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: 6
+  <CanEquip>k__BackingField: 0
+  <EquipmentSlot>k__BackingField: {fileID: 0}

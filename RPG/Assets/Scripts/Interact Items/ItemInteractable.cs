@@ -18,7 +18,7 @@ namespace QuestSystem
         {
             if (!CanInteract()) return;
 
-            playerController.PlayerData.Inventory.AddItemAndUpdateInventory(itemBase);
+            playerController.PlayerInventory.InventoryStorage.AddItemAndNotify(itemBase);
 
             ///Change to ppol
             Destroy(gameObject);

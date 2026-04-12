@@ -1,8 +1,6 @@
 ﻿using Entity.Player;
 using InputSystem;
 using InventorySystem;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -28,7 +26,7 @@ namespace UI.Inventory
         [Header("Item List Parameters")]
         [SerializeField] private InventoryGridConfig gridConfig;
 
-        private PlayerData _playerData;
+        private PlayerController _playerController;
         private InputManager _inputManager;
         private UIViewManager _viewManager;
 
@@ -39,7 +37,7 @@ namespace UI.Inventory
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager, InventoryItemSlotPool inventoryItemSlotFactory)
         {
-            _playerData = playerController.PlayerData;
+            _playerController = playerController;
             _inputManager = inputManager;
             _viewManager = viewManager;
             _inventoryItemSlotFactory = inventoryItemSlotFactory;
@@ -62,14 +60,14 @@ namespace UI.Inventory
 
         private void OnEnable()
         {
-            _playerData.Inventory.OnItemRemoved += OnItemRemovedFromInventory;
-            _playerData.Inventory.OnItemAdded += OnItemAddedToInventory;
-            _playerData.Inventory.OnItemSwapped += OnItemSwapInInventory;
+            _playerController.PlayerInventory.InventoryStorage.OnItemRemoved += OnItemRemovedFromInventory;
+            _playerController.PlayerInventory.InventoryStorage.OnItemAdded += OnItemAddedToInventory;
+            _playerController.PlayerInventory.Equipment.OnItemSwapped += OnItemSwapInInventory;
         }
 
-        private void OnItemSwapInInventory(ItemConfigBase newItem, ItemConfigBase lastItem)
+        private void OnItemSwapInInventory(ItemConfigBase currentItem, ItemConfigBase newItem)
         {
-            itemGrids[newItem.Category].SetItemOnItemSlot(lastItem, newItem);
+            itemGrids[newItem.Category].SetItemOnItemSlot(currentItem, newItem);
         }
 
         private void OnItemAddedToInventory(ItemConfigBase item)
@@ -84,9 +82,9 @@ namespace UI.Inventory
 
         private void OnDisable()
         {
-            _playerData.Inventory.OnItemRemoved -= OnItemRemovedFromInventory;
-            _playerData.Inventory.OnItemAdded -= OnItemAddedToInventory;
-            _playerData.Inventory.OnItemSwapped -= OnItemSwapInInventory;
+            _playerController.PlayerInventory.InventoryStorage.OnItemRemoved -= OnItemRemovedFromInventory;
+            _playerController.PlayerInventory.InventoryStorage.OnItemAdded -= OnItemAddedToInventory;
+            _playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
         }
 
         private void SetSelectedItemCategory(ItemCategory itemCategory)
@@ -155,8 +153,8 @@ namespace UI.Inventory
 
         private void UpdateInventory()
         {
-            UpdateGoldValue(_playerData.Inventory.Gold);
-            UpdateLiftingCapacityValue(_playerData.Inventory.LiftingCapacity, _playerData.MaxLiftingCapacity);
+            UpdateGoldValue(_playerController.PlayerInventory.Gold);
+            UpdateLiftingCapacityValue(_playerController.PlayerInventory.InventoryStorage.CurrentWeight.Value, _playerController.PlayerData.MaxLiftingCapacity);
 
             GenerateInvetory(_selectedItemCategory);
         }
@@ -173,9 +171,7 @@ namespace UI.Inventory
 
         private void GenerateInvetory(ItemCategory category)
         {
-            if (!_playerData.Inventory.Items.ContainsKey(category)) return;
-
-            itemGrids[category].GenerateItemSlots(_playerData.Inventory.Items[category]);
+            itemGrids[category].GenerateItemSlots(_playerController.PlayerInventory.InventoryStorage.GetItemsInCategory(category));
         }
 
     }

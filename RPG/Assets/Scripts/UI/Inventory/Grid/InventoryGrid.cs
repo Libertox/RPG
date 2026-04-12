@@ -8,9 +8,7 @@ namespace UI.Inventory
     public class InventoryGrid : MonoBehaviour
     {
         [SerializeField] private InventoryGridConfig config;
-
         [SerializeField] private ItemDescriptionView itemDescription;
-
         [field: SerializeField] public RectTransform SlotsContainer { get; private set; }
 
         private int _currentRow = 0;
@@ -32,6 +30,8 @@ namespace UI.Inventory
 
         public void GenerateItemSlots(List<ItemInventory> items)
         {
+            if (items == null) return;
+
             SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, 15);
 
             for (int i = 0; i < items.Count; i++)
@@ -67,17 +67,19 @@ namespace UI.Inventory
             return false;
         }
 
-        public void SetItemOnItemSlot(ItemConfigBase newItem, ItemConfigBase targetPosition)
+        public void SetItemOnItemSlot(ItemConfigBase currentItem, ItemConfigBase newItem)
         {
-            var node = FindNodeByItem(targetPosition);
+            var node = FindNodeByItem(currentItem);
 
+            if (node == null) return;
+    
             node.Slot.Initialize(newItem);
         }
 
         public void RemoveItemFromGrid(ItemConfigBase itemBase)
         {
             var nodes = FindNodesByItem(itemBase);
-            if (nodes == null) return;
+            if (nodes == null || nodes.Count == 0) return;
 
             nodes[0].Slot.OnSelected -= OnItemSlotSelected;
             nodes[0].Slot.OnDeselected -= OnItemSlotDeselected;

@@ -13,18 +13,16 @@ namespace UI.Inventory
         [SerializeField] private Button button;
 
         [Header("Settings")]
-        [SerializeField] private Sprite baseIcon;
-        [SerializeField] private EquipmentSlotCategory category;
+        [SerializeField] private Sprite defaultIcon;
+        [SerializeField] private EquipmentSlotCategory slotCategory;
+        [SerializeField] private int slotIndex;
 
-        private PlayerInventory _inventory;
-        private ItemInventory _equipedItem;
+        private Equipment _equipment;
 
         [Inject]
         private void Construct(PlayerController playerController)
         {
-            _inventory = playerController.PlayerData.Inventory;
-
-            _inventory.OnItemEquipped += OnItemEquiped;
+            _equipment = playerController.PlayerInventory.Equipment;
         }
 
         private void Awake()
@@ -32,30 +30,47 @@ namespace UI.Inventory
             button.onClick.AddListener(OnClick);
         }
 
-        private void OnItemEquiped(ItemInventory item)
+        private void OnEnable()
         {
-            if(item.ItemBase.EquipmentSlot == category)
-            {
-                SetItemIcon(item.ItemBase.Icon);
+            button.onClick.AddListener(OnClick);
+            _equipment.OnItemEquipped += HandleItemEquipped;
+            Refresh();
+        }
 
-                _equipedItem = item;
+        private void OnDisable()
+        {
+            button.onClick.RemoveListener(OnClick);
+            _equipment.OnItemEquipped -= HandleItemEquipped;
+        }
+
+        private void HandleItemEquipped(ItemInventory item, int index)
+        {
+            if (Matches(item, index))
+            {
+                SetIcon(item.ItemBase.Icon);
             }
         }
 
-        private void SetItemIcon(Sprite icon)
+        private bool Matches(ItemInventory item, int index)
+        {
+            return item.ItemBase.EquipmentSlot == slotCategory && index == slotIndex;
+        }
+
+        private void Refresh()
+        {
+            var item = _equipment.GetEquipped(slotCategory, slotIndex);
+            SetIcon(item != null ? item.ItemBase.Icon : defaultIcon);
+        }
+
+        private void SetIcon(Sprite icon)
         {
             this.icon.sprite = icon;
         }
 
         private void OnClick()
         {
-            if (_equipedItem == null) return;
-
-            _inventory.TryUnequipItem(_equipedItem);
-
-            _equipedItem = null;
-
-            SetItemIcon(baseIcon);
+            if (_equipment.TryUnequipItem(slotCategory, slotIndex))
+                SetIcon(defaultIcon);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace InventorySystem
 
             foreach(var item in _items)
             {
-                playerController.PlayerData.Inventory.AddItem(item.ItemBase, item.Amount);
+                playerController.PlayerInventory.InventoryStorage.AddItem(item.ItemBase, item.Amount);
             }
 
             _items.Clear();

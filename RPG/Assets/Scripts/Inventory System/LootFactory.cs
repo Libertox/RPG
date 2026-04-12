@@ -20,12 +20,17 @@ namespace InventorySystem
         {
             _playerController = playerController;
             _container = container;
-            _playerController.PlayerData.Inventory.OnItemDropped += OnItemDropped;
+         
         }
 
         private void Awake()
         {
             InitializePool();
+        }
+
+        private void Start()
+        {
+            _playerController.PlayerInventory.OnItemDropped += OnItemDropped;
         }
 
         private void InitializePool()
@@ -47,8 +52,6 @@ namespace InventorySystem
 
         private void OnItemDropped(ItemInventory item)
         {
-            Debug.Log("OnItemDropped");
-
             if (ShouldCreateNewLoot())
             {
                 _currentLoot = _lootPools.Get();

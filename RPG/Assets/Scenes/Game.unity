@@ -223,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445741943, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.88
+      value: 3.71
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445741943, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1545,7 +1545,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
   m_PrefabInstance: {fileID: 1539925079076479852}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1062251623}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b30f5da2d8565f6418f296833ce21a5d, type: 3}
@@ -1767,6 +1767,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056319134}
   m_CullTransparentMesh: 1
+--- !u!1 &1062251623 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+  m_PrefabInstance: {fileID: 1539925079076479852}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1062251627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062251623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189fc92397bdea44a98a955548924cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.PlayerInventory
+  <InventorySettings>k__BackingField: {fileID: 11400000, guid: a2079d24d4b15ee4eadfa5c5213f8e77, type: 2}
 --- !u!1 &1090039114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3476,6 +3494,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: playerData
+      value: 
+      objectReference: {fileID: 11400000, guid: 37e56e2db1cd7b94a8ea78e01407e1e7, type: 2}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: playerInventory
+      value: 
+      objectReference: {fileID: 1062251627}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.movementSpeed
       value: 4
       objectReference: {fileID: 0}
@@ -3492,13 +3518,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: playerData.<InventorySettings>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: a2079d24d4b15ee4eadfa5c5213f8e77, type: 2}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.<MaxLiftingCapacity>k__BackingField
       value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1062251627}
   m_SourcePrefab: {fileID: 100100000, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
 --- !u!1001 &2641778646376057912
 PrefabInstance:

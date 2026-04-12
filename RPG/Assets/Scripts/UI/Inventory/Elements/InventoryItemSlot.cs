@@ -3,7 +3,6 @@ using InputSystem;
 using InventorySystem;
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,7 +10,7 @@ using Zenject;
 
 namespace UI.Inventory
 {
-    public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IPointerEnterHandler, IPointerExitHandler
     {
         public event Action<ItemConfigBase> OnSelected;
         public event Action OnDeselected;
@@ -24,12 +23,10 @@ namespace UI.Inventory
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
 
-        public RectTransform RectTransform => (RectTransform)transform;
-
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager)
         {
-            _playerInventory = playerController.PlayerData.Inventory;
+            _playerInventory = playerController.PlayerInventory;
             _inputManager = inputManager;
         }
 
@@ -38,35 +35,14 @@ namespace UI.Inventory
             Item = item;
 
             icon.sprite = item.Icon;
-            amount.SetText(_playerInventory.GetItemInventory(item).Amount.ToString());
-
-            return this;
-        }
-
-        public InventoryItemSlot SetParent(Transform parent)
-        {
-            transform.SetParent(parent);
-
-            return this;
-        }
-
-        public InventoryItemSlot SetAnchoredPosition(Vector2 anchoredPosition)
-        {
-            RectTransform.anchoredPosition = anchoredPosition;
-
-            return this;
-        }
-
-        public InventoryItemSlot SetSize(Vector2 size)
-        {
-            RectTransform.sizeDelta = size;
+            amount.SetText(_playerInventory.InventoryStorage.FindInventoryItem(item).Amount.ToString());
 
             return this;
         }
 
         private void EquipItem()
         {
-            _playerInventory.TryEquipItem(Item);
+            _playerInventory.Equipment.TryEquipItem(_playerInventory.InventoryStorage.FindInventoryItem(Item));
         }
 
         private void DropItem()

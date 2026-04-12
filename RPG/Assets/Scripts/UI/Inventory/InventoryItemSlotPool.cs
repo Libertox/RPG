@@ -1,5 +1,4 @@
-﻿using UnityEngine.Pool;
-using Zenject;
+﻿using Zenject;
 
 namespace UI.Inventory
 {

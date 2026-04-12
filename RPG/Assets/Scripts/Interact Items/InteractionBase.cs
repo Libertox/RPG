@@ -1,8 +1,9 @@
 ﻿using Entity.Player;
+using UnityEngine;
 
 namespace InteractionSystem
 {
-    public abstract class InteractionBase : IInteractable
+    public abstract class InteractionBase : MonoBehaviour,  IInteractable
     {
         public virtual bool CanInteract()
         {

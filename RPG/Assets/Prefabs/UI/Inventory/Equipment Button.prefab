@@ -136,8 +136,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.EquipmentSlot
   icon: {fileID: 2319896570985974133}
   button: {fileID: 7577385303652248938}
-  baseIcon: {fileID: 21300000, guid: 728709007f0360249a1c6ae249c1ff85, type: 3}
-  category: 0
+  defaultIcon: {fileID: 21300000, guid: 728709007f0360249a1c6ae249c1ff85, type: 3}
+  slotCategory: {fileID: 0}
+  slotIndex: 0
 --- !u!1 &7657305810348968796
 GameObject:
   m_ObjectHideFlags: 0

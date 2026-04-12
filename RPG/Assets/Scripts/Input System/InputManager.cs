@@ -39,6 +39,8 @@ namespace InputSystem
 
             _inputActions.Enable();
 
+            EnableUIMap(false);
+
             SubscribeInputAction();
         }
 

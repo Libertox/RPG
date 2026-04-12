@@ -1,36 +1,17 @@
-﻿
-
-using InventorySystem;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Entity.Player
 {
-    [System.Serializable]
-    public class PlayerData
+    [CreateAssetMenu(fileName = "Player Data", menuName = "ScriptableObjects/Player/Player Data")]
+    public class PlayerData : ScriptableObject
     {
         [field: Header("Movement Data")]
-        [SerializeField] private float movementSpeed;
-        [SerializeField] private float encumberedSpeed;
+        [field: SerializeField] public float MovementSpeed { get; private set; }
+        [field: SerializeField] public float EncumberedSpeed { get; private set; }
+
         [field: SerializeField] public float RotationSpeed { get; private set; }
-
         [field: SerializeField] public CombatData CombatData { get; private set; }
-
         [field: SerializeField] public float MaxLiftingCapacity { get; private set; }
-
-        public PlayerInventory Inventory { get; private set; }
-
-        public PlayerData()
-        {
-            Inventory = new PlayerInventory();
-        }
-
-        public float GetMovementSpeed()
-        {
-            float speed = Inventory.LiftingCapacity >= MaxLiftingCapacity ? encumberedSpeed : movementSpeed;
-
-            return speed;
-        }
-
 
     }
 }

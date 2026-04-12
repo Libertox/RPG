@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4134c5d584a0640af2f09fce7607d3, type: 3}
+  m_Name: Inventory Settings
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.InventorySettings
+  MaxEquipmentSlotsAmount:
+    SerializedKeys:
+    - {fileID: 11400000, guid: 697a36ba06138ce4b81d9c028e275d60, type: 2}
+    - {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}
+    - {fileID: 11400000, guid: 4691c50b3833651418daf5d79172a8c8, type: 2}
+    - {fileID: 11400000, guid: 70c4581a561774e4893559659b513bea, type: 2}
+    - {fileID: 11400000, guid: b9e3fb1856146144a833683e82758249, type: 2}
+    - {fileID: 11400000, guid: 974b2ed792dd4eb469b962a277629224, type: 2}
+    - {fileID: 11400000, guid: e8b922373622f6a4f9c4db05404bb564, type: 2}
+    SerializedValues: 01000000040000000100000001000000010000000100000001000000

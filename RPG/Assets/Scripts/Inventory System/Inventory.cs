@@ -8,7 +8,7 @@ namespace InventorySystem
 {
     public class Inventory : IInventoryStorage
     {
-        public event Action<ItemConfigBase> OnItemAdded;
+        public event Action<ItemInventory> OnItemAdded;
         public event Action<ItemConfigBase> OnItemRemoved;
 
         private readonly Dictionary<ItemCategory, List<ItemInventory>> _items;
@@ -23,7 +23,7 @@ namespace InventorySystem
         public void AddItemAndNotify(ItemConfigBase item, int amount = 1)
         {
             if (!AddItem(item, amount)) return;
-            OnItemAdded?.Invoke(item);
+            OnItemAdded?.Invoke(GetOrCreateInventoryItem(item));
         }
 
         public void RemoveItemAndNotify(ItemConfigBase item)
@@ -50,12 +50,12 @@ namespace InventorySystem
             var inventoryItem = FindInventoryItem(item);
             if (inventoryItem == null) return false;
 
-            inventoryItem.Amount--;
+            //inventoryItem.Amount--;
             CurrentWeight.Subtract(item.Weight);
 
-            if (inventoryItem.Amount <= 0)
-                _items[item.Category].Remove(inventoryItem);
+            //if (inventoryItem.Amount <= 0)
 
+            _items[item.Category].Remove(inventoryItem);
             Debug.Log($"{item.Name} removed");
             return true;
         }

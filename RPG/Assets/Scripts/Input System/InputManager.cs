@@ -22,6 +22,9 @@ namespace InputSystem
         public event Action OnLeftMouseClicked;
         public event Action OnRightMouseClicked;
 
+        public event Action OnLeftMouseStartHolded;
+        public event Action OnLeftMouseCancelHolded;
+
         public Action<ControllerType> OnControllerChanged;
 
         private readonly InputActions _inputActions;
@@ -58,12 +61,23 @@ namespace InputSystem
             _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
             _inputActions.UI.Cancel.performed += OnCancelButtonPerformed;
 
-            _inputActions.UI.Click.performed += OnLeftMouseButtonPerformed;
+            _inputActions.UI.Click.canceled += OnLeftMouseButtonPerformed;
             _inputActions.UI.RightClick.performed += OnRightMouseButtonPerformed;
-
+            _inputActions.UI.HoldLeftMouseButton.performed += OnHoldLeftMouseButtonStarted;
+            _inputActions.UI.HoldLeftMouseButton.canceled += OnHoldLeftMouseButtonCanceled;
         }
 
-        private void OnRightMouseButtonPerformed(InputAction.CallbackContext obj)
+        private void OnHoldLeftMouseButtonStarted(InputAction.CallbackContext action)
+        {
+            OnLeftMouseStartHolded?.Invoke();
+        }
+
+        private void OnHoldLeftMouseButtonCanceled(InputAction.CallbackContext action)
+        {
+            OnLeftMouseCancelHolded?.Invoke();
+        }
+
+        private void OnRightMouseButtonPerformed(InputAction.CallbackContext action)
         {
             OnRightMouseClicked?.Invoke();
         }

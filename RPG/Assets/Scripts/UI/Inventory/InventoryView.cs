@@ -23,24 +23,18 @@ namespace UI.Inventory
         [SerializeField] private TextMeshProUGUI goldValue;
         [SerializeField] private TextMeshProUGUI liftingCapacityValue;
 
-        [Header("Item List Parameters")]
-        [SerializeField] private InventoryGridConfig gridConfig;
-
         private PlayerController _playerController;
         private InputManager _inputManager;
         private UIViewManager _viewManager;
 
         private ItemCategory _selectedItemCategory;
 
-        private InventoryItemSlotPool _inventoryItemSlotFactory;
-
         [Inject]
-        public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager, InventoryItemSlotPool inventoryItemSlotFactory)
+        public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager)
         {
             _playerController = playerController;
             _inputManager = inputManager;
             _viewManager = viewManager;
-            _inventoryItemSlotFactory = inventoryItemSlotFactory;
         }
 
         public void Initialize()
@@ -65,21 +59,6 @@ namespace UI.Inventory
             _playerController.PlayerInventory.Equipment.OnItemSwapped += OnItemSwapInInventory;
         }
 
-        private void OnItemSwapInInventory(ItemConfigBase currentItem, ItemConfigBase newItem)
-        {
-            itemGrids[newItem.Category].SetItemOnItemSlot(currentItem, newItem);
-        }
-
-        private void OnItemAddedToInventory(ItemConfigBase item)
-        {
-            itemGrids[item.Category].AddItemToGrid(item);
-        }
-
-        private void OnItemRemovedFromInventory(ItemConfigBase item)
-        {
-            itemGrids[item.Category].RemoveItemFromGrid(item);
-        }
-
         private void OnDisable()
         {
             _playerController.PlayerInventory.InventoryStorage.OnItemRemoved -= OnItemRemovedFromInventory;
@@ -87,23 +66,65 @@ namespace UI.Inventory
             _playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
         }
 
-        private void SetSelectedItemCategory(ItemCategory itemCategory)
+        private void OnItemSwapInInventory(ItemInventory currentItem, ItemInventory newItem)
         {
-            EnableItemSlots(false);
+            var grid = GetInventoryGrid(newItem.ItemBase.Category);
 
-            _selectedItemCategory = itemCategory;
-            scrollArea.content = itemGrids[_selectedItemCategory].SlotsContainer;
+            if (grid == null) return;
 
-            EnableItemSlots(true);
-
-            GenerateInvetory(_selectedItemCategory);
+            grid.SetItemOnItemSlot(currentItem, newItem);
         }
 
-        private void EnableItemSlots(bool enable = true)
+        private void OnItemAddedToInventory(ItemInventory item)
         {
-            if (_selectedItemCategory == null) return;
+            var grid = GetInventoryGrid(item.ItemBase.Category);
 
-            itemGrids[_selectedItemCategory].gameObject.SetActive(enable);
+            if (grid == null) return;
+
+            grid.AddItemToGrid(item);
+        }
+
+        private void OnItemRemovedFromInventory(ItemConfigBase item)
+        {
+            var grid = GetInventoryGrid(item.Category);
+
+            if (grid == null) return;
+
+            grid.RemoveItemFromGrid(item);
+        }
+
+        private InventoryGrid GetInventoryGrid(ItemCategory itemCategory)
+        {
+            itemGrids.TryGetValue(itemCategory, out var grid);
+
+            return grid;
+        }
+
+        private void SetSelectedItemCategory(ItemCategory category)
+        {
+            if (_selectedItemCategory == category) return;
+
+            ToggleCategory(_selectedItemCategory, false);
+
+            _selectedItemCategory = category;
+
+            ToggleCategory(_selectedItemCategory, true);
+
+            if (itemGrids.TryGetValue(category, out var grid))
+            {
+                scrollArea.content = grid.SlotsContainer;
+                GenerateInventory(category);
+            }
+        }
+
+        private void ToggleCategory(ItemCategory category, bool state)
+        {
+            if (category == null) return;
+
+            if (itemGrids.TryGetValue(category, out var grid))
+            {
+                grid.gameObject.SetActive(state);
+            }
         }
 
         public void Open()
@@ -156,7 +177,7 @@ namespace UI.Inventory
             UpdateGoldValue(_playerController.PlayerInventory.Gold);
             UpdateLiftingCapacityValue(_playerController.PlayerInventory.InventoryStorage.CurrentWeight.Value, _playerController.PlayerData.MaxLiftingCapacity);
 
-            GenerateInvetory(_selectedItemCategory);
+            GenerateInventory(_selectedItemCategory);
         }
 
         private void UpdateGoldValue(int value)
@@ -169,7 +190,7 @@ namespace UI.Inventory
             liftingCapacityValue.SetText($"{value}/{maxValue}");
         }
 
-        private void GenerateInvetory(ItemCategory category)
+        private void GenerateInventory(ItemCategory category)
         {
             itemGrids[category].GenerateItemSlots(_playerController.PlayerInventory.InventoryStorage.GetItemsInCategory(category));
         }

@@ -21,31 +21,25 @@ namespace InventorySystem
 
         private void Start()
         {
-            _equipment.OnItemUnequipped += OnItemUnequipped;
             _equipment.OnItemSwapped += OnItemSwapped;
             _equipment.OnItemEquipped += OnItemEquipped;
         }
 
         private void OnItemEquipped(ItemInventory item, int slot)
         {
-            _inventoryStorage.RemoveItemAndNotify(item.ItemBase);
+            InventoryStorage.RemoveItemAndNotify(item.ItemBase);
         }
 
-        private void OnItemSwapped(ItemConfigBase newItem, ItemConfigBase oldItem)
+        private void OnItemSwapped(ItemInventory newItem, ItemInventory oldItem)
         {
-            InventoryStorage.AddItem(oldItem, 1);
+            InventoryStorage.AddItem(oldItem.ItemBase, oldItem.Amount);
         }
 
-        private void OnItemUnequipped(ItemInventory item)
+        public void DropItem(ItemInventory item)
         {
-            InventoryStorage.AddItemAndNotify(item.ItemBase);
-        }
+            OnItemDropped?.Invoke(item);
 
-        public void DropItem(ItemConfigBase item)
-        {
-            OnItemDropped?.Invoke(InventoryStorage.FindInventoryItem(item));
-
-            InventoryStorage.RemoveItemAndNotify(item);
+            InventoryStorage.RemoveItemAndNotify(item.ItemBase);
         }
 
         public void AddGold(int amount)

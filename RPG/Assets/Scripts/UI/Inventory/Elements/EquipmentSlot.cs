@@ -1,16 +1,19 @@
 ﻿using Entity.Player;
+using InputSystem;
 using InventorySystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
 namespace UI.Inventory
 {
-    public class EquipmentSlot : MonoBehaviour
+    public class EquipmentSlot : MonoBehaviour, IDragable
     {
         [Header("Refernces")]
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
+        [SerializeField] private ItemHolder holder;
 
         [Header("Settings")]
         [SerializeField] private Sprite defaultIcon;
@@ -18,11 +21,15 @@ namespace UI.Inventory
         [SerializeField] private int slotIndex;
 
         private Equipment _equipment;
+        private InputManager _inputManager;
+        private IInventoryStorage _inventoryStorage;
 
         [Inject]
-        private void Construct(PlayerController playerController)
+        private void Construct(PlayerController playerController, InputManager inputManager) 
         {
             _equipment = playerController.PlayerInventory.Equipment;
+            _inventoryStorage = playerController.PlayerInventory.InventoryStorage;
+            _inputManager = inputManager;
         }
 
         private void Awake()
@@ -69,8 +76,34 @@ namespace UI.Inventory
 
         private void OnClick()
         {
+            var item = _equipment.GetEquipped(slotCategory, slotIndex);
+
+            if (_equipment.TryUnequipItem(slotCategory, slotIndex))
+            {
+                SetIcon(defaultIcon);
+                _inventoryStorage.AddItemAndNotify(item.ItemBase);
+            }
+                
+        }
+
+        public void Drag()
+        {
+            holder.SetItem(_equipment.GetEquipped(slotCategory, slotIndex), this);
+
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
                 SetIcon(defaultIcon);
+        }
+
+        public void Drop()
+        {
+            if (holder.HoldItem == null) return;
+
+            if (slotCategory == holder.HoldItem.ItemBase.EquipmentSlot)
+                _equipment.TryEquipItem(holder.HoldItem, slotIndex);
+            else
+                holder.ReturnToStartSlot();
+
+           holder.Hide();
         }
     }
 }

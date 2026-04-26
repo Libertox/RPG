@@ -10,18 +10,20 @@ using Zenject;
 
 namespace UI.Inventory
 {
-    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IPointerEnterHandler, IPointerExitHandler
+    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IDragable, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action<ItemConfigBase> OnSelected;
+        public event Action<ItemInventory> OnSelected;
         public event Action OnDeselected;
 
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
 
-        public ItemConfigBase Item { get; private set; }
+        public ItemInventory Item { get; private set; }
 
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
+
+        private ItemHolder _itemHolder;
 
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager)
@@ -30,19 +32,21 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public InventoryItemSlot Initialize(ItemConfigBase item)
+        public InventoryItemSlot Initialize(ItemInventory item, ItemHolder itemHolder)
         {
             Item = item;
 
-            icon.sprite = item.Icon;
-            amount.SetText(_playerInventory.InventoryStorage.FindInventoryItem(item).Amount.ToString());
+            icon.sprite = item.ItemBase.Icon;
+            amount.SetText(item.Amount.ToString());
+
+            _itemHolder = itemHolder;
 
             return this;
         }
 
         private void EquipItem()
         {
-            _playerInventory.Equipment.TryEquipItem(_playerInventory.InventoryStorage.FindInventoryItem(Item));
+            _playerInventory.Equipment.TryEquipItem(Item);
         }
 
         private void DropItem()
@@ -52,6 +56,8 @@ namespace UI.Inventory
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if (!gameObject.activeSelf) return;
+
             OnSelected?.Invoke(Item);
 
             _inputManager.OnLeftMouseClicked += EquipItem;
@@ -72,6 +78,14 @@ namespace UI.Inventory
             _inputManager.OnRightMouseClicked -= DropItem;
         }
 
+        public void Drop()
+        {
+            
+        }
 
+        public void Drag()
+        {
+            _itemHolder.SetItem(Item, this);
+        }
     }
 }

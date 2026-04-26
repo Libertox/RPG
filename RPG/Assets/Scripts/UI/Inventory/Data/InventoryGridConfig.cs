@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace UI.Inventory
 {
-    [Serializable]
-    public class InventoryGridConfig
+    [CreateAssetMenu(fileName = "Inventory Grid Config", menuName = "ScriptableObjects/Inventory System/Inventory Grid Config")]
+    public class InventoryGridConfig : ScriptableObject
     {
         [field: SerializeField] public float TopPadding { get; private set; }
         [field: SerializeField] public float LeftPadding { get; private set; }

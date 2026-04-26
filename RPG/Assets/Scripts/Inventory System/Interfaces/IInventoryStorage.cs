@@ -6,7 +6,7 @@ namespace InventorySystem
 {
     public interface IInventoryStorage
     {
-        public event Action<ItemConfigBase> OnItemAdded;
+        public event Action<ItemInventory> OnItemAdded;
         public event Action<ItemConfigBase> OnItemRemoved;
 
         public ObservableFloat CurrentWeight { get; set; }

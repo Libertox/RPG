@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a727b43a441a4d46827f61473578add, type: 3}
   m_Name: Armor
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.ItemBase
-  <Name>k__BackingField: Mushroom
+  <Name>k__BackingField: Armor
   <Description>k__BackingField: Mushroom
   <Icon>k__BackingField: {fileID: 21300000, guid: 5ccd4829acad5d149be6aeb611745b6f, type: 3}
   <Category>k__BackingField: {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
   <Weight>k__BackingField: 11
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 697a36ba06138ce4b81d9c028e275d60, type: 2}
+  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}

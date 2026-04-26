@@ -13,10 +13,10 @@ namespace UI.Inventory
             _pool = pool;
         }
 
-        public InventoryItemSlot Create(ItemConfigBase item, RectTransform parent, Vector2 position, Vector2 size)
+        public InventoryItemSlot Create(ItemInventory item, RectTransform parent, Vector2 position, Vector2 size, ItemHolder itemHolder)
         {
             return _pool.Spawn()
-                .Initialize(item)
+                .Initialize(item, itemHolder)
                 .SetParent(parent)
                 .SetAnchoredPosition(position)
                 .SetSize(size);

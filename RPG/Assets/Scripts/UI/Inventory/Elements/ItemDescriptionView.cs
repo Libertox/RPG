@@ -21,10 +21,10 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public  void Setup(ItemConfigBase item)
+        public  void Setup(ItemInventory item)
         {
-            itemName.SetText(item.Name);
-            description.SetText(item.Description);
+            itemName.SetText(item.ItemBase.Name);
+            description.SetText(item.ItemBase.Description);
 
             Show();
         }

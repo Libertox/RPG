@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4134c5d584a0640af2f09fce7607d3, type: 3}
   m_Name: Inventory Settings
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.InventorySettings
-  MaxEquipmentSlotsAmount:
+  <MaxEquipmentSlotsAmount>k__BackingField:
     SerializedKeys:
     - {fileID: 11400000, guid: 697a36ba06138ce4b81d9c028e275d60, type: 2}
     - {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}

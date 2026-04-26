@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UI.Inventory;
 
 namespace InventorySystem
 {
@@ -10,7 +11,7 @@ namespace InventorySystem
         public event Action<ItemInventory, int> OnItemEquipped;
         public event Action<ItemInventory> OnItemUnequipped;
 
-        public event Action<ItemConfigBase, ItemConfigBase> OnItemSwapped;
+        public event Action<ItemInventory, ItemInventory> OnItemSwapped;
 
         private readonly Dictionary<EquipmentSlotCategory, ItemInventory[]> _equipmentItems;
 
@@ -34,13 +35,23 @@ namespace InventorySystem
             EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;
             int slot = GetFreeConsumableSlot(category);
 
+            return TryEquipItem(inventoryItem, slot);
+        }
+
+        public bool TryEquipItem(ItemInventory inventoryItem, int slot)
+        {
+            if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
+                return false;
+
+            EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;
+
             if (slot == INVALID_SLOT)
                 slot = _equipmentItems[category].Length - 1;
 
             var replaced = _equipmentItems[category][slot];
 
             if (replaced != null)
-                OnItemSwapped?.Invoke(inventoryItem.ItemBase, replaced.ItemBase);
+                OnItemSwapped?.Invoke(inventoryItem, replaced);
 
             _equipmentItems[category][slot] = inventoryItem;
             OnItemEquipped?.Invoke(inventoryItem, slot);

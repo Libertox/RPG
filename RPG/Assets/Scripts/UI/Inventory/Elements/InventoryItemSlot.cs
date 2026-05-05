@@ -12,7 +12,7 @@ namespace UI.Inventory
 {
     public class InventoryItemSlot : UIElement<InventoryItemSlot>, IDragable, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action<ItemInventory> OnSelected;
+        public event Action<InventoryItemSlot> OnSelected;
         public event Action OnDeselected;
 
         [SerializeField] private Image icon;
@@ -58,7 +58,7 @@ namespace UI.Inventory
         {
             if (!gameObject.activeSelf) return;
 
-            OnSelected?.Invoke(Item);
+            OnSelected?.Invoke(this);
 
             _inputManager.OnLeftMouseClicked += EquipItem;
             _inputManager.OnRightMouseClicked += DropItem;

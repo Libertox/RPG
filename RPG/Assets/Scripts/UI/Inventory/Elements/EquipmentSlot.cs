@@ -16,7 +16,6 @@ namespace UI.Inventory
         [SerializeField] private ItemHolder holder;
 
         [Header("Settings")]
-        [SerializeField] private Sprite defaultIcon;
         [SerializeField] private EquipmentSlotCategory slotCategory;
         [SerializeField] private int slotIndex;
 
@@ -35,6 +34,8 @@ namespace UI.Inventory
         private void Awake()
         {
             button.onClick.AddListener(OnClick);
+
+            SetIcon(slotCategory.Icon);
         }
 
         private void OnEnable()
@@ -66,7 +67,7 @@ namespace UI.Inventory
         private void Refresh()
         {
             var item = _equipment.GetEquipped(slotCategory, slotIndex);
-            SetIcon(item != null ? item.ItemBase.Icon : defaultIcon);
+            SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
         }
 
         private void SetIcon(Sprite icon)
@@ -80,7 +81,7 @@ namespace UI.Inventory
 
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
             {
-                SetIcon(defaultIcon);
+                SetIcon(slotCategory.Icon);
                 _inventoryStorage.AddItemAndNotify(item.ItemBase);
             }
                 
@@ -91,7 +92,7 @@ namespace UI.Inventory
             holder.SetItem(_equipment.GetEquipped(slotCategory, slotIndex), this);
 
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
-                SetIcon(defaultIcon);
+                SetIcon(slotCategory.Icon);
         }
 
         public void Drop()

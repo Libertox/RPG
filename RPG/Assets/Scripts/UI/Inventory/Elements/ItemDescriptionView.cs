@@ -21,23 +21,28 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public  void Setup(ItemInventory item)
+        public void Setup(ItemInventory item)
         {
             itemName.SetText(item.ItemBase.Name);
             description.SetText(item.ItemBase.Description);
-
-            Show();
         }
 
-        private void Show()
+        public void ShowAtPosition(Vector3 worldPosition)
         {
-            //await Awaitable.WaitForSecondsAsync(showDelay);
-
             gameObject.SetActive(true);
 
             RectTransform rectTransform = (RectTransform)transform;
 
-            rectTransform.anchoredPosition = _inputManager.GetMousePosition();
+            RectTransform parentRect = rectTransform.parent as RectTransform;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parentRect,
+                RectTransformUtility.WorldToScreenPoint(null, worldPosition),
+                null,
+                out Vector2 localPoint
+            );
+
+            rectTransform.anchoredPosition = localPoint;
         }
 
         public void Hide()

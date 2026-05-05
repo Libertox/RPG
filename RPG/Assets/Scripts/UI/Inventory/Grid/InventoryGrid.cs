@@ -211,9 +211,11 @@ namespace UI.Inventory
             itemDescription.Hide();
         }
 
-        private void OnItemSlotSelected(ItemInventory item)
+        private void OnItemSlotSelected(InventoryItemSlot slot)
         {
-            itemDescription.Setup(item);
+            itemDescription.Setup(slot.Item);
+
+            itemDescription.ShowAtPosition(slot.GetRightBottomCornerPosition());
         }
 
         private void IncreaseColumnCount()

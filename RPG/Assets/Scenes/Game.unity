@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406caf48b3f6ac5429f29720cd43694f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
-  itemBase: {fileID: 11400000, guid: 6751c1e74145b3c4aaa465ad8e3fa76b, type: 2}
+  itemBase: {fileID: 11400000, guid: 4d6ef54971324e34091b99dda4105632, type: 2}
 --- !u!114 &251484368 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6885854082215195890, guid: 6da686e7e1785484494fbeebf48a31e7, type: 3}
@@ -903,17 +903,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!114 &535617337 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6892353210292711557, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
-  m_PrefabInstance: {fileID: 8425425284996013026}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57d6e60a658dd8d49bc399795bb15798, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.ItemHolder
 --- !u!1 &569009574
 GameObject:
   m_ObjectHideFlags: 0
@@ -3868,18 +3857,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 787109259}
     m_Modifications:
-    - target: {fileID: 6807480702993119903, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6807480702993119903, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7307092331935262529, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
       propertyPath: m_Name
       value: Inventory View
       objectReference: {fileID: 0}
+    - target: {fileID: 7628610782660443242, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
+      propertyPath: raycaster
+      value: 
+      objectReference: {fileID: 787109256}
+    - target: {fileID: 7628610782660443242, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 1518820103}
     - target: {fileID: 9040752540320868302, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3963,31 +3952,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7307092331935262529, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8425425284996013028}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
---- !u!1 &8425425284996013027 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7307092331935262529, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
-  m_PrefabInstance: {fileID: 8425425284996013026}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8425425284996013028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8425425284996013027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e0afea545c0dd144b49305e6483f68d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryDragController
-  raycaster: {fileID: 787109256}
-  eventSystem: {fileID: 1518820103}
-  itemHolder: {fileID: 535617337}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

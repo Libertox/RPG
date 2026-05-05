@@ -27,5 +27,11 @@ namespace UI
             return (T)this;
         }
 
+        public Vector3 GetRightBottomCornerPosition()
+        {
+            Vector3 localCorner = new Vector3(RectTransform.rect.width * (1 - RectTransform.pivot.x), -RectTransform.rect.height * RectTransform.pivot.y, 0);
+
+            return RectTransform.TransformPoint(localCorner);
+        }
     }
 }

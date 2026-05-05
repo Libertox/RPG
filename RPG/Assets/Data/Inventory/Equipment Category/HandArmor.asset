@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29430c9f5d09b9449465175e8d96c25, type: 3}
   m_Name: HandArmor
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.EquipmentSlotCategory
+  <Icon>k__BackingField: {fileID: 46638320, guid: a0ed7a80002679342bddd0504a51c171, type: 3}

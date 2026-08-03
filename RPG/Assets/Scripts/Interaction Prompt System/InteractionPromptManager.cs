@@ -11,15 +11,15 @@ namespace InteractionPromptSystem
     {
         private PromptIconFactory _promptIconFactory;
         private PlayerController _playerMotionController;
-        private InputManager _inputManager;
+        private InputDeviceChanger _inputDeviceChanger;
+
+        [SerializeField] private float _showPromptMaxDistance = 8f;
+        [SerializeField] private float _showPromptMinDistance = 1f;
+
+        [SerializeField] private float _interactionRange = 2f;
 
         private readonly List<IPromptProvider> _providers = new();
         private readonly Dictionary<IPromptProvider, PromptIcon> _icons = new();
-
-        private readonly float _showPromptMaxDistance = 8f;
-        private readonly float _showPromptMinDistance = 1f;
-
-        private readonly float _interactionRange = 2f;
 
         private void Awake()
         {
@@ -27,10 +27,10 @@ namespace InteractionPromptSystem
         }
 
         [Inject]
-        private void Construct(PlayerController motionController, InputManager inputManager)
+        private void Construct(PlayerController motionController, InputDeviceChanger inputDeviceChanger)
         {
             _playerMotionController = motionController;
-            _inputManager = inputManager;
+            _inputDeviceChanger = inputDeviceChanger;
         }
 
         public void RegisterPromptProvider(IPromptProvider promptProvider)
@@ -83,7 +83,7 @@ namespace InteractionPromptSystem
 
             if (distance < _interactionRange)
             {
-                icon.SetIcon(_inputManager.GetIconForPromptType(provider.Type));
+                icon.SetIcon(provider.Icon.GetInputIcons(_inputDeviceChanger.CurrentControllerType));
             }
             else
             {

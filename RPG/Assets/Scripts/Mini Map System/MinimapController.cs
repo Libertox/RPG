@@ -17,8 +17,6 @@ namespace MiniMapSystem
 
         private List<IMinimapEntity> _minimapEntities;
 
-        public List<IMinimapEntity> MinimapEntities => _minimapEntities;
-
         public void RegisterMinimapEntity(IMinimapEntity minimapEntity)
         {
             if (_minimapEntities.Contains(minimapEntity)) return;

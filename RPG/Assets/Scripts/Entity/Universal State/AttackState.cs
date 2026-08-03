@@ -1,6 +1,4 @@
 ﻿
-using UnityEngine;
-
 namespace Entity
 {
     public class AttackState : BaseState

@@ -17,7 +17,6 @@ namespace MiniMapSystem
         public bool IsStatic => isStaticMarker;
         public MinimapMarkerData MarkerData => markerData;
         public Vector3 Position => transform.position;
-        public MinimapController MinimapController => _minimapController;
 
         private MinimapController _minimapController;
 
@@ -29,14 +28,26 @@ namespace MiniMapSystem
 
         protected virtual void Start()
         {
-            if(registerMarkerOnAwake)
-                _minimapController.RegisterMinimapEntity(this);
+            if (registerMarkerOnAwake)
+                Register();
+        }
+
+        public void Register()
+        {
+            _minimapController.RegisterMinimapEntity(this);
+        }
+
+        public void Unregister()
+        {
+            _minimapController?.UnregisterMinimapEntity(this);
         }
 
         protected virtual void OnDestroy()
         {
-            _minimapController?.UnregisterMinimapEntity(this);
+            Unregister();
         }
+
+    
 
     }
 }

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace InputSystem
 {
-    public class InputManager : IDisposable, ITickable
+    public class InputManager : IDisposable
     {
         public event Action OnMoveStarted;
         public event Action OnMoveEnded;
@@ -25,20 +25,13 @@ namespace InputSystem
         public event Action OnLeftMouseStartHolded;
         public event Action OnLeftMouseCancelHolded;
 
-        public Action<ControllerType> OnControllerChanged;
-
         private readonly InputActions _inputActions;
-        private readonly InputIconsContainer _iconsContainer;
-
-        private ControllerType _currentControllerType = ControllerType.PC;
-        private ControllerType _lastControllerType;
 
         public Vector2 MoveDirection => _inputActions.Player.Move.ReadValue<Vector2>();
 
-        public InputManager(InputIconsContainer inputIconsContainer)
+        public InputManager()
         {
             _inputActions = new();
-            _iconsContainer = inputIconsContainer;
 
             _inputActions.Enable();
 
@@ -65,6 +58,7 @@ namespace InputSystem
             _inputActions.UI.RightClick.performed += OnRightMouseButtonPerformed;
             _inputActions.UI.HoldLeftMouseButton.performed += OnHoldLeftMouseButtonStarted;
             _inputActions.UI.HoldLeftMouseButton.canceled += OnHoldLeftMouseButtonCanceled;
+
         }
 
         private void OnHoldLeftMouseButtonStarted(InputAction.CallbackContext action)
@@ -129,7 +123,7 @@ namespace InputSystem
 
         public void EnableGameMap(bool enable = true)
         {
-            if(enable) _inputActions.Player.Enable();
+            if (enable) _inputActions.Player.Enable();
             else _inputActions.Player.Disable();
         }
 
@@ -139,41 +133,11 @@ namespace InputSystem
             else _inputActions.UI.Disable();
         }
 
-        public Sprite GetIconForPromptType(PromptType promptType)
-        {
-            return _iconsContainer.GetInputIcons(promptType, _currentControllerType);
-        }
-
         public Vector2 GetMousePosition()
         {
             return Mouse.current.position.value;
         }
 
-        public void Tick()
-        {
-            SetActiveController();
-        }
-
-        private void SetActiveController()
-        {
-            foreach (var device in UnityEngine.InputSystem.InputSystem.devices)
-            {
-                if (device.wasUpdatedThisFrame)
-                {
-                    if (device.displayName == "Mouse" || device.displayName == "Keyboard")
-                        _currentControllerType = ControllerType.PC;
-                    else
-                        _currentControllerType = ControllerType.PSGamePad;
-
-                    if(_lastControllerType != _currentControllerType)
-                    {
-                        OnControllerChanged?.Invoke(_currentControllerType);
-                    }
-                        
-                    _lastControllerType = _currentControllerType;
-                }
-            }
-        }
         public void Dispose()
         {
             _inputActions.Dispose();

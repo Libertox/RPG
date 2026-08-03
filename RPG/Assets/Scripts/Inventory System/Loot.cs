@@ -10,11 +10,11 @@ namespace InventorySystem
 
         private LootFactory _factory;
 
-        public override void Interact(PlayerController playerController)
+        public override void Execute(PlayerController playerController)
         {
-            if (!CanInteract()) return;
+            base.Execute(playerController);
 
-            foreach(var item in _items)
+            foreach (var item in _items)
             {
                 playerController.PlayerInventory.InventoryStorage.AddItem(item.ItemBase, item.Amount);
             }

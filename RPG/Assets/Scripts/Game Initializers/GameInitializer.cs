@@ -18,9 +18,6 @@ namespace GameInitializers
 
         [SerializeField] private InteractionPromptManager interactionPromptManager;
 
-        [SerializeField] private InputIconsContainer iconsContainer;
-
-        [SerializeField] private DialogueManager dialogueManager;
         [SerializeField] private QuestManager questManager;
         [SerializeField] private UIViewManager viewManager;
 
@@ -30,15 +27,16 @@ namespace GameInitializers
          
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<InputManager>().AsSingle().WithArguments(iconsContainer);
+            Container.BindInterfacesAndSelfTo<InputManager>().AsSingle();
 
             Container.BindInstance(playerController);
-            Container.BindInstance(interactionPromptManager).AsSingle();
-            Container.BindInstance(dialogueManager).AsSingle();
+            Container.BindInstance(interactionPromptManager).AsSingle(); 
             Container.BindInstance(questManager).AsSingle();
             Container.BindInstance(viewManager).AsSingle();
 
             Container.Bind<MinimapController>().AsSingle();
+            Container.Bind<DialogueManager>().AsSingle();
+            Container.BindInterfacesAndSelfTo<InputDeviceChanger>().AsSingle();
 
             Container.BindFactory<ItemInteractable, QuestItemFactory>().FromComponentInNewPrefab(itemPrefab);
 

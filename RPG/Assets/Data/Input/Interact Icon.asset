@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1804dc92b8e699f44be00ea7fa5737ad, type: 3}
+  m_Name: Interact Icon
+  m_EditorClassIdentifier: Assembly-CSharp::InputSystem.InputIconContainer
+  inputIcon:
+    PcIcon: {fileID: 935735691, guid: 32e0ebf945ee7174a9d55dc96c4507ba, type: 3}
+    PlayStationIcon: {fileID: 1259673966, guid: 033fe17f4daefcf47a12ab9f56facad4, type: 3}
+    XboxIcon: {fileID: -335584, guid: 5a65786264b247149abe1f067e1049db, type: 3}

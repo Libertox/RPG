@@ -7,7 +7,7 @@ using Zenject;
 
 namespace QuestSystem
 {
-    public class NPCQuestGiver : MonoBehaviour, IInteractable
+    public class NPCQuestGiver : InteractionBase, IInteractable
     {
         [Header("Quest Refernces")]
         [SerializeField] private Quest quest;
@@ -32,15 +32,13 @@ namespace QuestSystem
             _questManager = questManager;
         }
 
-        public bool CanInteract()
+        public override bool CanInteract()
         {
             return !quest.IsFinished();
         }
 
-        public void Interact(PlayerController playerController)
+        public override void Execute(PlayerController playerController)
         {
-            if(!CanInteract()) return;
-
             TryInvokeDialogueOnQuestStart();
             TryInvokeDialogueDuringQuest();
             TryInvokeDialogueOnQuestEnd();

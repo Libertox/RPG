@@ -5,7 +5,7 @@ namespace InteractionPromptSystem
 {
     public interface IPromptProvider
     {
-        public PromptType Type { get; }
+        public InputIconContainer Icon { get; }
         public Vector3 TargetPosition { get; }
         public Vector3 PromptPosition { get; }
 

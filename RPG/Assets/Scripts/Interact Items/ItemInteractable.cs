@@ -5,18 +5,13 @@ using UnityEngine;
 
 namespace QuestSystem
 {
-    public class ItemInteractable : MonoBehaviour, IInteractable
+    public class ItemInteractable : InteractionBase
     {
         [SerializeField] private ItemConfigBase itemBase;
 
-        public bool CanInteract()
+        public override void Execute(PlayerController playerController)
         {
-            return true;
-        }
-
-        public void Interact(PlayerController playerController)
-        {
-            if (!CanInteract()) return;
+            base.Execute(playerController);
 
             playerController.PlayerInventory.InventoryStorage.AddItemAndNotify(itemBase);
 

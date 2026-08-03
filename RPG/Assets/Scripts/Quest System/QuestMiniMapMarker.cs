@@ -36,23 +36,23 @@ namespace QuestSystem
         private void OnQuestCompleted(Quest quest)
         {
             if (this.quest == quest)
-                MinimapController.UnregisterMinimapEntity(this);
+                Unregister();
         }
 
         private void OnQuestStarted(Quest quest)
         {
-            if(this.quest == quest)
-                MinimapController.UnregisterMinimapEntity(this);
+            if (this.quest == quest)
+                Unregister();
         }
 
         private void OnQuestStepComplete()
         {
-            MinimapController.UnregisterMinimapEntity(this);
+            Unregister();
         }
 
         private void OnQuestStepStart()
         {
-            MinimapController.RegisterMinimapEntity(this);
+            Register();
         }
 
         protected override void OnDestroy()

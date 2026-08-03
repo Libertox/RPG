@@ -1,8 +1,4 @@
-﻿
-
-
-using InputSystem;
-using InteractionSystem;
+﻿using InputSystem;
 using UnityEngine;
 using Zenject;
 
@@ -10,16 +6,16 @@ namespace InteractionPromptSystem
 {
     public class PromptProvide : MonoBehaviour, IPromptProvider
     {
-        [SerializeField] private PromptType promptType;
+        [SerializeField] private InputIconContainer promptIcon;
         [SerializeField] private Transform promptPosition;
 
-        public PromptType Type => promptType;
+        public InputIconContainer Icon => promptIcon;
         public Vector3 TargetPosition => transform.position;
         public Vector3 PromptPosition => promptPosition.position;
 
         private InteractionPromptManager _promptManager;
 
-        private IInteractable _interactable;
+        private IInteractablePrompt _interactable;
 
         [Inject]
         public void Construct(InteractionPromptManager interactionPromptManager)
@@ -31,7 +27,7 @@ namespace InteractionPromptSystem
         {
             _promptManager.RegisterPromptProvider(this);
 
-            _interactable = GetComponent<IInteractable>();
+            _interactable = GetComponent<IInteractablePrompt>();
         }
 
         private void OnDestroy()

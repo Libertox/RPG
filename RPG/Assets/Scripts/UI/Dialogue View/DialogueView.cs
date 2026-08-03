@@ -20,20 +20,20 @@ namespace UI.DialogueView
 
         [SerializeField] private Button continueButton;
 
-        private DialogueManager _dialogueManager;
-        private InputManager _inputManager;
-        private UIViewManager _uIViewManager;
+        private DialogueManager dialogueManager;
+        private InputManager inputManager;
+        private UIViewManager uIViewManager;
 
-        private Coroutine _typingCoroutine;
+        private Coroutine typingCoroutine;
 
-        private TypewriterEffect _typewriterEffect;
+        private TypewriterEffect typewriterEffect;
 
         [Inject]
         public void Construct(DialogueManager dialogueManager, InputManager inputManager, UIViewManager uIViewManager)
         {
-            _dialogueManager = dialogueManager;
-            _inputManager = inputManager;
-            _uIViewManager = uIViewManager;
+            this.dialogueManager = dialogueManager;
+            this.inputManager = inputManager;
+            this.uIViewManager = uIViewManager;
 
             SubscribeDialogueEvents();
         }
@@ -42,7 +42,12 @@ namespace UI.DialogueView
         {
             continueButton.onClick.AddListener(OnContinueButtonClick);
 
-            _typewriterEffect = new TypewriterEffect(typewriteAnimationDuration);
+            typewriterEffect = new TypewriterEffect(typewriteAnimationDuration);       
+        }
+
+        public void OpenView()
+        {
+            _= uIViewManager.TryOpenView<DialogueView>(true);
         }
 
         public void Open()
@@ -71,45 +76,47 @@ namespace UI.DialogueView
 
         public async void OpenPreviewView()
         {
-            await _uIViewManager.OpenPreviousView();
+            await uIViewManager.OpenPreviousView();
         }
 
         public void SubscribeToInputEvents()
         {
-            _inputManager.OnSubmitUIButtonPressed += ShowNextDialogueLine;
-            _inputManager.OnContinueUIButtonPressed += ShowNextDialogueLine;
+            inputManager.OnSubmitUIButtonPressed += ShowNextDialogueLine;
+            inputManager.OnContinueUIButtonPressed += ShowNextDialogueLine;
         }
 
         public void UnsubscribeToInputEvents()
         {
-            _inputManager.OnSubmitUIButtonPressed -= ShowNextDialogueLine;
-            _inputManager.OnContinueUIButtonPressed -= ShowNextDialogueLine;
+            inputManager.OnSubmitUIButtonPressed -= ShowNextDialogueLine;
+            inputManager.OnContinueUIButtonPressed -= ShowNextDialogueLine;
         }
 
         private void SubscribeDialogueEvents()
         {
-            _dialogueManager.OnDialogueCompleted += OpenPreviewView;
-            _dialogueManager.OnDialgoueLineChanged += UpdateContent;
+            dialogueManager.OnDialogueCompleted += OpenPreviewView;
+            dialogueManager.OnDialgoueLineChanged += UpdateContent;
+            dialogueManager.OnDialogueStarted += OpenView;
         }
 
         private void UnsubscribeDialogueEvents()
         {
-            _dialogueManager.OnDialogueCompleted -= OpenPreviewView;
-            _dialogueManager.OnDialgoueLineChanged -= UpdateContent;
+            dialogueManager.OnDialogueCompleted -= OpenPreviewView;
+            dialogueManager.OnDialgoueLineChanged -= UpdateContent;
+            dialogueManager.OnDialogueStarted -= OpenView;
         }
 
     
         private void UpdateContent(DialogueLine dialogueLine)
         {
-            if (_typingCoroutine != null)
-                StopCoroutine(_typingCoroutine);
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
 
             dialogueActorPotrait.sprite = dialogueLine.DialogueActor.ActorPortrait;
             dialogueActorName.text = dialogueLine.DialogueActor.ActorName;
 
             continueButton.gameObject.SetActive(false);
 
-            _typingCoroutine = StartCoroutine(_typewriterEffect.PlayAnimation(dialogueContent, dialogueLine.Content, OnTypewriteEffectCompleted));
+            typingCoroutine = StartCoroutine(typewriterEffect.PlayAnimation(dialogueContent, dialogueLine.Content, OnTypewriteEffectCompleted));
         }
 
         private void OnTypewriteEffectCompleted()
@@ -127,13 +134,13 @@ namespace UI.DialogueView
         {
             if (!TrySkipTypingAnimation())
             {
-                _dialogueManager.ChangeToNextDialogueLine();
+                dialogueManager.ChangeDialogueLine();
             }
         }
 
         private bool TrySkipTypingAnimation()
         {
-            if (!_typewriterEffect.IsAnimationPlaying) return false;
+            if (!typewriterEffect.IsAnimationPlaying) return false;
 
             dialogueContent.maxVisibleCharacters = dialogueContent.text.Length;
 

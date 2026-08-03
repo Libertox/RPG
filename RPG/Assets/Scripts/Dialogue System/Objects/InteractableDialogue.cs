@@ -5,7 +5,7 @@ using Zenject;
 
 namespace DialogueSystem
 {
-    public class InteractableDialogue : MonoBehaviour, IInteractable
+    public class InteractableDialogue : InteractionBase, IInteractable
     {
         [SerializeField] private DialogueContainer dialogue;
 
@@ -17,13 +17,10 @@ namespace DialogueSystem
             _dialogueManager = dialogueManager;
         }
 
-        public bool CanInteract()
+        public override void Execute(PlayerController playerController)
         {
-            return true;
-        }
+            base.Execute(playerController);
 
-        public void Interact(PlayerController playerController)
-        {
             _dialogueManager.StartDialogue(dialogue);
         }
     }

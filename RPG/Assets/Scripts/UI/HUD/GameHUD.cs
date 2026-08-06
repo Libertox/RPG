@@ -1,13 +1,13 @@
 ﻿using InputSystem;
-using System.Threading.Tasks;
-using UI.Inventory;
-using UnityEngine;
 using Zenject;
+using UnityEngine;
 
 namespace UI.HUD
 {
-    public class GameHUD : MonoBehaviour, IView
+    public class GameHUD : UIViewBase
     {
+        [SerializeField] private UIViewSO inventoryViewID;
+
         private InputManager _inputManager;
         private UIViewManager _viewManager;
 
@@ -18,12 +18,8 @@ namespace UI.HUD
             _viewManager = viewManager;
         }
 
-        public void Initialize()
-        {
-
-        }
-
-        public void SubscribeToInputEvents()
+     
+        public override void SubscribeToInputEvents()
         {
             _inputManager.EnableGameMap(true);
 
@@ -31,40 +27,16 @@ namespace UI.HUD
         }
 
       
-        public void UnsubscribeToInputEvents()
+        public override void UnsubscribeToInputEvents()
         {
             _inputManager.EnableGameMap(false);
 
             _inputManager.OnInventoryButtonPressed -= OpenInventoryView;
         }
 
-        public void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public Task OpenAsync()
-        {
-            Open();
-
-            return Task.CompletedTask;
-        }
-
-        public void Close()
-        {
-            gameObject.SetActive(false);
-        }
-
-        public Task CloseAsync()
-        {
-            Close();
-
-            return Task.CompletedTask;
-        }
-
         private async void OpenInventoryView()
         {
-            await _viewManager.TryOpenView<InventoryView>(true);
+            await _viewManager.TryOpenView(inventoryViewID, true);
         }
 
 

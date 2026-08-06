@@ -10,7 +10,7 @@ using Zenject;
 
 namespace UI.Inventory
 {
-    public class InventoryView : MonoBehaviour, IView
+    public class InventoryView : UIViewBase
     {
         [Header("Refernces")]
         [SerializeField] private ItemCategory defaultCategorySelected;
@@ -37,7 +37,7 @@ namespace UI.Inventory
             _viewManager = viewManager;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             foreach(var item in itemGrids.Values)
             {
@@ -127,40 +127,22 @@ namespace UI.Inventory
             }
         }
 
-        public void Open()
+        public override void Open()
         {
-            gameObject.SetActive(true);
+            base.Open();
 
             UpdateInventory();
         }
+  
 
-        public Task OpenAsync()
-        {
-            Open();
-
-            return Task.CompletedTask;
-        }
-
-        public void Close()
-        {
-            gameObject.SetActive(false);
-        }
-
-        public Task CloseAsync()
-        {
-            Close();
-
-            return Task.CompletedTask;
-        }      
-
-        public void SubscribeToInputEvents()
+        public override void SubscribeToInputEvents()
         {
             _inputManager.EnableUIMap(true);
 
             _inputManager.OnCancelUIButtonPressed += OpenPreviousView;
         }
 
-        public void UnsubscribeToInputEvents()
+        public override void UnsubscribeToInputEvents()
         {
             _inputManager.EnableUIMap(false);
 

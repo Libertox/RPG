@@ -36,7 +36,6 @@ namespace Entity.Player
         private StateMachine _stateMachine;
 
         private InputManager _inputManager;
-        private UIViewManager _viewManager;
 
         private IMotionController _motionController;
 
@@ -49,10 +48,9 @@ namespace Entity.Player
         public bool IsDead => _isDead;
 
         [Inject]
-        private void Construct(InputManager inputManager, UIViewManager viewManager)
+        private void Construct(InputManager inputManager)
         {
             _inputManager = inputManager;
-            _viewManager = viewManager;
 
             _inputManager.OnMoveStarted += OnMoveStarted;
             _inputManager.OnMoveEnded += OnMoveEnded;
@@ -138,11 +136,10 @@ namespace Entity.Player
             else SetTakeDamge(true);
         }
 
-        private async void Die()
+        private void Die()
         {
             SetIsDead(true);
             OnDie?.Invoke();
-            await _viewManager.TryOpenView<GameOverView>();
         }
 
         public void SetTakeDamge(bool isTakimgDamge)

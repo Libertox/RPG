@@ -170,6 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d455362921f184b92fc111322be52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ViewID>k__BackingField: {fileID: 11400000, guid: bd17b2462e9c7714abc1a3b0c34301a3, type: 2}
+  <OpenOnStart>k__BackingField: 0
   canvasGroup: {fileID: 55039008}
   fadeDuration: 0.5
 --- !u!225 &55039008
@@ -3528,9 +3530,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 787109259}
     m_Modifications:
+    - target: {fileID: 1679551006090060328, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
+      propertyPath: inventoryViewID
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc75b71371c7b24e9ccb7dd10dfb7b0, type: 2}
+    - target: {fileID: 1679551006090060328, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
+      propertyPath: <ViewID>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 7c8ac0eb3e5cd0548bb9bfeeb556bace, type: 2}
+    - target: {fileID: 1679551006090060328, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
+      propertyPath: <OpenOnStart>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2901742432519611978, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
       propertyPath: m_Name
       value: Game HUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 2901742432519611978, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4253280764733502690, guid: 6bdf00d44e69ec04084dc464b1714bf7, type: 3}
       propertyPath: m_Pivot.x
@@ -3686,6 +3704,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 787109259}
     m_Modifications:
+    - target: {fileID: 2529127487532788741, guid: 43c159fdff31fec42a51fe75eb0ee024, type: 3}
+      propertyPath: <ViewID>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 336aaf9112dc4cb49a050b1482c55d8e, type: 2}
     - target: {fileID: 3371156464064760474, guid: 43c159fdff31fec42a51fe75eb0ee024, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3887,6 +3909,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 8365398947658582373, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
+      propertyPath: <ViewID>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 8fc75b71371c7b24e9ccb7dd10dfb7b0, type: 2}
     - target: {fileID: 8443539739085919572, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

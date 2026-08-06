@@ -8,30 +8,28 @@ namespace UI
 {
     public class UIViewManager : MonoBehaviour
     {
-        private Dictionary<Type, IView> _views;
+        private Dictionary<UIViewSO, UIViewBase> _views;
 
-        private readonly Stack<IView> _viewsStack = new();
+        private readonly Stack<UIViewBase> _viewsStack = new();
 
         private bool _isOpeningView;
 
         private void Awake()
         {
             GatherViews();
-
-            _= TryOpenView<GameHUD>();
         }
 
-        public async Task TryOpenView<T>(bool closeOpenedViewFirst = false) where T : IView
+        public async Task TryOpenView(UIViewSO menuID, bool closeOpenedViewFirst = false)
         {
             if (_isOpeningView) return;
 
-            _views.TryGetValue(typeof(T), out var view);
+            _views.TryGetValue(menuID, out var view);
 
             if (view == null) return;
 
             _isOpeningView = true;
 
-            IView peekView = TryPeekView();
+            UIViewBase peekView = TryPeekView();
             peekView?.UnsubscribeToInputEvents();
 
             if (closeOpenedViewFirst)
@@ -53,7 +51,7 @@ namespace UI
             Debug.Log("Close View: " + peekView.GetType().Name);
         }
 
-        private IView TryPeekView()
+        private UIViewBase TryPeekView()
         {
             if (_viewsStack.Count == 0) return default;
 
@@ -66,8 +64,8 @@ namespace UI
 
             _isOpeningView = true;
 
-            IView view = _viewsStack.Pop();
-            IView peekView = TryPeekView();
+            UIViewBase view = _viewsStack.Pop();
+            UIViewBase peekView = TryPeekView();
 
             view.UnsubscribeToInputEvents();
 
@@ -99,28 +97,33 @@ namespace UI
 
             foreach (Transform child in transform)
             {
-                if (child.TryGetComponent(out IView view))
+                if (child.TryGetComponent(out UIViewBase view))
                 {
-                    _views.Add(view.GetType(), view);
+                    _views.Add(view.ViewID, view);
                     view.Initialize();
+
+                    if (view.OpenOnStart)
+                    {
+                        _= TryOpenView(view.ViewID);
+                    }
                 }
             }
         }
 
-        public void RegisterView(IView view)
+        public void RegisterView(UIViewBase view)
         {
-            if (!_views.ContainsKey(view.GetType()))
+            if (!_views.ContainsKey(view.ViewID))
             {
                 view.Initialize();
-                _views.Add(view.GetType(), view);
+                _views.Add(view.ViewID, view);
             }
 
         }
 
-        public void UnregisterView(IView view)
+        public void UnregisterView(UIViewBase view)
         {
-            if (_views.ContainsKey(view.GetType()))
-                _views.Remove(view.GetType());
+            if (_views.ContainsKey(view.ViewID))
+                _views.Remove(view.ViewID);
         }
 
 

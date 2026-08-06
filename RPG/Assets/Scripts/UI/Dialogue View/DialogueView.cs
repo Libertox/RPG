@@ -1,6 +1,5 @@
 ﻿using DialogueSystem;
 using InputSystem;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +8,7 @@ using Zenject;
 
 namespace UI.DialogueView
 {
-    public class DialogueView : MonoBehaviour, IView
+    public class DialogueView : UIViewBase
     {
         [SerializeField] private float typewriteAnimationDuration = 0.02f;
 
@@ -38,7 +37,7 @@ namespace UI.DialogueView
             SubscribeDialogueEvents();
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             continueButton.onClick.AddListener(OnContinueButtonClick);
 
@@ -47,31 +46,7 @@ namespace UI.DialogueView
 
         public void OpenView()
         {
-            _= uIViewManager.TryOpenView<DialogueView>(true);
-        }
-
-        public void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public Task OpenAsync()
-        {
-            Open();
-
-            return Task.CompletedTask;
-        }
-
-        public void Close()
-        {
-            gameObject.SetActive(false);
-        }
-
-        public Task CloseAsync()
-        {
-            Close();
-
-            return Task.CompletedTask;
+            _= uIViewManager.TryOpenView(ViewID, true);
         }
 
         public async void OpenPreviewView()
@@ -79,13 +54,13 @@ namespace UI.DialogueView
             await uIViewManager.OpenPreviousView();
         }
 
-        public void SubscribeToInputEvents()
+        public override void SubscribeToInputEvents()
         {
             inputManager.OnSubmitUIButtonPressed += ShowNextDialogueLine;
             inputManager.OnContinueUIButtonPressed += ShowNextDialogueLine;
         }
 
-        public void UnsubscribeToInputEvents()
+        public override void UnsubscribeToInputEvents()
         {
             inputManager.OnSubmitUIButtonPressed -= ShowNextDialogueLine;
             inputManager.OnContinueUIButtonPressed -= ShowNextDialogueLine;

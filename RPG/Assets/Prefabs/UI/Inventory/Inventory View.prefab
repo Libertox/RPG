@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2420236768705342709}
+  - component: {fileID: 5018086938012409246}
   m_Layer: 5
   m_Name: LiftingCapacity
   m_TagString: Untagged
@@ -37,6 +38,19 @@ RectTransform:
   m_AnchoredPosition: {x: -643, y: -17}
   m_SizeDelta: {x: 152.9619, y: 78.9009}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &5018086938012409246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48695656127948370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584a90b676428fb42a47da0af32adbfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.UI.LiftingVisualizer
+  liftingCapacityValue: {fileID: 337203929368406511}
 --- !u!1 &610183179120462637
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,8 +258,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 133.4, y: 1.2}
-  m_SizeDelta: {x: 46.5426, y: 46.003}
+  m_AnchoredPosition: {x: 132, y: 3}
+  m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5540317089847407330
 CanvasRenderer:
@@ -275,7 +289,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b004db033e544a54eb08695109388fbd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c42de2782bc30864181cc15de1eca975, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -412,7 +426,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryGrid
   config: {fileID: 11400000, guid: df22025e2650caf469977990eefbdcbc, type: 2}
   itemDescription: {fileID: 302965191926149540}
-  itemHolder: {fileID: 6892353210292711557}
   <SlotsContainer>k__BackingField: {fileID: 8671788689890473992}
 --- !u!222 &605580039455147460
 CanvasRenderer:
@@ -677,7 +690,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryGrid
   config: {fileID: 11400000, guid: df22025e2650caf469977990eefbdcbc, type: 2}
   itemDescription: {fileID: 302965191926149540}
-  itemHolder: {fileID: 6892353210292711557}
   <SlotsContainer>k__BackingField: {fileID: 1267038328602931240}
 --- !u!222 &3060156766506027122
 CanvasRenderer:
@@ -807,7 +819,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryGrid
   config: {fileID: 11400000, guid: df22025e2650caf469977990eefbdcbc, type: 2}
   itemDescription: {fileID: 302965191926149540}
-  itemHolder: {fileID: 6892353210292711557}
   <SlotsContainer>k__BackingField: {fileID: 971626510911059806}
 --- !u!222 &7138935648574264878
 CanvasRenderer:
@@ -1773,8 +1784,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 133.4, y: 1.2}
-  m_SizeDelta: {x: 46.5426, y: 46.003}
+  m_AnchoredPosition: {x: 132, y: 3}
+  m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7499034783622843656
 CanvasRenderer:
@@ -1804,7 +1815,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b004db033e544a54eb08695109388fbd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2cb76aa73ad14845885e57a6c36383f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1825,13 +1836,14 @@ GameObject:
   - component: {fileID: 9040752540320868302}
   - component: {fileID: 8365398947658582373}
   - component: {fileID: 7628610782660443242}
+  - component: {fileID: 7451155049051195164}
   m_Layer: 5
   m_Name: Inventory View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9040752540320868302
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1873,27 +1885,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7887f623001e94a90b27f809439203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryView
-  defaultCategorySelected: {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
-  inventoryItemSlotPrefab: {fileID: 78010781555275281, guid: c0b5ee0ee9bd6b34d94eef0635cacc64, type: 3}
-  itemGrids:
-    SerializedKeys:
-    - {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
-    - {fileID: 11400000, guid: f6470ca25b8476640ba62eb93eb7ce21, type: 2}
-    - {fileID: 11400000, guid: bec0775a2d8ec0e4d8e6434b72c87f1b, type: 2}
-    - {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
-    SerializedValues:
-    - {fileID: 3770316241044260990}
-    - {fileID: 1691200144145638587}
-    - {fileID: 5332955246367878142}
-    - {fileID: 845341288069671534}
-  scrollArea: {fileID: 2284112544994828699}
-  itemCategoryButtons:
-  - {fileID: 1909545537768507046}
-  - {fileID: 4254186550935587021}
-  - {fileID: 2640020279786056381}
-  - {fileID: 3076766856752263248}
-  goldValue: {fileID: 4597563892556852664}
-  liftingCapacityValue: {fileID: 337203929368406511}
+  <ViewID>k__BackingField: {fileID: 11400000, guid: 8fc75b71371c7b24e9ccb7dd10dfb7b0, type: 2}
+  <OpenOnStart>k__BackingField: 0
+  inventoryCategorySelector: {fileID: 7451155049051195164}
+  inventoryVisualizers:
+  - {fileID: 6853228851631129590}
+  - {fileID: 7451155049051195164}
+  - {fileID: 5018086938012409246}
 --- !u!114 &7628610782660443242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1909,6 +1907,37 @@ MonoBehaviour:
   raycaster: {fileID: 0}
   eventSystem: {fileID: 0}
   itemHolder: {fileID: 6892353210292711557}
+--- !u!114 &7451155049051195164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7307092331935262529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77eb0974efc0efa40bdb97b216c819d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.UI.InventoryCategorySelector
+  defaultCategorySelected: {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
+  inventoryItemSlotPrefab: {fileID: 78010781555275281, guid: c0b5ee0ee9bd6b34d94eef0635cacc64, type: 3}
+  itemGrids:
+    SerializedKeys:
+    - {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
+    - {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
+    - {fileID: 11400000, guid: bec0775a2d8ec0e4d8e6434b72c87f1b, type: 2}
+    - {fileID: 11400000, guid: f6470ca25b8476640ba62eb93eb7ce21, type: 2}
+    SerializedValues:
+    - {fileID: 3770316241044260990}
+    - {fileID: 845341288069671534}
+    - {fileID: 5332955246367878142}
+    - {fileID: 1691200144145638587}
+  scrollArea: {fileID: 2284112544994828699}
+  itemCategoryButtons:
+  - {fileID: 1909545537768507046}
+  - {fileID: 4254186550935587021}
+  - {fileID: 2640020279786056381}
+  - {fileID: 3076766856752263248}
 --- !u!1 &7539004318203962855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,7 +2239,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Inventory.InventoryGrid
   config: {fileID: 11400000, guid: df22025e2650caf469977990eefbdcbc, type: 2}
   itemDescription: {fileID: 302965191926149540}
-  itemHolder: {fileID: 6892353210292711557}
   <SlotsContainer>k__BackingField: {fileID: 2176875250979113566}
 --- !u!222 &1030463103452893818
 CanvasRenderer:
@@ -2597,6 +2625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4793140888002570891}
+  - component: {fileID: 6853228851631129590}
   m_Layer: 5
   m_Name: Gold
   m_TagString: Untagged
@@ -2625,6 +2654,20 @@ RectTransform:
   m_AnchoredPosition: {x: -468.1255, y: -17}
   m_SizeDelta: {x: 156.5404, y: 78.9009}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &6853228851631129590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109842434300965029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad762614f4255744ea4df989d787c3b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.UI.CurrencyVisualizer
+  goldValue: {fileID: 4597563892556852664}
+  currency: {fileID: 11400000, guid: 55941275f6771b146a81b3efe37ec14d, type: 2}
 --- !u!1 &9216684515659080376
 GameObject:
   m_ObjectHideFlags: 0
@@ -4276,14 +4319,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shield Equipment
       objectReference: {fileID: 0}
-    - target: {fileID: 1463054051910547203, guid: fc77e2c77a8be7f499b46d34a80af49f, type: 3}
-      propertyPath: holder
-      value: 
-      objectReference: {fileID: 6892353210292711557}
-    - target: {fileID: 2319896570985974133, guid: fc77e2c77a8be7f499b46d34a80af49f, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 755886616, guid: a0ed7a80002679342bddd0504a51c171, type: 3}
     - target: {fileID: 2491442387725208968, guid: fc77e2c77a8be7f499b46d34a80af49f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

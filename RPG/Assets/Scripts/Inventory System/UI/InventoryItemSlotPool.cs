@@ -1,6 +1,6 @@
 ﻿using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class InventoryItemSlotPool : MonoMemoryPool<InventoryItemSlot>
     {

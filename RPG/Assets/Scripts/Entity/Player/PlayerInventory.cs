@@ -1,75 +1,55 @@
-﻿
-using System;
-using UnityEngine;
-using static UnityEditor.Timeline.Actions.MenuPriority;
+﻿using System;
+using Utility;
 
 namespace InventorySystem
 {
-    public class PlayerInventory : MonoBehaviour
+    public class PlayerInventory
     {
-        public event Action<ItemInventory> OnItemDropped;
-        public event Action<int> OnGoldChanged;
+        public event Action<InventoryItem> OnItemDropped;
 
-        [field: SerializeField] public InventorySettings InventorySettings { get; private set; }
-        public int Gold { get; private set; }
+        private readonly IInventoryStorage inventoryStorage;
+        private readonly Equipment equipment;
+        private readonly Wallet wallet;
 
-        private IInventoryStorage _inventoryStorage;
-        private Equipment _equipment;
+        public IInventoryStorage InventoryStorage => inventoryStorage;
+        public Equipment Equipment => equipment;
+        public Wallet Wallet => wallet;
+        public float Weight => inventoryStorage.CurrentWeight + equipment.CurrentWeight;
 
-        public IInventoryStorage InventoryStorage => _inventoryStorage ??= new Inventory(); 
-        public Equipment Equipment => _equipment ??= new(InventorySettings);
-
-        private void Start()
+        public PlayerInventory(InventorySettings inventorySettings)
         {
-            _equipment.OnItemSwapped += OnItemSwapped;
-            _equipment.OnItemEquipped += OnItemEquipped;
+            equipment = new(inventorySettings);
+            inventoryStorage = new Inventory();
+            wallet = new();
+
+            equipment.OnItemSwapped += OnItemSwapped;
+            equipment.OnItemEquipped += OnItemEquipped;
         }
 
-        private void OnItemEquipped(ItemInventory item, int slot)
+        private void OnItemEquipped(InventoryItem item, int slot)
         {
             InventoryStorage.RemoveItemAndNotify(item.ItemBase);
         }
 
-        private void OnItemSwapped(ItemInventory newItem, ItemInventory oldItem)
+        private void OnItemSwapped(InventoryItem newItem, InventoryItem oldItem)
         {
             InventoryStorage.AddItem(oldItem.ItemBase, oldItem.Amount);
         }
 
-        public void DropItem(ItemInventory item)
+        public void DropItem(InventoryItem item)
         {
             OnItemDropped?.Invoke(item);
 
             InventoryStorage.RemoveItemAndNotify(item.ItemBase);
         }
-
-        public void AddGold(int amount)
-        {
-            Gold += amount;
-
-            Debug.Log(amount + "gold added");
-
-            OnGoldChanged?.Invoke(Gold);
-        }
-
-        public void RemoveGold(int amount)
-        {
-            Gold -= amount;
-
-            if(Gold < 0)
-                Gold = 0;
-
-            Debug.Log(amount + "gold removed");
-
-            OnGoldChanged?.Invoke(Gold);
-        }
     }
 
-    public class ItemInventory
+    public class InventoryItem
     {
-        public ItemConfigBase ItemBase;
+        public ItemConfigBase ItemBase { get; }
         public int Amount;
 
-        public ItemInventory(ItemConfigBase itemBase, int amount)
+        public InventoryItem(ItemConfigBase itemBase, int amount)
         {
             ItemBase = itemBase;
             Amount = amount;

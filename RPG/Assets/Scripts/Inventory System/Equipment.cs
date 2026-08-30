@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UI.Inventory;
 
 namespace InventorySystem
 {
@@ -8,12 +7,13 @@ namespace InventorySystem
     {
         private const int INVALID_SLOT = -1;
 
-        public event Action<ItemInventory, int> OnItemEquipped;
-        public event Action<ItemInventory> OnItemUnequipped;
+        public event Action<InventoryItem, int> OnItemEquipped;
+        public event Action<InventoryItem> OnItemUnequipped;
 
-        public event Action<ItemInventory, ItemInventory> OnItemSwapped;
+        public event Action<InventoryItem, InventoryItem> OnItemSwapped;
 
-        private readonly Dictionary<EquipmentSlotCategory, ItemInventory[]> _equipmentItems;
+        private readonly Dictionary<EquipmentSlotCategory, InventoryItem[]> _equipmentItems;
+        public float CurrentWeight { get; private set; }
 
         public Equipment(InventorySettings inventorySettings)
         {
@@ -23,11 +23,11 @@ namespace InventorySystem
 
             foreach(var category in inventorySettings.MaxEquipmentSlotsAmount)
             {
-                _equipmentItems.Add(category.Key, new ItemInventory[category.Value]);
+                _equipmentItems.Add(category.Key, new InventoryItem[category.Value]);
             }
         }
 
-        public bool TryEquipItem(ItemInventory inventoryItem)
+        public bool TryEquipItem(InventoryItem inventoryItem)
         {
             if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
                 return false;
@@ -38,7 +38,7 @@ namespace InventorySystem
             return TryEquipItem(inventoryItem, slot);
         }
 
-        public bool TryEquipItem(ItemInventory inventoryItem, int slot)
+        public bool TryEquipItem(InventoryItem inventoryItem, int slot)
         {
             if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
                 return false;
@@ -55,6 +55,8 @@ namespace InventorySystem
 
             _equipmentItems[category][slot] = inventoryItem;
             OnItemEquipped?.Invoke(inventoryItem, slot);
+
+            CurrentWeight += inventoryItem.ItemBase.Weight;
 
             return true;
         }
@@ -78,13 +80,14 @@ namespace InventorySystem
 
             if(item == null) return false;
 
-           OnItemUnequipped?.Invoke(item);
+            CurrentWeight -= item.ItemBase.Weight;
+            OnItemUnequipped?.Invoke(item);
            _equipmentItems[slotCategory][slotIndex] = null;
 
             return true;
         }
 
-        public ItemInventory GetEquipped(EquipmentSlotCategory slotCategory, int slotIndex)
+        public InventoryItem GetEquipped(EquipmentSlotCategory slotCategory, int slotIndex)
         {
             return _equipmentItems[slotCategory][slotIndex];
         }

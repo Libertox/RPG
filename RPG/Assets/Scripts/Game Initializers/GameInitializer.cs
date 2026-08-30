@@ -1,21 +1,17 @@
 ﻿using InputSystem;
 using Zenject;
 using UnityEngine;
-using Entity.Player;
 using MiniMapSystem;
 using InteractionPromptSystem;
 using DialogueSystem;
 using QuestSystem;
 using UI;
-using InventorySystem;
-using UI.Inventory;
+using InventorySystem.UI;
 
-namespace GameInitializers
+namespace Initializers
 {
     public class GameInitializer : MonoInstaller<GameInitializer>
     {
-        [SerializeField] private PlayerController playerController;
-
         [SerializeField] private InteractionPromptManager interactionPromptManager;
 
         [SerializeField] private QuestManager questManager;
@@ -29,7 +25,6 @@ namespace GameInitializers
         {
             Container.BindInterfacesAndSelfTo<InputManager>().AsSingle();
 
-            Container.BindInstance(playerController);
             Container.BindInstance(interactionPromptManager).AsSingle(); 
             Container.BindInstance(questManager).AsSingle();
             Container.BindInstance(viewManager).AsSingle();

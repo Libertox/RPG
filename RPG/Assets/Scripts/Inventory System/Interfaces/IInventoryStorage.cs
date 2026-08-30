@@ -6,17 +6,17 @@ namespace InventorySystem
 {
     public interface IInventoryStorage
     {
-        public event Action<ItemInventory> OnItemAdded;
+        public event Action<InventoryItem> OnItemAdded;
         public event Action<ItemConfigBase> OnItemRemoved;
 
-        public ObservableFloat CurrentWeight { get; set; }
+        public float CurrentWeight { get; set; }
 
         public void AddItemAndNotify(ItemConfigBase item, int amount = 1);
         public void RemoveItemAndNotify(ItemConfigBase item);
         public bool AddItem(ItemConfigBase item, int amount = 1);
         public bool RemoveItem(ItemConfigBase item);
 
-        public List<ItemInventory> GetItemsInCategory(ItemCategory category);
-        public ItemInventory FindInventoryItem(ItemConfigBase item);
+        public List<InventoryItem> GetItemsInCategory(ItemCategory category);
+        public InventoryItem FindInventoryItem(ItemConfigBase item);
     }
 }

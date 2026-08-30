@@ -1,6 +1,6 @@
 ﻿using Entity.Player;
 using InputSystem;
-using InventorySystem;
+using UI;
 using System;
 using TMPro;
 using UnityEngine;
@@ -8,9 +8,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
-    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IDragable, IPointerEnterHandler, IPointerExitHandler
+    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IPointerEnterHandler, IPointerExitHandler
     {
         public event Action<InventoryItemSlot> OnSelected;
         public event Action OnDeselected;
@@ -18,12 +18,10 @@ namespace UI.Inventory
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
 
-        public ItemInventory Item { get; private set; }
+        public InventoryItem Item { get; private set; }
 
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
-
-        private ItemHolder _itemHolder;
 
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager)
@@ -32,14 +30,12 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public InventoryItemSlot Initialize(ItemInventory item, ItemHolder itemHolder)
+        public InventoryItemSlot Initialize(InventoryItem item)
         {
             Item = item;
 
             icon.sprite = item.ItemBase.Icon;
             amount.SetText(item.Amount.ToString());
-
-            _itemHolder = itemHolder;
 
             return this;
         }
@@ -64,6 +60,7 @@ namespace UI.Inventory
             _inputManager.OnRightMouseClicked += DropItem;
         }
 
+
         public void OnPointerExit(PointerEventData eventData)
         {
             OnDeselected?.Invoke();
@@ -76,16 +73,6 @@ namespace UI.Inventory
         {
             _inputManager.OnLeftMouseClicked -= EquipItem;
             _inputManager.OnRightMouseClicked -= DropItem;
-        }
-
-        public void Drop()
-        {
-            
-        }
-
-        public void Drag()
-        {
-            _itemHolder.SetItem(Item, this);
         }
     }
 }

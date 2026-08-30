@@ -1,22 +1,17 @@
 ﻿using Entity.Player;
 using InputSystem;
-using InventorySystem;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
-    public class InventoryGrid : MonoBehaviour, IDragable
+    public class InventoryGrid : MonoBehaviour, IItemContainer
     {
+        private const int CONTAINER_HEIGHT = 650;
+
         [SerializeField] private InventoryGridConfig config;
         [SerializeField] private ItemDescriptionView itemDescription;
-
-        [SerializeField] private ItemHolder itemHolder;
-
         [field: SerializeField] public RectTransform SlotsContainer { get; private set; }
 
         private int _currentRow = 0;
@@ -25,34 +20,49 @@ namespace UI.Inventory
         private readonly Dictionary<ItemConfigBase, List<InventoryGridNode>> _nodes = new();
         private InventorySlotFactory _inventorySlotFactory;
 
-        private InputManager _inputManager;
         private PlayerInventory _playerInventory;
 
         [Inject]
-        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, InputManager inputManager, PlayerController playerController)
+        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, PlayerController playerController)
         {
             _inventorySlotFactory = new(inventoryItemSlotPool);
-            _inputManager = inputManager;
             _playerInventory = playerController.PlayerInventory;
         }
 
-        public void Drag() { }
-  
-        public void Drop() 
+        public bool Drop(InventoryItem item) 
         {
-            if(itemHolder.HoldItem == null) return;
+            if(item == null) return false;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, _inputManager.GetMousePosition(), null, out Vector2 localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, InputManager.GetMousePosition(), null, out Vector2 localPoint);
 
             int column = Mathf.FloorToInt((localPoint.x - config.LeftPadding) / (config.ItemSlotSize.x + config.ItemPadding));
             int row = Mathf.FloorToInt((-localPoint.y - config.TopPadding) / (config.ItemSlotSize.y + config.ItemPadding));
 
-            AddItemToGrid(itemHolder.HoldItem, column, row);
+            if (AddItemToGrid(item, column, row))
+            {
+                _playerInventory.InventoryStorage.AddItem(item.ItemBase);
+                return true;
+            }
 
-            _playerInventory.InventoryStorage.AddItem(itemHolder.HoldItem.ItemBase);
+            return false;
         }
- 
-        public void GenerateItemSlots(List<ItemInventory> items)
+
+        public InventoryItem Get()
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, InputManager.GetMousePosition(), null, out Vector2 localPoint);
+
+            int column = Mathf.FloorToInt((localPoint.x - config.LeftPadding) / (config.ItemSlotSize.x + config.ItemPadding));
+            int row = Mathf.FloorToInt((-localPoint.y - config.TopPadding) / (config.ItemSlotSize.y + config.ItemPadding));
+
+            var node = GetNodeAtPosition(new Vector2Int(column, row));
+
+            if (node == null) return null;
+
+            return node.Slot.Item;
+        }
+
+
+        public void GenerateItemSlots(List<InventoryItem> items)
         {
             if (items == null) return;
 
@@ -91,7 +101,21 @@ namespace UI.Inventory
             return false;
         }
 
-        public void SetItemOnItemSlot(ItemInventory currentItem, ItemInventory newItem)
+        private InventoryGridNode GetNodeAtPosition(Vector2Int gridPosition)
+        {
+            foreach (var node in _nodes)
+            {
+                for (int i = 0; i < node.Value.Count; i++)
+                {
+                    if (node.Value[i].GridPosition == gridPosition && node.Value[i].Slot.Item != null)
+                        return node.Value[i];
+                }
+            }
+
+            return null;
+        }
+
+        public void SetItemOnItemSlot(InventoryItem currentItem, InventoryItem newItem)
         {
             Debug.Log("SetItemOnItemSlot: " + currentItem.ItemBase.Name + " -> " + newItem.ItemBase.Name);
 
@@ -116,7 +140,7 @@ namespace UI.Inventory
                 if (oldNodes.Count == 0)
                     _nodes.Remove(oldBase);
 
-                node.Slot.Initialize(newItem, itemHolder);
+                node.Slot.Initialize(newItem);
 
                 if (!_nodes.ContainsKey(newBase))
                     _nodes.Add(newBase, new List<InventoryGridNode>());
@@ -125,7 +149,7 @@ namespace UI.Inventory
             }
             else
             {
-                node.Slot.Initialize(newItem, itemHolder);
+                node.Slot.Initialize(newItem);
             }
         }
 
@@ -143,15 +167,15 @@ namespace UI.Inventory
             RemoveNode(itemBase);  
         }
 
-        public void AddItemToGrid(ItemInventory item, int column = 0, int row = 0)
+        public bool AddItemToGrid(InventoryItem item, int column = 0, int row = 0)
         {
-            if(item == null) return;
+            if(item == null) return false;
 
             var itemSettings = item.ItemBase;
 
-            if (FindNodeByItem(itemSettings) != null) return;
+            if (FindNodeByItem(itemSettings) != null) return false;
 
-            SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, 650);
+            SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, CONTAINER_HEIGHT);
 
             _currentColumn = column;
             _currentRow = row;
@@ -164,7 +188,7 @@ namespace UI.Inventory
             Vector2 slotPosition = new(_currentColumn * config.ItemSlotSize.x + config.LeftPadding, -(_currentRow * config.ItemSlotSize.y + config.TopPadding));
             Vector2 slotSize = new(itemSettings.InventorySize.x * config.ItemSlotSize.x, itemSettings.InventorySize.y * config.ItemSlotSize.y);
 
-            InventoryItemSlot inventoryItemSlot = _inventorySlotFactory.Create(item, SlotsContainer, slotPosition, slotSize, itemHolder);
+            InventoryItemSlot inventoryItemSlot = _inventorySlotFactory.Create(item, SlotsContainer, slotPosition, slotSize);
 
             Bind(inventoryItemSlot);
 
@@ -192,6 +216,8 @@ namespace UI.Inventory
             }
 
             IncreaseColumnCount();
+
+            return true;
         }
 
         private void Bind(InventoryItemSlot slot)

@@ -50,7 +50,7 @@ namespace InventorySystem
             _lootPools.Release(loot);
         }
 
-        private void OnItemDropped(ItemInventory item)
+        private void OnItemDropped(InventoryItem item)
         {
             if (ShouldCreateNewLoot())
             {

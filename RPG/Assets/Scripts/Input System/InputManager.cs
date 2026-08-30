@@ -2,7 +2,6 @@ using InputSystem.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Zenject;
 
 namespace InputSystem
 {
@@ -28,6 +27,8 @@ namespace InputSystem
         private readonly InputActions _inputActions;
 
         public Vector2 MoveDirection => _inputActions.Player.Move.ReadValue<Vector2>();
+
+        private bool isHoldLeftMouseButton;
 
         public InputManager()
         {
@@ -63,21 +64,29 @@ namespace InputSystem
 
         private void OnHoldLeftMouseButtonStarted(InputAction.CallbackContext action)
         {
+            isHoldLeftMouseButton = true;
+
             OnLeftMouseStartHolded?.Invoke();
         }
 
         private void OnHoldLeftMouseButtonCanceled(InputAction.CallbackContext action)
         {
+            isHoldLeftMouseButton = false;
+
             OnLeftMouseCancelHolded?.Invoke();
         }
 
         private void OnRightMouseButtonPerformed(InputAction.CallbackContext action)
         {
+            if (isHoldLeftMouseButton) return;
+
             OnRightMouseClicked?.Invoke();
         }
 
         private void OnLeftMouseButtonPerformed(InputAction.CallbackContext action)
         {
+            if (isHoldLeftMouseButton) return;
+
             OnLeftMouseClicked?.Invoke();
         }
 
@@ -133,7 +142,7 @@ namespace InputSystem
             else _inputActions.UI.Disable();
         }
 
-        public Vector2 GetMousePosition()
+        public static Vector2 GetMousePosition()
         {
             return Mouse.current.position.value;
         }

@@ -3,7 +3,7 @@
 using System;
 using UnityEngine;
 
-namespace UI.Inventory
+namespace InventorySystem
 {
     [CreateAssetMenu(fileName = "Inventory Grid Config", menuName = "ScriptableObjects/Inventory System/Inventory Grid Config")]
     public class InventoryGridConfig : ScriptableObject

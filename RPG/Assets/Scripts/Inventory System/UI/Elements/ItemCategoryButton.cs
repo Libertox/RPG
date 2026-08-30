@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class ItemCategoryButton : MonoBehaviour
     {

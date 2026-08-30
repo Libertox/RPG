@@ -6,7 +6,7 @@ namespace InventorySystem
 {
     public class Loot : InteractionBase
     {
-        private List<ItemInventory> _items;
+        private List<InventoryItem> _items;
 
         private LootFactory _factory;
 
@@ -30,7 +30,7 @@ namespace InventorySystem
             return this;
         }
 
-        public void AddItem(ItemInventory item)
+        public void AddItem(InventoryItem item)
         {
             if (item == null) return;
 
@@ -42,7 +42,7 @@ namespace InventorySystem
             }
             else
             {
-                _items.Add(new ItemInventory(item.ItemBase, item.Amount));
+                _items.Add(new InventoryItem(item.ItemBase, item.Amount));
             }
         }
     }

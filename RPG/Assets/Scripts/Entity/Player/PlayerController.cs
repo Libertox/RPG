@@ -2,9 +2,7 @@
 using InventorySystem;
 using StateMachines;
 using System;
-using UI;
 using UnityEngine;
-using UnityEngine.AI;
 using Zenject;
 
 namespace Entity.Player
@@ -16,15 +14,13 @@ namespace Entity.Player
         [SerializeField] private Transform playerPresentation;
         [SerializeField] private Transform attackCollisionPoint;
 
-        [SerializeField] private PlayerInventory playerInventory;
-
         [Header("Settings")]
         [SerializeField] private PlayerData playerData;
 
         public Vector3 Position => transform.localPosition;
         public Quaternion Rotation => playerPresentation.rotation;
 
-        public PlayerInventory PlayerInventory => playerInventory; 
+        public PlayerInventory PlayerInventory { get; private set; }
         public PlayerData PlayerData => playerData;
 
         private IState _idleState;
@@ -48,8 +44,9 @@ namespace Entity.Player
         public bool IsDead => _isDead;
 
         [Inject]
-        private void Construct(InputManager inputManager)
+        private void Construct(InputManager inputManager, PlayerInventory playerInventory)
         {
+            PlayerInventory = playerInventory;
             _inputManager = inputManager;
 
             _inputManager.OnMoveStarted += OnMoveStarted;
@@ -85,7 +82,6 @@ namespace Entity.Player
             _animationController = new PlayerAnimationController(playerPresentation.GetComponent<Animator>());
             _motionController = new PlayerMotionController(this, _inputManager, playerData, playerPresentation);
             _combatController = new MeleeCombatController(attackCollisionPoint, playerData.CombatData);
-            playerInventory = GetComponent<PlayerInventory>();
         }
 
         private void SetupStateMachine()
@@ -154,7 +150,7 @@ namespace Entity.Player
 
         public float GetMovementSpeed()
         {
-            float speed = playerInventory.InventoryStorage.CurrentWeight.Value >= playerData.MaxLiftingCapacity 
+            float speed = PlayerInventory.Weight >= playerData.MaxLiftingCapacity 
                 ? playerData.EncumberedSpeed : playerData.MovementSpeed;
 
             return speed;

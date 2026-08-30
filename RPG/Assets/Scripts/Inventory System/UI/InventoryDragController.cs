@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class InventoryDragController : MonoBehaviour
     {
@@ -30,27 +30,32 @@ namespace UI.Inventory
 
         private void OnLeftMouseCancelHolded()
         {
-            var dragable = GetSlotUnderMouse(_inputManager.GetMousePosition());
+            var itemContainer = GetSlotUnderMouse(InputManager.GetMousePosition());
 
-            if (dragable == null)
+            if (itemContainer == null)
             {
                 itemHolder.ReturnToStartSlot();
                 return;
             }
 
-            dragable?.Drop();
+            if (!itemContainer.Drop(itemHolder.HoldItem))
+            {
+                itemHolder.ReturnToStartSlot();
+            }
 
             itemHolder.Hide();
         }
 
         private void OnLeftMouseStartHolded()
         {
-            var dragable = GetSlotUnderMouse(_inputManager.GetMousePosition());
+            var itemContainer = GetSlotUnderMouse(InputManager.GetMousePosition());
 
-            dragable?.Drag();
+            if (itemContainer == null) return;
+
+            itemHolder.SetItem(itemContainer.Get(), itemContainer);
         }
 
-        public IDragable GetSlotUnderMouse(Vector2 mousePos)
+        public IItemContainer GetSlotUnderMouse(Vector2 mousePos)
         {
             PointerEventData data = new(eventSystem);
             data.position = mousePos;
@@ -60,7 +65,7 @@ namespace UI.Inventory
 
             foreach (var r in results)
             {
-                if (r.gameObject.TryGetComponent<IDragable>(out var slot))
+                if (r.gameObject.TryGetComponent<IItemContainer>(out var slot))
                     return slot;
             }
 

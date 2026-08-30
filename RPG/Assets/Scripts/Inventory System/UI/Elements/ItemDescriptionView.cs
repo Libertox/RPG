@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class ItemDescriptionView : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace UI.Inventory
             _inputManager = inputManager;
         }
 
-        public void Setup(ItemInventory item)
+        public void Setup(InventoryItem item)
         {
             itemName.SetText(item.ItemBase.Name);
             description.SetText(item.ItemBase.Description);

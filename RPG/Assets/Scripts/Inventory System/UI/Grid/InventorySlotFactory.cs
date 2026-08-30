@@ -2,7 +2,7 @@
 using InventorySystem;
 using UnityEngine;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class InventorySlotFactory 
     {
@@ -13,10 +13,10 @@ namespace UI.Inventory
             _pool = pool;
         }
 
-        public InventoryItemSlot Create(ItemInventory item, RectTransform parent, Vector2 position, Vector2 size, ItemHolder itemHolder)
+        public InventoryItemSlot Create(InventoryItem item, RectTransform parent, Vector2 position, Vector2 size)
         {
             return _pool.Spawn()
-                .Initialize(item, itemHolder)
+                .Initialize(item)
                 .SetParent(parent)
                 .SetAnchoredPosition(position)
                 .SetSize(size);

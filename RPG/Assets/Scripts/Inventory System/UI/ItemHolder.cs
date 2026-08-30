@@ -1,30 +1,17 @@
-﻿
-
-using InputSystem;
-using InventorySystem;
+﻿using InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class ItemHolder : MonoBehaviour
     {
         [SerializeField] private Image icon;
-        public ItemInventory HoldItem { get; private set; }
+        public InventoryItem HoldItem { get; private set; }
 
-        private InputManager _inputManager;
+        private IItemContainer _startSlot;
 
-        private IDragable _startSlot;
-
-        [Inject]
-        private void Construct(InputManager inputManager)
-        {
-            _inputManager = inputManager;
-        }
-
- 
-        public void SetItem(ItemInventory item, IDragable startSlot)
+        public void SetItem(InventoryItem item, IItemContainer startSlot)
         {
             if(item == null) return;
 
@@ -36,7 +23,7 @@ namespace UI.Inventory
 
         public void ReturnToStartSlot()
         {
-            _startSlot?.Drop();
+            _startSlot?.Drop(HoldItem);
             Hide();
         }
 
@@ -49,7 +36,7 @@ namespace UI.Inventory
 
         public void Update()
         {
-            transform.position = _inputManager.GetMousePosition();
+            transform.position = InputManager.GetMousePosition();
         }
     }
 }

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d10392da1ab43441bbe2c4845872e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptSystem.PromptProvide
-  promptType: 1
+  promptIcon: {fileID: 11400000, guid: 6c5e85537b5ff1044b0a112123566fce, type: 2}
   promptPosition: {fileID: 4936828714190165321}
 --- !u!1 &6447908379222071324
 GameObject:

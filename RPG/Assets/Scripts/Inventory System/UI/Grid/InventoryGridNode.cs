@@ -1,9 +1,6 @@
-﻿
+﻿using UnityEngine;
 
-using InventorySystem;
-using UnityEngine;
-
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
     public class InventoryGridNode
     {

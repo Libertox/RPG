@@ -1,34 +1,31 @@
 ﻿using Entity.Player;
 using InputSystem;
-using InventorySystem;
+using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Inventory
+namespace InventorySystem.UI
 {
-    public class EquipmentSlot : MonoBehaviour, IDragable
+    public class EquipmentSlot : MonoBehaviour, IItemContainer
     {
         [Header("Refernces")]
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
-        [SerializeField] private ItemHolder holder;
+        [SerializeField] private TextMeshProUGUI amountLabel;
 
         [Header("Settings")]
         [SerializeField] private EquipmentSlotCategory slotCategory;
         [SerializeField] private int slotIndex;
 
         private Equipment _equipment;
-        private InputManager _inputManager;
         private IInventoryStorage _inventoryStorage;
 
         [Inject]
-        private void Construct(PlayerController playerController, InputManager inputManager) 
+        private void Construct(PlayerController playerController) 
         {
             _equipment = playerController.PlayerInventory.Equipment;
             _inventoryStorage = playerController.PlayerInventory.InventoryStorage;
-            _inputManager = inputManager;
         }
 
         private void Awake()
@@ -36,6 +33,7 @@ namespace UI.Inventory
             button.onClick.AddListener(OnClick);
 
             SetIcon(slotCategory.Icon);
+            amountLabel.gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -51,15 +49,16 @@ namespace UI.Inventory
             _equipment.OnItemEquipped -= HandleItemEquipped;
         }
 
-        private void HandleItemEquipped(ItemInventory item, int index)
+        private void HandleItemEquipped(InventoryItem item, int index)
         {
             if (Matches(item, index))
             {
                 SetIcon(item.ItemBase.Icon);
+                SetAmountLabel(item.Amount);
             }
         }
 
-        private bool Matches(ItemInventory item, int index)
+        private bool Matches(InventoryItem item, int index)
         {
             return item.ItemBase.EquipmentSlot == slotCategory && index == slotIndex;
         }
@@ -68,11 +67,19 @@ namespace UI.Inventory
         {
             var item = _equipment.GetEquipped(slotCategory, slotIndex);
             SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
+            SetAmountLabel(item != null ? item.Amount : 0);
         }
 
         private void SetIcon(Sprite icon)
         {
             this.icon.sprite = icon;
+        }
+
+        private void SetAmountLabel(int amount)
+        {
+            amountLabel.gameObject.SetActive(amount > 0);
+
+            amountLabel.SetText(amount.ToString());
         }
 
         private void OnClick()
@@ -81,30 +88,34 @@ namespace UI.Inventory
 
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
             {
-                SetIcon(slotCategory.Icon);
-                _inventoryStorage.AddItemAndNotify(item.ItemBase);
+                Refresh();
+                _inventoryStorage.AddItemAndNotify(item.ItemBase, item.Amount);
             }
                 
         }
 
-        public void Drag()
+        public InventoryItem Get()
         {
-            holder.SetItem(_equipment.GetEquipped(slotCategory, slotIndex), this);
+            var equippedItem = _equipment.GetEquipped(slotCategory, slotIndex);
 
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
-                SetIcon(slotCategory.Icon);
+            {
+                Refresh();
+            }
+
+            return equippedItem;
         }
 
-        public void Drop()
+        public bool Drop(InventoryItem item)
         {
-            if (holder.HoldItem == null) return;
+            if (item == null) return false;
 
-            if (slotCategory == holder.HoldItem.ItemBase.EquipmentSlot)
-                _equipment.TryEquipItem(holder.HoldItem, slotIndex);
-            else
-                holder.ReturnToStartSlot();
+            if (slotCategory != item.ItemBase.EquipmentSlot)
+                return false;
 
-           holder.Hide();
+            _equipment.TryEquipItem(item, slotIndex);
+
+            return true;
         }
     }
 }

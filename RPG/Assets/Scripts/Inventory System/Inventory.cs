@@ -8,16 +8,15 @@ namespace InventorySystem
 {
     public class Inventory : IInventoryStorage
     {
-        public event Action<ItemInventory> OnItemAdded;
+        public event Action<InventoryItem> OnItemAdded;
         public event Action<ItemConfigBase> OnItemRemoved;
 
-        private readonly Dictionary<ItemCategory, List<ItemInventory>> _items;
-        public ObservableFloat CurrentWeight { get; set; }
+        private readonly Dictionary<ItemCategory, List<InventoryItem>> _items;
+        public float CurrentWeight { get; set; }
 
         public Inventory()
         {
             _items = new();
-            CurrentWeight = new();
         }
 
         public void AddItemAndNotify(ItemConfigBase item, int amount = 1)
@@ -39,7 +38,7 @@ namespace InventorySystem
             var inventoryItem = GetOrCreateInventoryItem(item);
             inventoryItem.Amount += amount;
 
-            CurrentWeight.Add(item.Weight * amount);
+            CurrentWeight += item.Weight * amount;
 
             Debug.Log($"{item.Name} added");
             return true;
@@ -50,33 +49,30 @@ namespace InventorySystem
             var inventoryItem = FindInventoryItem(item);
             if (inventoryItem == null) return false;
 
-            //inventoryItem.Amount--;
-            CurrentWeight.Subtract(item.Weight);
-
-            //if (inventoryItem.Amount <= 0)
+            CurrentWeight -= item.Weight;
 
             _items[item.Category].Remove(inventoryItem);
             Debug.Log($"{item.Name} removed");
             return true;
         }
 
-        private ItemInventory GetOrCreateInventoryItem(ItemConfigBase item)
+        private InventoryItem GetOrCreateInventoryItem(ItemConfigBase item)
         {
             if (!_items.TryGetValue(item.Category, out var list))
             {
-                list = new List<ItemInventory>();
+                list = new List<InventoryItem>();
                 _items[item.Category] = list;
             }
 
             var existing = list.FirstOrDefault(i => i.ItemBase == item);
             if (existing != null) return existing;
 
-            var created = new ItemInventory(item, 0);
+            var created = new InventoryItem(item, 0);
             list.Add(created);
             return created;
         }
 
-        public ItemInventory FindInventoryItem(ItemConfigBase item)
+        public InventoryItem FindInventoryItem(ItemConfigBase item)
         {
             if (item == null) return null;
             if (!_items.TryGetValue(item.Category, out var list)) return null;
@@ -84,9 +80,9 @@ namespace InventorySystem
             return list.FirstOrDefault(i => i.ItemBase == item);
         }
 
-        public List<ItemInventory> GetItemsInCategory(ItemCategory category)
+        public List<InventoryItem> GetItemsInCategory(ItemCategory category)
         {
-            return _items.TryGetValue(category, out var itemsList) ? itemsList : new List<ItemInventory>();
+            return _items.TryGetValue(category, out var itemsList) ? itemsList : new List<InventoryItem>();
         }
     }
 }

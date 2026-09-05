@@ -13,7 +13,7 @@ namespace InventorySystem.UI
 
         [Header("Refernces")]
         [SerializeField] private ItemCategory defaultCategorySelected;
-        [SerializeField] private InventoryItemSlot inventoryItemSlotPrefab;
+        [SerializeField] private InventorySlotUI inventoryItemSlotPrefab;
         [SerializeField] private SerializableDictionary<ItemCategory, InventoryGrid> itemGrids;
         [SerializeField] private ScrollRect scrollArea;
         [SerializeField] private ItemCategoryButton[] itemCategoryButtons;
@@ -50,7 +50,7 @@ namespace InventorySystem.UI
 
         public override void Refresh()
         {
-            GetGrid(selectedItemCategory).GenerateItemSlots(playerInventory.InventoryStorage.GetItemsInCategory(selectedItemCategory));
+            GetGrid(selectedItemCategory).Refresh(playerInventory.InventoryStorage.GetItemsInCategory(selectedItemCategory));
         }
 
         private void SetSelectedItemCategory(ItemCategory category)

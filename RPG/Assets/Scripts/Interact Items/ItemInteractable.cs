@@ -9,11 +9,13 @@ namespace QuestSystem
     {
         [SerializeField] private ItemConfigBase itemBase;
 
+        [SerializeField] private int amount = 1;
+
         public override void Execute(PlayerController playerController)
         {
             base.Execute(playerController);
 
-            playerController.PlayerInventory.InventoryStorage.AddItemAndNotify(itemBase);
+            playerController.PlayerInventory.InventoryStorage.AddItemAndNotify(new InventorySlot(itemBase, amount));
 
             ///Change to ppol
             Destroy(gameObject);

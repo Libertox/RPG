@@ -1,6 +1,7 @@
 ﻿using Entity.Player;
 using InputSystem;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -17,7 +18,7 @@ namespace InventorySystem.UI
         private int _currentRow = 0;
         private int _currentColumn = 0;
 
-        private readonly Dictionary<ItemConfigBase, List<InventoryGridNode>> _nodes = new();
+        private readonly Dictionary<InventorySlot, List<InventoryGridNode>> _nodes = new();
         private InventorySlotFactory _inventorySlotFactory;
 
         private PlayerInventory _playerInventory;
@@ -29,7 +30,7 @@ namespace InventorySystem.UI
             _playerInventory = playerController.PlayerInventory;
         }
 
-        public bool Drop(InventoryItem item) 
+        public bool Drop(InventorySlot item) 
         {
             if(item == null) return false;
 
@@ -38,16 +39,17 @@ namespace InventorySystem.UI
             int column = Mathf.FloorToInt((localPoint.x - config.LeftPadding) / (config.ItemSlotSize.x + config.ItemPadding));
             int row = Mathf.FloorToInt((-localPoint.y - config.TopPadding) / (config.ItemSlotSize.y + config.ItemPadding));
 
-            if (AddItemToGrid(item, column, row))
+            if (!_nodes.ContainsKey(item))
             {
-                _playerInventory.InventoryStorage.AddItem(item.ItemBase);
+                _playerInventory.InventoryStorage.AddItem(item);
+                AddItemToGrid(item, column, row);
                 return true;
             }
 
             return false;
         }
 
-        public InventoryItem Get()
+        public InventorySlot Get()
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, InputManager.GetMousePosition(), null, out Vector2 localPoint);
 
@@ -62,7 +64,7 @@ namespace InventorySystem.UI
         }
 
 
-        public void GenerateItemSlots(List<InventoryItem> items)
+        public void Refresh(List<InventorySlot> items)
         {
             if (items == null) return;
 
@@ -70,35 +72,32 @@ namespace InventorySystem.UI
             {
                 AddItemToGrid(items[i], 0, 0);
             }
+
+            RemoveUnusedNodes(items);
         }
 
-        private void AddNode(Vector2Int gridPosition, Vector2 worldPosition, InventoryItemSlot slot)
+        private void RemoveUnusedNodes(List<InventorySlot> items)
+        {
+            foreach (var key in _nodes.Keys.ToList())
+            {
+                if (!items.Contains(key))
+                    RemoveItemFromGrid(key);
+            }
+        }
+
+        private void AddNode(Vector2Int gridPosition, Vector2 worldPosition, InventorySlotUI slot)
         {
             var node = new InventoryGridNode(gridPosition, worldPosition, slot);
 
-            if (!_nodes.ContainsKey(slot.Item.ItemBase))
-                _nodes.Add(slot.Item.ItemBase, new());
+            if (!_nodes.ContainsKey(slot.Item))
+                _nodes.Add(slot.Item, new());
 
-            _nodes[slot.Item.ItemBase].Add(node);
+            _nodes[slot.Item].Add(node);
         }
 
-        private void RemoveNode(ItemConfigBase itemConfig)
+        private void RemoveNode(InventorySlot item)
         {
-            _nodes.Remove(itemConfig);
-        }
-
-        private bool ContainNodeAtPosition(Vector2Int gridPosition)
-        {
-            foreach(var node in _nodes)
-            {
-                for (int i = 0; i < node.Value.Count; i++)
-                {
-                    if (node.Value[i].GridPosition == gridPosition && node.Value[i].Slot.Item != null)
-                        return true;
-                }
-            }
-
-            return false;
+            _nodes.Remove(item);
         }
 
         private InventoryGridNode GetNodeAtPosition(Vector2Int gridPosition)
@@ -115,72 +114,56 @@ namespace InventorySystem.UI
             return null;
         }
 
-        public void SetItemOnItemSlot(InventoryItem currentItem, InventoryItem newItem)
+        public void ReplaceItem(InventorySlot currentItem, InventorySlot newItem)
         {
-            Debug.Log("SetItemOnItemSlot: " + currentItem.ItemBase.Name + " -> " + newItem.ItemBase.Name);
-
-            var node = FindNodeByItem(currentItem.ItemBase);
+            var node = FindNodeByItem(currentItem);
 
             if (node == null)
             {
-                AddItemToGrid(newItem);
                 return;
             }
+            RemoveItemFromGrid(currentItem);
 
-            var oldBase = currentItem.ItemBase;
-            var newBase = newItem.ItemBase;
+            var gridPosition = node.GridPosition;
 
-            if (_nodes.TryGetValue(oldBase, out var oldNodes))
-            {
-                var nodesToMove = oldNodes.FindAll(n => n.Slot == node.Slot);
-
-                foreach (var n in nodesToMove)
-                    oldNodes.Remove(n);
-
-                if (oldNodes.Count == 0)
-                    _nodes.Remove(oldBase);
-
-                node.Slot.Initialize(newItem);
-
-                if (!_nodes.ContainsKey(newBase))
-                    _nodes.Add(newBase, new List<InventoryGridNode>());
-
-                _nodes[newBase].AddRange(nodesToMove);
-            }
-            else
-            {
-                node.Slot.Initialize(newItem);
-            }
+            AddItemToGrid(newItem, gridPosition.x, gridPosition.y);
         }
 
-        public void RemoveItemFromGrid(ItemConfigBase itemBase)
+        public void RemoveItemFromGrid(InventorySlot item)
         {
-            Debug.Log("RemoveItemFromGrid: " + itemBase.Name);
+            Debug.LogError("RemoveItemFromGrid: " + item.ItemBase.Name);
 
-            var node = FindNodeByItem(itemBase);
+            var node = FindNodeByItem(item);
             if (node == null) return;
 
             Unbind(node.Slot);
 
             _inventorySlotFactory.Release(node.Slot);
 
-            RemoveNode(itemBase);  
+            RemoveNode(item);  
         }
 
-        public bool AddItemToGrid(InventoryItem item, int column = 0, int row = 0)
+        public bool AddItemToGrid(InventorySlot item, int column = 0, int row = 0)
         {
-            if(item == null) return false;
+            if (item == null) return false;
+
+            if (_nodes.ContainsKey(item))
+            {
+                var node = FindNodeByItem(item);
+
+                node?.Slot.Initialize(item);
+
+                return false;
+            }
 
             var itemSettings = item.ItemBase;
-
-            if (FindNodeByItem(itemSettings) != null) return false;
 
             SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, CONTAINER_HEIGHT);
 
             _currentColumn = column;
             _currentRow = row;
 
-            while (ContainNodeAtPosition(new(_currentColumn, _currentRow)))
+            while (!CanPlaceItem(new Vector2Int(_currentColumn, _currentRow), item.ItemBase.InventorySize))
             {
                 IncreaseColumnCount();
             }
@@ -188,7 +171,7 @@ namespace InventorySystem.UI
             Vector2 slotPosition = new(_currentColumn * config.ItemSlotSize.x + config.LeftPadding, -(_currentRow * config.ItemSlotSize.y + config.TopPadding));
             Vector2 slotSize = new(itemSettings.InventorySize.x * config.ItemSlotSize.x, itemSettings.InventorySize.y * config.ItemSlotSize.y);
 
-            InventoryItemSlot inventoryItemSlot = _inventorySlotFactory.Create(item, SlotsContainer, slotPosition, slotSize);
+            InventorySlotUI inventoryItemSlot = _inventorySlotFactory.Create(item, SlotsContainer, slotPosition, slotSize);
 
             Bind(inventoryItemSlot);
 
@@ -220,13 +203,27 @@ namespace InventorySystem.UI
             return true;
         }
 
-        private void Bind(InventoryItemSlot slot)
+        private bool CanPlaceItem(Vector2Int position, Vector2Int size)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    if (GetNodeAtPosition(position + new Vector2Int(x, y)) != null)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void Bind(InventorySlotUI slot)
         {
             slot.OnSelected += OnItemSlotSelected;
             slot.OnDeselected += OnItemSlotDeselected;
         }
 
-        private void Unbind(InventoryItemSlot slot)
+        private void Unbind(InventorySlotUI slot)
         {
             slot.OnSelected -= OnItemSlotSelected;
             slot.OnDeselected -= OnItemSlotDeselected;
@@ -234,14 +231,14 @@ namespace InventorySystem.UI
 
         private void OnItemSlotDeselected()
         {
-            itemDescription.Hide();
+            //itemDescription.Hide();
         }
 
-        private void OnItemSlotSelected(InventoryItemSlot slot)
+        private void OnItemSlotSelected(InventorySlotUI slot)
         {
-            itemDescription.Setup(slot.Item);
+            //itemDescription.Setup(slot.Item);
 
-            itemDescription.ShowAtPosition(slot.GetRightBottomCornerPosition());
+            //itemDescription.ShowAtPosition(slot.GetRightBottomCornerPosition());
         }
 
         private void IncreaseColumnCount()
@@ -256,14 +253,12 @@ namespace InventorySystem.UI
             }
         }
 
-        private InventoryGridNode FindNodeByItem(ItemConfigBase item)
+        private InventoryGridNode FindNodeByItem(InventorySlot item)
         {
-            if (!_nodes.ContainsKey(item))
+            if (!_nodes.TryGetValue(item, out var nodes))
                 return null;
 
-            _nodes.TryGetValue(item, out List<InventoryGridNode> nodes);
-
-            return nodes[0];
+            return nodes.Count > 0 ? nodes[0] : null;
         }
     }
 }

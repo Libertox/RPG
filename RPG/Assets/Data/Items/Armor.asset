@@ -20,3 +20,5 @@ MonoBehaviour:
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
   <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}
+  <CanStack>k__BackingField: 0
+  <MaxStackSize>k__BackingField: 1

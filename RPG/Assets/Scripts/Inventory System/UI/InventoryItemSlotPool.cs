@@ -2,19 +2,19 @@
 
 namespace InventorySystem.UI
 {
-    public class InventoryItemSlotPool : MonoMemoryPool<InventoryItemSlot>
+    public class InventoryItemSlotPool : MonoMemoryPool<InventorySlotUI>
     {
-        protected override void OnCreated(InventoryItemSlot item)
+        protected override void OnCreated(InventorySlotUI item)
         {
             
         }
 
-        protected override void OnSpawned(InventoryItemSlot item)
+        protected override void OnSpawned(InventorySlotUI item)
         {
             item.gameObject.SetActive(true);
         }
 
-        protected override void OnDespawned(InventoryItemSlot item)
+        protected override void OnDespawned(InventorySlotUI item)
         {
             item.gameObject.SetActive(false);
         }

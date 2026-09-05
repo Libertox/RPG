@@ -6,7 +6,7 @@ namespace InventorySystem
 {
     public class Loot : InteractionBase
     {
-        private List<InventoryItem> _items;
+        private List<InventorySlot> _items;
 
         private LootFactory _factory;
 
@@ -16,7 +16,7 @@ namespace InventorySystem
 
             foreach (var item in _items)
             {
-                playerController.PlayerInventory.InventoryStorage.AddItem(item.ItemBase, item.Amount);
+                playerController.PlayerInventory.InventoryStorage.AddItem(item);
             }
 
             _items.Clear();
@@ -30,7 +30,7 @@ namespace InventorySystem
             return this;
         }
 
-        public void AddItem(InventoryItem item)
+        public void AddItem(InventorySlot item)
         {
             if (item == null) return;
 
@@ -42,7 +42,7 @@ namespace InventorySystem
             }
             else
             {
-                _items.Add(new InventoryItem(item.ItemBase, item.Amount));
+                _items.Add(new InventorySlot(item.ItemBase, item.Amount));
             }
         }
     }

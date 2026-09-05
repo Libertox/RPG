@@ -7,7 +7,7 @@ using Zenject;
 
 namespace InventorySystem.UI
 {
-    public class EquipmentSlot : MonoBehaviour, IItemContainer
+    public class EquipmentSlotUI : MonoBehaviour, IItemContainer
     {
         [Header("Refernces")]
         [SerializeField] private Image icon;
@@ -49,16 +49,15 @@ namespace InventorySystem.UI
             _equipment.OnItemEquipped -= HandleItemEquipped;
         }
 
-        private void HandleItemEquipped(InventoryItem item, int index)
+        private void HandleItemEquipped(InventorySlot item, int index)
         {
             if (Matches(item, index))
             {
-                SetIcon(item.ItemBase.Icon);
-                SetAmountLabel(item.Amount);
+                Refresh();
             }
         }
 
-        private bool Matches(InventoryItem item, int index)
+        private bool Matches(InventorySlot item, int index)
         {
             return item.ItemBase.EquipmentSlot == slotCategory && index == slotIndex;
         }
@@ -67,7 +66,7 @@ namespace InventorySystem.UI
         {
             var item = _equipment.GetEquipped(slotCategory, slotIndex);
             SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
-            SetAmountLabel(item != null ? item.Amount : 0);
+            SetAmountLabel(item != null && item.ItemBase.CanStack ? item.Amount : 0);
         }
 
         private void SetIcon(Sprite icon)
@@ -89,12 +88,12 @@ namespace InventorySystem.UI
             if (_equipment.TryUnequipItem(slotCategory, slotIndex))
             {
                 Refresh();
-                _inventoryStorage.AddItemAndNotify(item.ItemBase, item.Amount);
+                _inventoryStorage.AddItemAndNotify(item);
             }
                 
         }
 
-        public InventoryItem Get()
+        public InventorySlot Get()
         {
             var equippedItem = _equipment.GetEquipped(slotCategory, slotIndex);
 
@@ -106,7 +105,7 @@ namespace InventorySystem.UI
             return equippedItem;
         }
 
-        public bool Drop(InventoryItem item)
+        public bool Drop(InventorySlot item)
         {
             if (item == null) return false;
 

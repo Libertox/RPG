@@ -322,6 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
   itemBase: {fileID: 11400000, guid: 4d6ef54971324e34091b99dda4105632, type: 2}
+  amount: 7
 --- !u!1 &292102657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,6 +1834,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1623233936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1141510399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1141510401}
+  - component: {fileID: 1141510400}
+  m_Layer: 0
+  m_Name: Debug Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1141510400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141510399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abbc4e5f5318d084aae01f6ae8f162db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Utility.DebugManager
+  showInventory:
+    m_Name: Show Inventory
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2eae3ed2-13cb-431b-96c2-a5dfd5a7046d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 6f42ec20-dc81-4fd4-9e80-51afbfa13628
+      m_Path: <Keyboard>/f1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Show Inventory
+      m_Flags: 0
+    m_Flags: 0
+--- !u!4 &1141510401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141510399}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1156507230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2554,7 +2616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Name
-      value: Mushroom_02
+      value: Armor
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Layer
@@ -2671,6 +2733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
   itemBase: {fileID: 11400000, guid: bda4c6ab929e20944b64cba1e4a94861, type: 2}
+  amount: 1
 --- !u!1001 &1623233934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2685,7 +2748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Name
-      value: Mushroom_02 (2)
+      value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Layer
@@ -2801,7 +2864,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406caf48b3f6ac5429f29720cd43694f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
-  itemBase: {fileID: 11400000, guid: 371d52852de98eb419696ac597ca3d50, type: 2}
+  itemBase: {fileID: 11400000, guid: e85e352ba89e8bb4993cc136ca817ae3, type: 2}
+  amount: 1
 --- !u!1 &1739916757
 GameObject:
   m_ObjectHideFlags: 0
@@ -3001,7 +3065,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406caf48b3f6ac5429f29720cd43694f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
-  itemBase: {fileID: 11400000, guid: 148b8a221d7a6fe419c86d88daf4a35d, type: 2}
+  itemBase: {fileID: 11400000, guid: 4d6ef54971324e34091b99dda4105632, type: 2}
+  amount: 27
 --- !u!1 &2054278124
 GameObject:
   m_ObjectHideFlags: 0
@@ -3052,7 +3117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Name
-      value: Mushroom_02 (3)
+      value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 5440707293445505367, guid: 494f6d43e170e9145bc7865d243ee00b, type: 3}
       propertyPath: m_Layer
@@ -3169,6 +3234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.ItemInteractable
   itemBase: {fileID: 11400000, guid: e85e352ba89e8bb4993cc136ca817ae3, type: 2}
+  amount: 1
 --- !u!1 &2070883154
 GameObject:
   m_ObjectHideFlags: 0
@@ -3484,6 +3550,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 37e56e2db1cd7b94a8ea78e01407e1e7, type: 2}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_Name
+      value: Debug
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerInventory
       value: 
       objectReference: {fileID: 0}
@@ -3496,6 +3570,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_ExpectedControlType
+      value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.maxLiftingCapacity
       value: 10
       objectReference: {fileID: 0}
@@ -3504,12 +3582,28 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.<InventorySettings>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: a2079d24d4b15ee4eadfa5c5213f8e77, type: 2}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.<MaxLiftingCapacity>k__BackingField
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Id
+      value: ac5c57bf-0909-4e67-a662-963de825bf31
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/f1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Debug
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4022,3 +4116,4 @@ SceneRoots:
   - {fileID: 240696973}
   - {fileID: 2062720102}
   - {fileID: 893869137}
+  - {fileID: 1141510401}

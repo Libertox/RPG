@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Utility;
 
 namespace InventorySystem
 {
     public class Inventory : IInventoryStorage
     {
-        public event Action<InventoryItem> OnItemAdded;
-        public event Action<ItemConfigBase> OnItemRemoved;
+        public event Action<InventorySlot> OnItemAdded;
+        public event Action<InventorySlot> OnItemRemoved;
 
-        private readonly Dictionary<ItemCategory, List<InventoryItem>> _items;
+        private readonly Dictionary<ItemCategory, List<InventorySlot>> _items;
         public float CurrentWeight { get; set; }
 
         public Inventory()
@@ -19,70 +18,119 @@ namespace InventorySystem
             _items = new();
         }
 
-        public void AddItemAndNotify(ItemConfigBase item, int amount = 1)
+        public void AddItemAndNotify(InventorySlot item)
         {
-            if (!AddItem(item, amount)) return;
-            OnItemAdded?.Invoke(GetOrCreateInventoryItem(item));
+            if (!AddItem(item)) return;
+
+            OnItemAdded?.Invoke(item);
         }
 
-        public void RemoveItemAndNotify(ItemConfigBase item)
+        public void RemoveItemAndNotify(InventorySlot inventoryItem)
         {
-            if (!RemoveItem(item)) return;
-            OnItemRemoved?.Invoke(item);
+            if (!RemoveItem(inventoryItem)) return;
+
+            OnItemRemoved?.Invoke(inventoryItem);
         }
 
-        public bool AddItem(ItemConfigBase item, int amount = 1)
+        public bool AddItem(InventorySlot item)
         {
-            if (item == null || amount < 0) return false;
+            if (item == null || item.ItemBase == null || item.Amount <= 0)
+                return false;
+ 
+            var itemBase = item.ItemBase;
+            var amountToAdd = item.Amount;
 
-            var inventoryItem = GetOrCreateInventoryItem(item);
-            inventoryItem.Amount += amount;
-
-            CurrentWeight += item.Weight * amount;
-
-            Debug.Log($"{item.Name} added");
-            return true;
-        }
-
-        public bool RemoveItem(ItemConfigBase item)
-        {
-            var inventoryItem = FindInventoryItem(item);
-            if (inventoryItem == null) return false;
-
-            CurrentWeight -= item.Weight;
-
-            _items[item.Category].Remove(inventoryItem);
-            Debug.Log($"{item.Name} removed");
-            return true;
-        }
-
-        private InventoryItem GetOrCreateInventoryItem(ItemConfigBase item)
-        {
-            if (!_items.TryGetValue(item.Category, out var list))
+            if (!_items.TryGetValue(itemBase.Category, out var list))
             {
-                list = new List<InventoryItem>();
-                _items[item.Category] = list;
+                list = new List<InventorySlot>();
+                _items[itemBase.Category] = list;
             }
 
-            var existing = list.FirstOrDefault(i => i.ItemBase == item);
-            if (existing != null) return existing;
+            if (!itemBase.CanStack)
+            {
+                list.Add(item);
+                Debug.Log($"Added new stack of {itemBase.Name}");
+            }
+            else
+            {
+                var remainingAmount = amountToAdd;
 
-            var created = new InventoryItem(item, 0);
-            list.Add(created);
-            return created;
+                foreach (var stack in list.Where(i => i.ItemBase == itemBase).OrderBy(i => i.Amount))
+                {
+                    var spaceLeft = itemBase.MaxStackSize - stack.Amount;
+
+                    if (spaceLeft <= 0)
+                        continue;
+
+                    var amount = Mathf.Min(spaceLeft, remainingAmount);
+
+                    stack.Amount += amount;
+                    Debug.Log($"Added {amount} to existing stack of {itemBase.Name}");
+                    remainingAmount -= amount;
+
+                    if (remainingAmount <= 0)
+                    {
+                        break;
+                    }         
+                }
+
+                while (remainingAmount > 0)
+                {
+                    var amount = Mathf.Min(itemBase.MaxStackSize, remainingAmount);
+
+                    list.Add(new InventorySlot(itemBase, amount));
+                    Debug.Log($"Added new stack of {itemBase.Name} with amount {amount}");
+
+                    remainingAmount -= amount;
+                }
+            }
+
+            CurrentWeight += itemBase.Weight * amountToAdd;
+
+            return true;
         }
 
-        public InventoryItem FindInventoryItem(ItemConfigBase item)
+        public bool RemoveItem(InventorySlot inventoryItem)
+        {
+            if (inventoryItem == null || inventoryItem.ItemBase == null)
+                return false;
+
+            Debug.Log($"Removing {inventoryItem.Amount} of {inventoryItem.ItemBase.Name} from inventory");
+
+            var itemToRemove = FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount);
+
+            _items[inventoryItem.ItemBase.Category].Remove(itemToRemove);
+
+            CurrentWeight -= inventoryItem.ItemBase.Weight * inventoryItem.Amount;
+
+            Show();
+
+            return true;
+        }
+
+        public InventorySlot FindInventoryItem(ItemConfigBase item, int amount = 1)
         {
             if (item == null) return null;
             if (!_items.TryGetValue(item.Category, out var list)) return null;
 
-            return list.FirstOrDefault(i => i.ItemBase == item);
+            return list.FirstOrDefault(i => i.ItemBase == item && i.Amount == amount);
         }
 
-        public List<InventoryItem> GetItemsInCategory(ItemCategory category)
+        public List<InventorySlot> GetItemsInCategory(ItemCategory category)
         {
-            return _items.TryGetValue(category, out var itemsList) ? itemsList : new List<InventoryItem>();
+            return _items.TryGetValue(category, out var itemsList) ? itemsList : new List<InventorySlot>();
+        }
+
+        public void Show()
+        {
+            foreach (var category in _items.Keys)
+            {
+                Debug.Log($"Category: {category}");
+                foreach (var item in _items[category])
+                {
+                    Debug.Log($"Item: {item.ItemBase.Name}, Amount: {item.Amount}");
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Entity.Player;
 using InputSystem;
+using System;
 using UI;
 using UnityEngine;
 using Zenject;
@@ -36,6 +37,7 @@ namespace InventorySystem.UI
             _playerController.PlayerInventory.Equipment.OnItemSwapped += OnItemSwapInInventory;
         }
 
+
         private void OnDisable()
         {
             _playerController.PlayerInventory.InventoryStorage.OnItemRemoved -= OnItemRemovedFromInventory;
@@ -43,27 +45,26 @@ namespace InventorySystem.UI
             _playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
         }
 
-        private void OnItemSwapInInventory(InventoryItem currentItem, InventoryItem newItem)
+  
+        private void OnItemSwapInInventory(InventorySlot currentItem, InventorySlot newItem)
         {
             var grid = inventoryCategorySelector.GetGrid(newItem.ItemBase.Category);
 
             if (grid == null) return;
 
-            grid.SetItemOnItemSlot(currentItem, newItem);
+            grid.ReplaceItem(currentItem, newItem);
         }
 
-        private void OnItemAddedToInventory(InventoryItem item)
+        private void OnItemAddedToInventory(InventorySlot item)
         {
+            RefreshInventory();
+        }
+
+        private void OnItemRemovedFromInventory(InventorySlot item)
+        {
+            if (item == null) return;
+
             var grid = inventoryCategorySelector.GetGrid(item.ItemBase.Category);
-
-            if (grid == null) return;
-
-            grid.AddItemToGrid(item);
-        }
-
-        private void OnItemRemovedFromInventory(ItemConfigBase item)
-        {
-            var grid = inventoryCategorySelector.GetGrid(item.Category);
 
             if (grid == null) return;
 

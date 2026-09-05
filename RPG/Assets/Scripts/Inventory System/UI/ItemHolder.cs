@@ -7,18 +7,23 @@ namespace InventorySystem.UI
     public class ItemHolder : MonoBehaviour
     {
         [SerializeField] private Image icon;
-        public InventoryItem HoldItem { get; private set; }
+        public InventorySlot HoldItem { get; private set; }
 
         private IItemContainer _startSlot;
 
-        public void SetItem(InventoryItem item, IItemContainer startSlot)
+        public void Setup(InventorySlot item, IItemContainer startSlot)
         {
             if(item == null) return;
 
             gameObject.SetActive(true);
             HoldItem = item;
             _startSlot = startSlot;
-            icon.sprite = HoldItem.ItemBase.Icon;
+            SetIcon(HoldItem.ItemBase.Icon);
+        }
+
+        private void SetIcon(Sprite icon)
+        {
+            this.icon.sprite = icon;
         }
 
         public void ReturnToStartSlot()

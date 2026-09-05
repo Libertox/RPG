@@ -21,7 +21,7 @@ namespace InventorySystem.UI
             _inputManager = inputManager;
         }
 
-        public void Setup(InventoryItem item)
+        public void Setup(InventorySlot item)
         {
             itemName.SetText(item.ItemBase.Name);
             description.SetText(item.ItemBase.Description);

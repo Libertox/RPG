@@ -30,6 +30,8 @@ namespace InventorySystem.UI
 
         private void OnLeftMouseCancelHolded()
         {
+            if (itemHolder.HoldItem == null) return;
+
             var itemContainer = GetSlotUnderMouse(InputManager.GetMousePosition());
 
             if (itemContainer == null)
@@ -52,7 +54,7 @@ namespace InventorySystem.UI
 
             if (itemContainer == null) return;
 
-            itemHolder.SetItem(itemContainer.Get(), itemContainer);
+            itemHolder.Setup(itemContainer.Get(), itemContainer);
         }
 
         public IItemContainer GetSlotUnderMouse(Vector2 mousePos)

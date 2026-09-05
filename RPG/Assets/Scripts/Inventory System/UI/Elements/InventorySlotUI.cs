@@ -10,15 +10,15 @@ using Zenject;
 
 namespace InventorySystem.UI
 {
-    public class InventoryItemSlot : UIElement<InventoryItemSlot>, IPointerEnterHandler, IPointerExitHandler
+    public class InventorySlotUI : UIElement<InventorySlotUI>, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action<InventoryItemSlot> OnSelected;
+        public event Action<InventorySlotUI> OnSelected;
         public event Action OnDeselected;
 
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
 
-        public InventoryItem Item { get; private set; }
+        public InventorySlot Item { get; private set; }
 
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
@@ -30,12 +30,13 @@ namespace InventorySystem.UI
             _inputManager = inputManager;
         }
 
-        public InventoryItemSlot Initialize(InventoryItem item)
+        public InventorySlotUI Initialize(InventorySlot item)
         {
             Item = item;
 
             icon.sprite = item.ItemBase.Icon;
             amount.SetText(item.Amount.ToString());
+            amount.gameObject.SetActive(item.ItemBase.CanStack);
 
             return this;
         }

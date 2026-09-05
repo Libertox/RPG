@@ -15,5 +15,8 @@ namespace InventorySystem
 
         [field: SerializeField] public bool CanEquip { get; private set; }
         [field: SerializeField, ShowIf(nameof(CanEquip))] public EquipmentSlotCategory EquipmentSlot { get; private set; }
+
+        [field: SerializeField] public bool CanStack { get; private set; } = true;
+        [field: SerializeField, ShowIf(nameof(CanStack))] public int MaxStackSize { get; private set; } = 1;
     }
 }

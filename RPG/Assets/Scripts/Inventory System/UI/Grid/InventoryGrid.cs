@@ -131,7 +131,7 @@ namespace InventorySystem.UI
 
         public void RemoveItemFromGrid(InventorySlot item)
         {
-            Debug.LogError("RemoveItemFromGrid: " + item.ItemBase.Name);
+            Debug.Log("RemoveItemFromGrid: " + item.ItemBase.Name);
 
             var node = FindNodeByItem(item);
             if (node == null) return;

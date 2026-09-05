@@ -10,6 +10,7 @@ namespace InventorySystem.UI
     public class EquipmentSlotUI : MonoBehaviour, IItemContainer
     {
         [Header("Refernces")]
+        [SerializeField] private Image background;
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI amountLabel;
@@ -67,6 +68,7 @@ namespace InventorySystem.UI
             var item = _equipment.GetEquipped(slotCategory, slotIndex);
             SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
             SetAmountLabel(item != null && item.ItemBase.CanStack ? item.Amount : 0);
+            SetBackground(item?.ItemBase.Rarity.Presentation);
         }
 
         private void SetIcon(Sprite icon)
@@ -79,6 +81,11 @@ namespace InventorySystem.UI
             amountLabel.gameObject.SetActive(amount > 0);
 
             amountLabel.SetText(amount.ToString());
+        }
+
+        private void SetBackground(Sprite background)
+        {
+            this.background.sprite = background;
         }
 
         private void OnClick()

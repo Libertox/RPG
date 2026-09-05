@@ -1,8 +1,8 @@
 ﻿using Entity.Player;
 using InputSystem;
-using UI;
 using System;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,6 +17,7 @@ namespace InventorySystem.UI
 
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
+        [SerializeField] private Image background;
 
         public InventorySlot Item { get; private set; }
 
@@ -35,6 +36,7 @@ namespace InventorySystem.UI
             Item = item;
 
             icon.sprite = item.ItemBase.Icon;
+            background.sprite = item.ItemBase.Rarity.Presentation;
             amount.SetText(item.Amount.ToString());
             amount.gameObject.SetActive(item.ItemBase.CanStack);
 

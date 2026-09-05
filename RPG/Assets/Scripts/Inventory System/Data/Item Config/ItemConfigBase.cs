@@ -10,6 +10,7 @@ namespace InventorySystem
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
         [field: SerializeField] public ItemCategory Category { get; private set; }
+        [field: SerializeField] public RarityCategory Rarity { get; private set; }
         [field: SerializeField] public float Weight { get; private set; }
         [field: SerializeField] public Vector2Int InventorySize { get; private set; } = Vector2Int.one;
 

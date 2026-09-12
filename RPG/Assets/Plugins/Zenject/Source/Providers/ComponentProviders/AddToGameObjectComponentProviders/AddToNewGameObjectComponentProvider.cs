@@ -2,21 +2,19 @@
 
 using System;
 using System.Collections.Generic;
+using ModestTree;
 using UnityEngine;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class AddToNewGameObjectComponentProvider : AddToGameObjectComponentProviderBase
     {
         readonly GameObjectCreationParameters _gameObjectBindInfo;
 
         public AddToNewGameObjectComponentProvider(
             DiContainer container, Type componentType,
-            IEnumerable<TypeValuePair> extraArguments, GameObjectCreationParameters gameObjectBindInfo,
-            object concreteIdentifier,
-            Action<InjectContext, object> instantiateCallback)
-            : base(container, componentType, extraArguments, concreteIdentifier, instantiateCallback)
+            object concreteIdentifier, List<TypeValuePair> extraArguments, GameObjectCreationParameters gameObjectBindInfo)
+            : base(container, componentType, concreteIdentifier, extraArguments)
         {
             _gameObjectBindInfo = gameObjectBindInfo;
         }
@@ -30,7 +28,7 @@ namespace Zenject
         {
             if (_gameObjectBindInfo.Name == null)
             {
-                _gameObjectBindInfo.Name = ComponentType.Name;
+                _gameObjectBindInfo.Name = ConcreteIdentifier as string ?? ComponentType.Name;
             }
 
             return Container.CreateEmptyGameObject(_gameObjectBindInfo, context);

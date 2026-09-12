@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using ModestTree;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using ModestTree;
 
 namespace Zenject
 {
-    public abstract class UnityInspectorListEditor : Editor
+    public abstract class UnityInspectorListEditor : UnityEditor.Editor
     {
         List<ReorderableList> _installersLists;
         List<SerializedProperty> _installersProperties;

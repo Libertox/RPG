@@ -5,41 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using ModestTree;
 using UnityEngine;
-using Zenject.Internal;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public abstract class AddToGameObjectComponentProviderBase : IProvider
     {
+        readonly object _concreteIdentifier;
         readonly Type _componentType;
         readonly DiContainer _container;
         readonly List<TypeValuePair> _extraArguments;
-        readonly object _concreteIdentifier;
-        readonly Action<InjectContext, object> _instantiateCallback;
 
         public AddToGameObjectComponentProviderBase(
             DiContainer container, Type componentType,
-            IEnumerable<TypeValuePair> extraArguments, object concreteIdentifier,
-            Action<InjectContext, object> instantiateCallback)
+            object concreteIdentifier, List<TypeValuePair> extraArguments)
         {
             Assert.That(componentType.DerivesFrom<Component>());
 
-            _extraArguments = extraArguments.ToList();
+            _concreteIdentifier = concreteIdentifier;
+            _extraArguments = extraArguments;
             _componentType = componentType;
             _container = container;
-            _concreteIdentifier = concreteIdentifier;
-            _instantiateCallback = instantiateCallback;
-        }
-
-        public bool IsCached
-        {
-            get { return false; }
-        }
-
-        public bool TypeVariesBasedOnMemberType
-        {
-            get { return false; }
         }
 
         protected DiContainer Container
@@ -52,6 +37,11 @@ namespace Zenject
             get { return _componentType; }
         }
 
+        protected object ConcreteIdentifier
+        {
+            get { return _concreteIdentifier; }
+        }
+
         protected abstract bool ShouldToggleActive
         {
             get;
@@ -62,8 +52,7 @@ namespace Zenject
             return _componentType;
         }
 
-        public void GetAllInstancesWithInjectSplit(
-            InjectContext context, List<TypeValuePair> args, out Action injectAction, List<object> buffer)
+        public IEnumerator<List<object>> GetAllInstancesWithInjectSplit(InjectContext context, List<TypeValuePair> args)
         {
             Assert.IsNotNull(context);
 
@@ -81,13 +70,13 @@ namespace Zenject
                 gameObj.SetActive(false);
             }
 
-            if (!_container.IsValidating || TypeAnalyzer.ShouldAllowDuringValidation(_componentType))
+            if (!_container.IsValidating || DiContainer.CanCreateOrInjectDuringValidation(_componentType))
             {
                 if (_componentType == typeof(Transform))
-                    // Treat transform as a special case because it's the one component that's always automatically added
-                    // Otherwise, calling AddComponent below will fail and return null
-                    // This is nice to allow doing things like
-                    //      Container.Bind<Transform>().FromNewComponentOnNewGameObject();
+                // Treat transform as a special case because it's the one component that's always automatically added
+                // Otherwise, calling AddComponent below will fail and return null
+                // This is nice to allow doing things like
+                //      Container.Bind<Transform>().FromNewComponentOnNewGameObject();
                 {
                     instance = gameObj.transform;
                 }
@@ -103,36 +92,28 @@ namespace Zenject
                 instance = new ValidationMarker(_componentType);
             }
 
-            injectAction = () =>
+            // Note that we don't just use InstantiateComponentOnNewGameObjectExplicit here
+            // because then circular references don't work
+            yield return new List<object>() { instance };
+
+            try
             {
-                try
+                var injectArgs = new InjectArgs()
                 {
-                    var extraArgs = ZenPools.SpawnList<TypeValuePair>();
+                    ExtraArgs = _extraArguments.Concat(args).ToList(),
+                    Context = context,
+                    ConcreteIdentifier = _concreteIdentifier,
+                };
 
-                    extraArgs.AllocFreeAddRange(_extraArguments);
-                    extraArgs.AllocFreeAddRange(args);
-
-                    _container.InjectExplicit(instance, _componentType, extraArgs, context, _concreteIdentifier);
-
-                    Assert.That(extraArgs.Count == 0);
-
-                    ZenPools.DespawnList(extraArgs);
-
-                    if (_instantiateCallback != null)
-                    {
-                        _instantiateCallback(context, instance);
-                    }
-                }
-                finally
+                _container.InjectExplicit(instance, _componentType, injectArgs);
+            }
+            finally
+            {
+                if (wasActive && ShouldToggleActive)
                 {
-                    if (wasActive && ShouldToggleActive)
-                    {
-                        gameObj.SetActive(true);
-                    }
+                    gameObj.SetActive(true);
                 }
-            };
-
-            buffer.Add(instance);
+            }
         }
 
         protected abstract GameObject GetGameObject(InjectContext context);

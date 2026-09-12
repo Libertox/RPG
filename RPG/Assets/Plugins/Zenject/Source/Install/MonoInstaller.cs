@@ -1,5 +1,7 @@
 #if !NOT_UNITY3D
 
+using System;
+using UnityEngine;
 using ModestTree;
 
 namespace Zenject
@@ -137,7 +139,7 @@ namespace Zenject
         public static string GetDefaultResourcePath<TInstaller>()
             where TInstaller : MonoInstallerBase
         {
-            return "Installers/" + typeof(TInstaller).PrettyName();
+            return "Installers/" + typeof(TInstaller).Name();
         }
 
         public static TInstaller CreateInstaller<TInstaller>(
@@ -148,14 +150,9 @@ namespace Zenject
             var gameObj = container.CreateAndParentPrefabResource(
                 resourcePath, GameObjectCreationParameters.Default, null, out shouldMakeActive);
 
-            if (shouldMakeActive && !container.IsValidating)
+            if (shouldMakeActive)
             {
-#if ZEN_INTERNAL_PROFILING
-                using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-                {
-                    gameObj.SetActive(true);
-                }
+                gameObj.SetActive(true);
             }
 
             var installers = gameObj.GetComponentsInChildren<TInstaller>();

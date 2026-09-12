@@ -4,31 +4,18 @@ using ModestTree;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class InstanceProvider : IProvider
     {
         readonly object _instance;
         readonly Type _instanceType;
         readonly DiContainer _container;
-        readonly Action<InjectContext, object> _instantiateCallback;
 
         public InstanceProvider(
-            Type instanceType, object instance, DiContainer container, Action<InjectContext, object> instantiateCallback)
+            Type instanceType, object instance, DiContainer container)
         {
             _instanceType = instanceType;
             _instance = instance;
             _container = container;
-            _instantiateCallback = instantiateCallback;
-        }
-
-        public bool IsCached
-        {
-            get { return true; }
-        }
-
-        public bool TypeVariesBasedOnMemberType
-        {
-            get { return false; }
         }
 
         public Type GetInstanceType(InjectContext context)
@@ -36,25 +23,16 @@ namespace Zenject
             return _instanceType;
         }
 
-        public void GetAllInstancesWithInjectSplit(
-            InjectContext context, List<TypeValuePair> args, out Action injectAction, List<object> buffer)
+        public IEnumerator<List<object>> GetAllInstancesWithInjectSplit(InjectContext context, List<TypeValuePair> args)
         {
-            Assert.That(args.Count == 0);
+            Assert.IsEmpty(args);
             Assert.IsNotNull(context);
 
             Assert.That(_instanceType.DerivesFromOrEqual(context.MemberType));
 
-            injectAction = () =>
-            {
-                object instance = _container.LazyInject(_instance);
+            yield return new List<object>() { _instance };
 
-                if (_instantiateCallback != null)
-                {
-                    _instantiateCallback(context, instance);
-                }
-            };
-
-            buffer.Add(_instance);
+            _container.LazyInject(_instance);
         }
     }
 }

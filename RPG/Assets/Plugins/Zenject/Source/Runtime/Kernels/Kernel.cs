@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
+using ModestTree;
 
 namespace Zenject
 {
-    [DebuggerStepThrough]
+    [System.Diagnostics.DebuggerStepThrough]
     public class Kernel : IInitializable, IDisposable, ITickable, ILateTickable, IFixedTickable, ILateDisposable
     {
         [InjectLocal]

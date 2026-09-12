@@ -1,20 +1,15 @@
 #if !NOT_UNITY3D
 
-using System.Collections.Generic;
 using System.Linq;
 using ModestTree;
-using UnityEngine.SceneManagement;
+using ModestTree.Util;
+using UnityEngine;
+using Zenject.Internal;
 
 namespace Zenject
 {
     public class ProjectKernel : MonoKernel
     {
-        [Inject]
-        ZenjectSettings _settings = null;
-
-        [Inject]
-        SceneContextRegistry _contextRegistry = null;
-
         // One issue with relying on MonoKernel.OnDestroy to call IDisposable.Dispose
         // is that the order that OnDestroy is called in is difficult to predict
         // One good thing is that it does follow the heirarchy order (so root game objects
@@ -38,19 +33,10 @@ namespace Zenject
         // ZenjectSceneLoader which will do this for you
         public void OnApplicationQuit()
         {
-            if (_settings.EnsureDeterministicDestructionOrderOnApplicationQuit)
-            {
-                DestroyEverythingInOrder();
-            }
-        }
-
-        public void DestroyEverythingInOrder()
-        {
             ForceUnloadAllScenes(true);
 
-            // Destroy project context after all scenes
             Assert.That(!IsDestroyed);
-            DestroyImmediate(gameObject);
+            GameObject.DestroyImmediate(this.gameObject);
             Assert.That(IsDestroyed);
         }
 
@@ -60,24 +46,17 @@ namespace Zenject
             // (Unless it is destroyed manually)
             Assert.That(!IsDestroyed);
 
-            var sceneOrder = new List<Scene>();
-
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                sceneOrder.Add(SceneManager.GetSceneAt(i));
-            }
-
             // Destroy the scene contexts from bottom to top
             // Since this is the reverse order that they were loaded in
-            foreach (var sceneContext in _contextRegistry.SceneContexts.OrderByDescending(x => sceneOrder.IndexOf(x.gameObject.scene)).ToList())
+            foreach (var sceneContext in ZenUtilInternal.GetAllSceneContexts().Reverse().ToList())
             {
                 if (immediate)
                 {
-                    DestroyImmediate(sceneContext.gameObject);
+                    GameObject.DestroyImmediate(sceneContext.gameObject);
                 }
                 else
                 {
-                    Destroy(sceneContext.gameObject);
+                    GameObject.Destroy(sceneContext.gameObject);
                 }
             }
         }

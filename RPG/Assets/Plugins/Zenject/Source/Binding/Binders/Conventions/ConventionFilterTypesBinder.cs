@@ -8,7 +8,6 @@ using ModestTree;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class ConventionFilterTypesBinder : ConventionAssemblySelectionBinder
     {
         public ConventionFilterTypesBinder(ConventionBindInfo bindInfo)
@@ -23,7 +22,7 @@ namespace Zenject
 
         public ConventionFilterTypesBinder DerivingFromOrEqual(Type parentType)
         {
-            BindInfo.AddTypeFilter(type => type.DerivesFromOrEqual(parentType));
+            BindInfo.AddTypeFilter((type) => type.DerivesFromOrEqual(parentType));
             return this;
         }
 
@@ -34,7 +33,7 @@ namespace Zenject
 
         public ConventionFilterTypesBinder DerivingFrom(Type parentType)
         {
-            BindInfo.AddTypeFilter(type => type.DerivesFrom(parentType));
+            BindInfo.AddTypeFilter((type) => type.DerivesFrom(parentType));
             return this;
         }
 

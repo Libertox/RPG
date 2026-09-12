@@ -1,41 +1,17 @@
 using System;
-using System.Diagnostics;
-using ModestTree;
 
 namespace Zenject
 {
-    [DebuggerStepThrough]
-    public struct BindingId : IEquatable<BindingId>
+    [System.Diagnostics.DebuggerStepThrough]
+    public class BindingId : IEquatable<BindingId>
     {
-        Type _type;
-        object _identifier;
+        public readonly Type Type;
+        public readonly object Identifier;
 
         public BindingId(Type type, object identifier)
         {
-            _type = type;
-            _identifier = identifier;
-        }
-
-        public Type Type
-        {
-            get { return _type; }
-            set { _type = value; }
-        }
-
-        public object Identifier
-        {
-            get { return _identifier; }
-            set { _identifier = value; }
-        }
-
-        public override string ToString()
-        {
-            if (_identifier == null)
-            {
-                return _type.PrettyName();
-            }
-
-            return "{0} (ID: {1})".Fmt(_type, _identifier);
+            Type = type;
+            Identifier = identifier;
         }
 
         public override int GetHashCode()
@@ -43,8 +19,8 @@ namespace Zenject
             unchecked // Overflow is fine, just wrap
             {
                 int hash = 17;
-                hash = hash * 29 + _type.GetHashCode();
-                hash = hash * 29 + (_identifier == null ? 0 : _identifier.GetHashCode());
+                hash = hash * 29 + this.Type.GetHashCode();
+                hash = hash * 29 + (this.Identifier == null ? 0 : this.Identifier.GetHashCode());
                 return hash;
             }
         }
@@ -56,8 +32,10 @@ namespace Zenject
                 BindingId otherId = (BindingId)other;
                 return otherId == this;
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public bool Equals(BindingId that)
@@ -67,7 +45,7 @@ namespace Zenject
 
         public static bool operator ==(BindingId left, BindingId right)
         {
-            return left.Type == right.Type && Equals(left.Identifier, right.Identifier);
+            return left.Type == right.Type && object.Equals(left.Identifier, right.Identifier);
         }
 
         public static bool operator !=(BindingId left, BindingId right)

@@ -15,7 +15,7 @@ namespace Zenject
             [Inject(Optional = true, Source = InjectSources.Local)]
             List<IGuiRenderable> renderables,
             [Inject(Optional = true, Source = InjectSources.Local)]
-            List<ValuePair<Type, int>> priorities)
+            List<ModestTree.Util.ValuePair<Type, int>> priorities)
         {
             _renderables = new List<RenderableInfo>();
 
@@ -49,10 +49,7 @@ namespace Zenject
             {
                 try
                 {
-#if ZEN_INTERNAL_PROFILING
-                    using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ZEN_PROFILING_ENABLED
                     using (ProfileBlock.Start("{0}.GuiRender()", renderable.Renderable.GetType()))
 #endif
                     {
@@ -62,7 +59,7 @@ namespace Zenject
                 catch (Exception e)
                 {
                     throw Assert.CreateException(
-                        e, "Error occurred while calling {0}.GuiRender", renderable.Renderable.GetType());
+                        e, "Error occurred while initializing IGuiRenderable with type '{0}'", renderable.Renderable.GetType());
                 }
             }
         }

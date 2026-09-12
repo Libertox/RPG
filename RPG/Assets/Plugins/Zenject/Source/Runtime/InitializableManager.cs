@@ -12,14 +12,14 @@ namespace Zenject
     {
         List<InitializableInfo> _initializables;
 
-        protected bool _hasInitialized;
+        bool _hasInitialized;
 
         [Inject]
         public InitializableManager(
             [Inject(Optional = true, Source = InjectSources.Local)]
             List<IInitializable> initializables,
             [Inject(Optional = true, Source = InjectSources.Local)]
-            List<ValuePair<Type, int>> priorities)
+            List<ModestTree.Util.ValuePair<Type, int>> priorities)
         {
             _initializables = new List<InitializableInfo>();
 
@@ -34,18 +34,6 @@ namespace Zenject
 
                 _initializables.Add(new InitializableInfo(initializable, priority));
             }
-        }
-
-        public void Add(IInitializable initializable)
-        {
-            Add(initializable, 0);
-        }
-
-        public void Add(IInitializable initializable, int priority)
-        {
-            Assert.That(!_hasInitialized);
-            _initializables.Add(
-                new InitializableInfo(initializable, priority));
         }
 
         public void Initialize()
@@ -66,10 +54,7 @@ namespace Zenject
             {
                 try
                 {
-#if ZEN_INTERNAL_PROFILING
-                    using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ZEN_PROFILING_ENABLED
                     using (ProfileBlock.Start("{0}.Initialize()", initializable.Initializable.GetType()))
 #endif
                     {

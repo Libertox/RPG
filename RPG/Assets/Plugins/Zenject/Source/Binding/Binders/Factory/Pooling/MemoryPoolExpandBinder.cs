@@ -1,11 +1,14 @@
+using System;
+using System.Collections.Generic;
+using ModestTree;
+
 namespace Zenject
 {
-    [NoReflectionBaking]
-    public class MemoryPoolExpandBinder<TContract> : FactoryArgumentsToChoiceBinder<TContract>
+    public class MemoryPoolExpandBinder<TContract> : FactoryToChoiceIdBinder<TContract>
     {
         public MemoryPoolExpandBinder(
-            DiContainer bindContainer, BindInfo bindInfo, FactoryBindInfo factoryBindInfo, MemoryPoolBindInfo poolBindInfo)
-            : base(bindContainer, bindInfo, factoryBindInfo)
+            BindInfo bindInfo, FactoryBindInfo factoryBindInfo, MemoryPoolBindInfo poolBindInfo)
+            : base(bindInfo, factoryBindInfo)
         {
             MemoryPoolBindInfo = poolBindInfo;
 
@@ -17,13 +20,13 @@ namespace Zenject
             get; private set;
         }
 
-        public FactoryArgumentsToChoiceBinder<TContract> ExpandByOneAtATime()
+        public FactoryToChoiceIdBinder<TContract> ExpandByOneAtATime()
         {
             MemoryPoolBindInfo.ExpandMethod = PoolExpandMethods.OneAtATime;
             return this;
         }
 
-        public FactoryArgumentsToChoiceBinder<TContract> ExpandByDoubling()
+        public FactoryToChoiceIdBinder<TContract> ExpandByDoubling()
         {
             MemoryPoolBindInfo.ExpandMethod = PoolExpandMethods.Double;
             return this;

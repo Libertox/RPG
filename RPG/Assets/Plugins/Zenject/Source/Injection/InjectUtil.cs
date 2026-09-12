@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using ModestTree;
 
 namespace Zenject
 {
-    [DebuggerStepThrough]
-    public struct TypeValuePair
+    [System.Diagnostics.DebuggerStepThrough]
+    public class TypeValuePair
     {
         public Type Type;
         public object Value;
@@ -19,7 +18,7 @@ namespace Zenject
         }
     }
 
-    [DebuggerStepThrough]
+    [System.Diagnostics.DebuggerStepThrough]
     public static class InjectUtil
     {
         public static List<TypeValuePair> CreateArgList(IEnumerable<object> args)
@@ -38,68 +37,68 @@ namespace Zenject
 
         public static List<TypeValuePair> CreateArgListExplicit<T>(T param)
         {
-            return new List<TypeValuePair>
+            return new List<TypeValuePair>()
             {
-                CreateTypePair(param)
+                CreateTypePair(param),
             };
         }
 
         public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2>(TParam1 param1, TParam2 param2)
         {
-            return new List<TypeValuePair>
+            return new List<TypeValuePair>()
             {
                 CreateTypePair(param1),
-                CreateTypePair(param2)
+                CreateTypePair(param2),
             };
         }
 
         public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2, TParam3>(
             TParam1 param1, TParam2 param2, TParam3 param3)
         {
-            return new List<TypeValuePair>
+            return new List<TypeValuePair>()
             {
                 CreateTypePair(param1),
                 CreateTypePair(param2),
-                CreateTypePair(param3)
+                CreateTypePair(param3),
             };
         }
 
         public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2, TParam3, TParam4>(
             TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
         {
-            return new List<TypeValuePair>
+            return new List<TypeValuePair>()
             {
                 CreateTypePair(param1),
                 CreateTypePair(param2),
                 CreateTypePair(param3),
-                CreateTypePair(param4)
+                CreateTypePair(param4),
             };
         }
 
         public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2, TParam3, TParam4, TParam5>(
             TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
         {
-            return new List<TypeValuePair>
-            {
-                CreateTypePair(param1),
-                CreateTypePair(param2),
-                CreateTypePair(param3),
-                CreateTypePair(param4),
-                CreateTypePair(param5)
-            };
-        }
-
-        public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6>(
-            TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
-        {
-            return new List<TypeValuePair>
+            return new List<TypeValuePair>()
             {
                 CreateTypePair(param1),
                 CreateTypePair(param2),
                 CreateTypePair(param3),
                 CreateTypePair(param4),
                 CreateTypePair(param5),
-                CreateTypePair(param6)
+            };
+        }
+
+        public static List<TypeValuePair> CreateArgListExplicit<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6>(
+            TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
+        {
+            return new List<TypeValuePair>()
+            {
+                CreateTypePair(param1),
+                CreateTypePair(param2),
+                CreateTypePair(param3),
+                CreateTypePair(param4),
+                CreateTypePair(param5),
+                CreateTypePair(param6),
             };
         }
 
@@ -108,16 +107,16 @@ namespace Zenject
         public static bool PopValueWithType(
             List<TypeValuePair> extraArgMap, Type injectedFieldType, out object value)
         {
-            for (int i = 0; i < extraArgMap.Count; i++)
-            {
-                var arg = extraArgMap[i];
+            var match = extraArgMap
+                .Where(x => x.Type.DerivesFromOrEqual(injectedFieldType))
+                .FirstOrDefault();
 
-                if (arg.Type.DerivesFromOrEqual(injectedFieldType))
-                {
-                    value = arg.Value;
-                    extraArgMap.RemoveAt(i);
-                    return true;
-                }
+            if (match != null)
+            {
+                // Note that this will only remove the first element which is what we want
+                extraArgMap.RemoveWithConfirm(match);
+                value = match.Value;
+                return true;
             }
 
             value = injectedFieldType.GetDefaultValue();

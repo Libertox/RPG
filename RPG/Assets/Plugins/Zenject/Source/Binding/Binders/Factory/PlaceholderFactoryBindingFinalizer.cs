@@ -1,9 +1,8 @@
-using System.Linq;
+using System;
 using ModestTree;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class PlaceholderFactoryBindingFinalizer<TContract> : ProviderBindingFinalizer
     {
         readonly FactoryBindInfo _factoryBindInfo;
@@ -12,7 +11,7 @@ namespace Zenject
             BindInfo bindInfo, FactoryBindInfo factoryBindInfo)
             : base(bindInfo)
         {
-            // Note that it doesn't derive from PlaceholderFactory<TContract>
+            // Note that it doesn't derive from Factory<TContract>
             // when used with To<>, so we can only check IPlaceholderFactory
             Assert.That(factoryBindInfo.FactoryType.DerivesFrom<IPlaceholderFactory>());
 
@@ -23,28 +22,17 @@ namespace Zenject
         {
             var provider = _factoryBindInfo.ProviderFunc(container);
 
-            var transientProvider = new TransientProvider(
-                _factoryBindInfo.FactoryType,
+            RegisterProviderForAllContracts(
                 container,
-                _factoryBindInfo.Arguments.Concat(
-                    InjectUtil.CreateArgListExplicit(
-                        provider,
-                        new InjectContext(container, typeof(TContract)))).ToList(),
-                BindInfo.ContextInfo, BindInfo.ConcreteIdentifier, null);
-
-            IProvider mainProvider;
-
-            if (BindInfo.Scope == ScopeTypes.Unset || BindInfo.Scope == ScopeTypes.Singleton)
-            {
-                mainProvider = BindingUtil.CreateCachedProvider(transientProvider);
-            }
-            else
-            {
-                Assert.IsEqual(BindInfo.Scope, ScopeTypes.Transient);
-                mainProvider = transientProvider;
-            }
-
-            RegisterProviderForAllContracts(container, mainProvider);
+                new CachedProvider(
+                    new TransientProvider(
+                        _factoryBindInfo.FactoryType,
+                        container,
+                        InjectUtil.CreateArgListExplicit(
+                            provider,
+                            new InjectContext(container, typeof(TContract))),
+                        null,
+                        BindInfo.ContextInfo)));
         }
     }
 }

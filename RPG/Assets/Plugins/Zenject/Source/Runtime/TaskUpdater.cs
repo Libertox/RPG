@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using ModestTree;
+using ModestTree.Util;
 
 namespace Zenject
 {
     // Update tasks once per frame based on a priority
-    [DebuggerStepThrough]
+    [System.Diagnostics.DebuggerStepThrough]
     public abstract class TaskUpdater<TTask>
     {
         readonly LinkedList<TaskInfo> _tasks = new LinkedList<TaskInfo>();
@@ -92,7 +92,6 @@ namespace Zenject
 
                 if (info.IsRemoved)
                 {
-                    //ModestTree.Log.Debug("Removed task '" + info.Task.GetType().ToString() + "'");
                     tasks.Remove(node);
                 }
 
@@ -148,10 +147,7 @@ namespace Zenject
     {
         protected override void UpdateItem(ITickable task)
         {
-#if ZEN_INTERNAL_PROFILING
-            using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ZEN_PROFILING_ENABLED
             using (ProfileBlock.Start("{0}.Tick()", task.GetType()))
 #endif
             {
@@ -164,10 +160,7 @@ namespace Zenject
     {
         protected override void UpdateItem(ILateTickable task)
         {
-#if ZEN_INTERNAL_PROFILING
-            using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ZEN_PROFILING_ENABLED
             using (ProfileBlock.Start("{0}.LateTick()", task.GetType()))
 #endif
             {
@@ -180,10 +173,7 @@ namespace Zenject
     {
         protected override void UpdateItem(IFixedTickable task)
         {
-#if ZEN_INTERNAL_PROFILING
-            using (ProfileTimers.CreateTimedBlock("User Code"))
-#endif
-#if UNITY_EDITOR
+#if UNITY_EDITOR && ZEN_PROFILING_ENABLED
             using (ProfileBlock.Start("{0}.FixedTick()", task.GetType()))
 #endif
             {

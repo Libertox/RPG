@@ -1,6 +1,7 @@
+using ModestTree;
+
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class IdBinder
     {
         BindInfo _bindInfo;

@@ -4,7 +4,6 @@ using ModestTree;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class MethodProviderUntyped : IProvider
     {
         readonly DiContainer _container;
@@ -18,31 +17,19 @@ namespace Zenject
             _method = method;
         }
 
-        public bool IsCached
-        {
-            get { return false; }
-        }
-
-        public bool TypeVariesBasedOnMemberType
-        {
-            get { return false; }
-        }
-
         public Type GetInstanceType(InjectContext context)
         {
             return context.MemberType;
         }
 
-        public void GetAllInstancesWithInjectSplit(
-            InjectContext context, List<TypeValuePair> args, out Action injectAction, List<object> buffer)
+        public IEnumerator<List<object>> GetAllInstancesWithInjectSplit(InjectContext context, List<TypeValuePair> args)
         {
             Assert.IsEmpty(args);
             Assert.IsNotNull(context);
 
-            injectAction = null;
-            if (_container.IsValidating && !TypeAnalyzer.ShouldAllowDuringValidation(context.MemberType))
+            if (_container.IsValidating && !DiContainer.CanCreateOrInjectDuringValidation(context.MemberType))
             {
-                buffer.Add(new ValidationMarker(context.MemberType));
+                yield return new List<object>() { new ValidationMarker(context.MemberType) };
             }
             else
             {
@@ -50,15 +37,17 @@ namespace Zenject
 
                 if (result == null)
                 {
-                    Assert.That(!context.MemberType.IsPrimitive(),
+#if !UNITY_WSA
+                    Assert.That(context.MemberType.IsPrimitive,
                         "Invalid value returned from FromMethod.  Expected non-null.");
+#endif
                 }
                 else
                 {
                     Assert.That(result.GetType().DerivesFromOrEqual(context.MemberType));
                 }
 
-                buffer.Add(result);
+                yield return new List<object>() { result };
             }
         }
     }

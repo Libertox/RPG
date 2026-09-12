@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ModestTree;
-using ModestTree.Util;
-#if ZEN_SIGNALS_ADD_UNIRX
-using UniRx;
-#endif
 
 namespace Zenject
 {
@@ -21,19 +17,13 @@ namespace Zenject
         readonly List<ILateTickable> _lateTickables = null;
 
         [Inject(Optional = true, Source = InjectSources.Local)]
-        readonly List<ValuePair<Type, int>> _priorities = null;
+        readonly List<ModestTree.Util.ValuePair<Type, int>> _priorities = null;
 
         [Inject(Optional = true, Id = "Fixed", Source = InjectSources.Local)]
-        readonly List<ValuePair<Type, int>> _fixedPriorities = null;
+        readonly List<ModestTree.Util.ValuePair<Type, int>> _fixedPriorities = null;
 
         [Inject(Optional = true, Id = "Late", Source = InjectSources.Local)]
-        readonly List<ValuePair<Type, int>> _latePriorities = null;
-
-#if ZEN_SIGNALS_ADD_UNIRX
-        readonly Subject<Unit> _tickStream = new Subject<Unit>();
-        readonly Subject<Unit> _lateTickStream = new Subject<Unit>();
-        readonly Subject<Unit> _fixedTickStream = new Subject<Unit>();
-#endif
+        readonly List<ModestTree.Util.ValuePair<Type, int>> _latePriorities = null;
 
         readonly TickablesTaskUpdater _updater = new TickablesTaskUpdater();
         readonly FixedTickablesTaskUpdater _fixedUpdater = new FixedTickablesTaskUpdater();
@@ -45,23 +35,6 @@ namespace Zenject
         public TickableManager()
         {
         }
-
-#if ZEN_SIGNALS_ADD_UNIRX
-        public IObservable<Unit> TickStream
-        {
-            get { return _tickStream; }
-        }
-
-        public IObservable<Unit> LateTickStream
-        {
-            get { return _lateTickStream; }
-        }
-
-        public IObservable<Unit> FixedTickStream
-        {
-            get { return _fixedTickStream; }
-        }
-#endif
 
         public IEnumerable<ITickable> Tickables
         {
@@ -186,47 +159,35 @@ namespace Zenject
 
         public void Update()
         {
-            if(IsPaused)
+            if(_isPaused)
             {
                 return;
             }
 
             _updater.OnFrameStart();
             _updater.UpdateAll();
-
-#if ZEN_SIGNALS_ADD_UNIRX
-            _tickStream.OnNext(Unit.Default);
-#endif
         }
 
         public void FixedUpdate()
         {
-            if(IsPaused)
+            if(_isPaused)
             {
                 return;
             }
 
             _fixedUpdater.OnFrameStart();
             _fixedUpdater.UpdateAll();
-
-#if ZEN_SIGNALS_ADD_UNIRX
-            _fixedTickStream.OnNext(Unit.Default);
-#endif
         }
 
         public void LateUpdate()
         {
-            if(IsPaused)
+            if(_isPaused)
             {
                 return;
             }
 
             _lateUpdater.OnFrameStart();
             _lateUpdater.UpdateAll();
-
-#if ZEN_SIGNALS_ADD_UNIRX
-            _lateTickStream.OnNext(Unit.Default);
-#endif
         }
     }
 }

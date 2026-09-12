@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ModestTree;
+using System.Linq;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class ConcreteBinderGeneric<TContract> : FromBinderGeneric<TContract>
     {
         public ConcreteBinderGeneric(
-            DiContainer bindContainer, BindInfo bindInfo,
-            BindStatement bindStatement)
-            : base(bindContainer, bindInfo, bindStatement)
+            BindInfo bindInfo,
+            BindFinalizerWrapper finalizerWrapper)
+            : base(bindInfo, finalizerWrapper)
         {
             ToSelf();
         }
@@ -23,10 +22,9 @@ namespace Zenject
 
             BindInfo.RequireExplicitScope = true;
             SubFinalizer = new ScopableBindingFinalizer(
-                BindInfo, (container, type) => new TransientProvider(
-                    type, container, BindInfo.Arguments,
-                    BindInfo.ContextInfo, BindInfo.ConcreteIdentifier,
-                    BindInfo.InstantiatedCallback));
+                BindInfo, SingletonTypes.FromNew, null,
+                (container, type) => new TransientProvider(
+                    type, container, BindInfo.Arguments, BindInfo.ConcreteIdentifier, BindInfo.ContextInfo));
 
             return this;
         }
@@ -35,11 +33,13 @@ namespace Zenject
             where TConcrete : TContract
         {
             BindInfo.ToChoice = ToChoices.Concrete;
-            BindInfo.ToTypes.Clear();
-            BindInfo.ToTypes.Add(typeof(TConcrete));
+            BindInfo.ToTypes = new List<Type>()
+            {
+                typeof(TConcrete)
+            };
 
             return new FromBinderGeneric<TConcrete>(
-                BindContainer, BindInfo, BindStatement);
+                BindInfo, FinalizerWrapper);
         }
 
         public FromBinderNonGeneric To(params Type[] concreteTypes)
@@ -53,11 +53,10 @@ namespace Zenject
                 concreteTypes, BindInfo.ContractTypes, BindInfo.InvalidBindResponse);
 
             BindInfo.ToChoice = ToChoices.Concrete;
-            BindInfo.ToTypes.Clear();
-            BindInfo.ToTypes.AddRange(concreteTypes);
+            BindInfo.ToTypes = concreteTypes.ToList();
 
             return new FromBinderNonGeneric(
-                BindContainer, BindInfo, BindStatement);
+                BindInfo, FinalizerWrapper);
         }
 
 #if !(UNITY_WSA && ENABLE_DOTNET)

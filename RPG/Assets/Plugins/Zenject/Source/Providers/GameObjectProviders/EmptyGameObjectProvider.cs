@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Zenject
 {
-    [NoReflectionBaking]
     public class EmptyGameObjectProvider : IProvider
     {
         readonly DiContainer _container;
@@ -20,30 +19,20 @@ namespace Zenject
             _container = container;
         }
 
-        public bool IsCached
-        {
-            get { return false; }
-        }
-
-        public bool TypeVariesBasedOnMemberType
-        {
-            get { return false; }
-        }
-
         public Type GetInstanceType(InjectContext context)
         {
             return typeof(GameObject);
         }
 
-        public void GetAllInstancesWithInjectSplit(
-            InjectContext context, List<TypeValuePair> args, out Action injectAction, List<object> buffer)
+        public IEnumerator<List<object>> GetAllInstancesWithInjectSplit(
+            InjectContext context, List<TypeValuePair> args)
         {
             Assert.IsEmpty(args);
 
-            injectAction = null;
-
-            var gameObj = _container.CreateEmptyGameObject(_gameObjectBindInfo, context);
-            buffer.Add(gameObj);
+            yield return new List<object>()
+            {
+                _container.CreateEmptyGameObject(_gameObjectBindInfo, context)
+            };
         }
     }
 }

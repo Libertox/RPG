@@ -11,9 +11,9 @@ namespace ModestTree
         public static void Debug(string message, params object[] args)
         {
 #if NOT_UNITY3D
-            //Console.WriteLine(message.Fmt(args));
+            //Console.WriteLine(string.Format(message, args));
 #else
-            //UnityEngine.Debug.Log(message.Fmt(args));
+            //UnityEngine.Debug.Log(string.Format(message, args));
 #endif
         }
 
@@ -22,9 +22,9 @@ namespace ModestTree
         public static void Info(string message, params object[] args)
         {
 #if NOT_UNITY3D
-            Console.WriteLine(message.Fmt(args));
+            Console.WriteLine(string.Format(message, args));
 #else
-            UnityEngine.Debug.Log(message.Fmt(args));
+            UnityEngine.Debug.Log(string.Format(message, args));
 #endif
         }
 
@@ -33,9 +33,9 @@ namespace ModestTree
         public static void Warn(string message, params object[] args)
         {
 #if NOT_UNITY3D
-            Console.WriteLine(message.Fmt(args));
+            Console.WriteLine(string.Format(message, args));
 #else
-            UnityEngine.Debug.LogWarning(message.Fmt(args));
+            UnityEngine.Debug.LogWarning(string.Format(message, args));
 #endif
         }
 
@@ -44,9 +44,9 @@ namespace ModestTree
         public static void Trace(string message, params object[] args)
         {
 #if NOT_UNITY3D
-            Console.WriteLine(message.Fmt(args));
+            Console.WriteLine(string.Format(message, args));
 #else
-            UnityEngine.Debug.Log(message.Fmt(args));
+            UnityEngine.Debug.Log(string.Format(message, args));
 #endif
         }
 
@@ -74,9 +74,9 @@ namespace ModestTree
         public static void Error(string message, params object[] args)
         {
 #if NOT_UNITY3D
-            Console.WriteLine(message.Fmt(args));
+            Console.WriteLine(string.Format(message, args));
 #else
-            UnityEngine.Debug.LogError(message.Fmt(args));
+            UnityEngine.Debug.LogError(string.Format(message, args));
 #endif
         }
     }

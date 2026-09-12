@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ModestTree;
-using ModestTree.Util;
+using System.Linq;
 
 namespace Zenject
 {
@@ -12,9 +11,9 @@ namespace Zenject
         readonly DiContainer _container = null;
 
         [InjectOptional]
-        readonly List<ValuePair<TKey, Type>> _typePairs = null;
+        readonly List<ModestTree.Util.ValuePair<TKey, Type>> _typePairs = null;
 
-        Dictionary<TKey, Type> _typeMap = null;
+        Dictionary<TKey, Type> _typeMap;
 
         [InjectOptional]
         readonly Type _fallbackType = null;
@@ -89,8 +88,8 @@ namespace Zenject
         protected static ConditionCopyNonLazyBinder AddBindingInternal<TDerived>(DiContainer container, TKey key)
             where TDerived : TBase
         {
-            return container.Bind<ValuePair<TKey, Type>>()
-                .FromInstance(ValuePair.New(key, typeof(TDerived)));
+            return container.Bind<ModestTree.Util.ValuePair<TKey, Type>>()
+                .FromInstance(ModestTree.Util.ValuePair.New(key, typeof(TDerived)));
         }
     }
 
@@ -114,16 +113,16 @@ namespace Zenject
     {
         protected override IEnumerable<Type> ProvidedTypes
         {
-            get { return new[] { typeof(TParam1) }; }
+            get { return new Type[] { typeof(TParam1) }; }
         }
 
         public virtual TBase Create(TKey key, TParam1 param1)
         {
             return (TBase)Container.InstantiateExplicit(
                 GetTypeForKey(key),
-                new List<TypeValuePair>
+                new List<TypeValuePair>()
                 {
-                    InjectUtil.CreateTypePair(param1)
+                    InjectUtil.CreateTypePair(param1),
                 });
         }
     }
@@ -133,17 +132,17 @@ namespace Zenject
     {
         protected override IEnumerable<Type> ProvidedTypes
         {
-            get { return new[] { typeof(TParam1), typeof(TParam2) }; }
+            get { return new Type[] { typeof(TParam1), typeof(TParam2) }; }
         }
 
         public virtual TBase Create(TKey key, TParam1 param1, TParam2 param2)
         {
             return (TBase)Container.InstantiateExplicit(
                 GetTypeForKey(key),
-                new List<TypeValuePair>
+                new List<TypeValuePair>()
                 {
                     InjectUtil.CreateTypePair(param1),
-                    InjectUtil.CreateTypePair(param2)
+                    InjectUtil.CreateTypePair(param2),
                 });
         }
     }
@@ -153,18 +152,18 @@ namespace Zenject
     {
         protected override IEnumerable<Type> ProvidedTypes
         {
-            get { return new[] { typeof(TParam1), typeof(TParam2), typeof(TParam3) }; }
+            get { return new Type[] { typeof(TParam1), typeof(TParam2), typeof(TParam3) }; }
         }
 
         public virtual TBase Create(TKey key, TParam1 param1, TParam2 param2, TParam3 param3)
         {
             return (TBase)Container.InstantiateExplicit(
                 GetTypeForKey(key),
-                new List<TypeValuePair>
+                new List<TypeValuePair>()
                 {
                     InjectUtil.CreateTypePair(param1),
                     InjectUtil.CreateTypePair(param2),
-                    InjectUtil.CreateTypePair(param3)
+                    InjectUtil.CreateTypePair(param3),
                 });
         }
     }
@@ -174,19 +173,19 @@ namespace Zenject
     {
         protected override IEnumerable<Type> ProvidedTypes
         {
-            get { return new[] { typeof(TParam1), typeof(TParam2), typeof(TParam3), typeof(TParam4) }; }
+            get { return new Type[] { typeof(TParam1), typeof(TParam2), typeof(TParam3), typeof(TParam4) }; }
         }
 
         public virtual TBase Create(TKey key, TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
         {
             return (TBase)Container.InstantiateExplicit(
                 GetTypeForKey(key),
-                new List<TypeValuePair>
+                new List<TypeValuePair>()
                 {
                     InjectUtil.CreateTypePair(param1),
                     InjectUtil.CreateTypePair(param2),
                     InjectUtil.CreateTypePair(param3),
-                    InjectUtil.CreateTypePair(param4)
+                    InjectUtil.CreateTypePair(param4),
                 });
         }
     }

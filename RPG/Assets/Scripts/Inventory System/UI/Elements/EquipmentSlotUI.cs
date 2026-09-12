@@ -19,14 +19,15 @@ namespace InventorySystem.UI
         [SerializeField] private EquipmentSlotCategory slotCategory;
         [SerializeField] private int slotIndex;
 
+        private PlayerInventory playerInventory;
+
         private Equipment _equipment;
         private IInventoryStorage _inventoryStorage;
 
         [Inject]
-        private void Construct(PlayerController playerController) 
+        private void Construct(PlayerInventory playerInventory) 
         {
-            _equipment = playerController.PlayerInventory.Equipment;
-            _inventoryStorage = playerController.PlayerInventory.InventoryStorage;
+            this.playerInventory = playerInventory;
         }
 
         private void Awake()
@@ -35,6 +36,9 @@ namespace InventorySystem.UI
 
             SetIcon(slotCategory.Icon);
             amountLabel.gameObject.SetActive(false);
+
+            _equipment = playerInventory.Equipment;
+            _inventoryStorage = playerInventory.InventoryStorage;
         }
 
         private void OnEnable()

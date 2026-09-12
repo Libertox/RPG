@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e08862d38174145a0f838a6f946e39, type: 3}
   m_Name: Armor
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.ItemCategory
+  <Name>k__BackingField: Armor

@@ -97,13 +97,10 @@ namespace InventorySystem
 
             Debug.Log($"Removing {inventoryItem.Amount} of {inventoryItem.ItemBase.Name} from inventory");
 
-            var itemToRemove = FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount);
-
-            _items[inventoryItem.ItemBase.Category].Remove(itemToRemove);
+            if (!_items[inventoryItem.ItemBase.Category].Remove(inventoryItem))
+                _items[inventoryItem.ItemBase.Category].Remove(FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount));
 
             CurrentWeight -= inventoryItem.ItemBase.Weight * inventoryItem.Amount;
-
-            Show();
 
             return true;
         }

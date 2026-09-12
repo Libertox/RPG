@@ -7,6 +7,7 @@ namespace InventorySystem
     {
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public Sprite Presentation { get; private set; }
+        [field: SerializeField] public Color Color { get; private set; }
 
 
     }

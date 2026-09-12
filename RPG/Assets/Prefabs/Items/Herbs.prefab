@@ -79,6 +79,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406caf48b3f6ac5429f29720cd43694f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemBase: {fileID: 0}
+  amount: 0
 --- !u!114 &4413056926687335262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d10392da1ab43441bbe2c4845872e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptType: 1
+  promptIcon: {fileID: 0}
   promptPosition: {fileID: 3176005142722073958}
 --- !u!135 &4391876080093874696
 SphereCollider:

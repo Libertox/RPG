@@ -20,9 +20,12 @@ namespace Initializers
         [SerializeField] private GameObject itemPrefab;
 
         [SerializeField] private GameObject slotPrefab;
-         
+
         public override void InstallBindings()
         {
+            Container.DeclareSignal<DeselectInventorySlotSignal>();
+            Container.DeclareSignal<SelectInventorySlotSignal>();
+
             Container.BindInterfacesAndSelfTo<InputManager>().AsSingle();
 
             Container.BindInstance(interactionPromptManager).AsSingle(); 
@@ -35,7 +38,7 @@ namespace Initializers
 
             Container.BindFactory<ItemInteractable, QuestItemFactory>().FromComponentInNewPrefab(itemPrefab);
 
-            Container.BindMemoryPool<InventorySlotUI, InventoryItemSlotPool>().FromComponentInNewPrefab(slotPrefab).AsSingle();
+            Container.BindMemoryPool<InventorySlotUI, InventoryItemSlotPool>().FromComponentInNewPrefab(slotPrefab);
 
         }
     }

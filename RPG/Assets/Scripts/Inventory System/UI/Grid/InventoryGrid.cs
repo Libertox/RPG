@@ -1,5 +1,4 @@
-﻿using Entity.Player;
-using InputSystem;
+﻿using InputSystem;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,7 +11,6 @@ namespace InventorySystem.UI
         private const int CONTAINER_HEIGHT = 650;
 
         [SerializeField] private InventoryGridConfig config;
-        [SerializeField] private ItemDescriptionView itemDescription;
         [field: SerializeField] public RectTransform SlotsContainer { get; private set; }
 
         private int _currentRow = 0;
@@ -24,10 +22,10 @@ namespace InventorySystem.UI
         private PlayerInventory _playerInventory;
 
         [Inject]
-        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, PlayerController playerController)
+        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, PlayerInventory playerInventory)
         {
             _inventorySlotFactory = new(inventoryItemSlotPool);
-            _playerInventory = playerController.PlayerInventory;
+            _playerInventory = playerInventory;
         }
 
         public bool Drop(InventorySlot item) 
@@ -81,7 +79,11 @@ namespace InventorySystem.UI
             foreach (var key in _nodes.Keys.ToList())
             {
                 if (!items.Contains(key))
+                {
+                    Debug.Log("Remove From Unused Nodes");
                     RemoveItemFromGrid(key);
+                }
+                    
             }
         }
 
@@ -122,6 +124,7 @@ namespace InventorySystem.UI
             {
                 return;
             }
+
             RemoveItemFromGrid(currentItem);
 
             var gridPosition = node.GridPosition;
@@ -135,8 +138,6 @@ namespace InventorySystem.UI
 
             var node = FindNodeByItem(item);
             if (node == null) return;
-
-            Unbind(node.Slot);
 
             _inventorySlotFactory.Release(node.Slot);
 
@@ -173,8 +174,6 @@ namespace InventorySystem.UI
 
             InventorySlotUI inventoryItemSlot = _inventorySlotFactory.Create(item, SlotsContainer, slotPosition, slotSize);
 
-            Bind(inventoryItemSlot);
-
             if (_currentColumn != 0)
                 inventoryItemSlot.RectTransform.anchoredPosition += new Vector2(config.ItemPadding, 0f) * _currentColumn;
 
@@ -200,6 +199,8 @@ namespace InventorySystem.UI
 
             IncreaseColumnCount();
 
+            Debug.Log("AddItemToGrid: " + item.ItemBase.Name);
+
             return true;
         }
 
@@ -215,30 +216,6 @@ namespace InventorySystem.UI
             }
 
             return true;
-        }
-
-        private void Bind(InventorySlotUI slot)
-        {
-            slot.OnSelected += OnItemSlotSelected;
-            slot.OnDeselected += OnItemSlotDeselected;
-        }
-
-        private void Unbind(InventorySlotUI slot)
-        {
-            slot.OnSelected -= OnItemSlotSelected;
-            slot.OnDeselected -= OnItemSlotDeselected;
-        }
-
-        private void OnItemSlotDeselected()
-        {
-            //itemDescription.Hide();
-        }
-
-        private void OnItemSlotSelected(InventorySlotUI slot)
-        {
-            //itemDescription.Setup(slot.Item);
-
-            //itemDescription.ShowAtPosition(slot.GetRightBottomCornerPosition());
         }
 
         private void IncreaseColumnCount()

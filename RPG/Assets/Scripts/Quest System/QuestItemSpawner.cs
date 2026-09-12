@@ -30,7 +30,7 @@ namespace QuestSystem
         }
     }
 
-    public class QuestItemFactory : PlaceholderFactory<ItemInteractable>
+    public class QuestItemFactory : Factory<ItemInteractable>
     {
         private DiContainer _container;
 

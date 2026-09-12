@@ -18,6 +18,8 @@ MonoBehaviour:
   <Category>k__BackingField: {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
   <Rarity>k__BackingField: {fileID: 11400000, guid: 77b5bb0be0a97914db35019512cd2c02, type: 2}
   <Weight>k__BackingField: 11
+  <Gold>k__BackingField: 30
+  <RequiredLevel>k__BackingField: 1
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
   <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}

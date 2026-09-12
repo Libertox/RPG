@@ -12,9 +12,6 @@ namespace InventorySystem.UI
 {
     public class InventorySlotUI : UIElement<InventorySlotUI>, IPointerEnterHandler, IPointerExitHandler
     {
-        public event Action<InventorySlotUI> OnSelected;
-        public event Action OnDeselected;
-
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
         [SerializeField] private Image background;
@@ -23,12 +20,18 @@ namespace InventorySystem.UI
 
         private PlayerInventory _playerInventory;
         private InputManager _inputManager;
+        private SelectInventorySlotSignal _selectInventorySlotSignal;
+        private DeselectInventorySlotSignal _deselectInventorySlotSignal;
 
         [Inject]
-        public void Construct(PlayerController playerController, InputManager inputManager)
+        public void Construct(PlayerController playerController, InputManager inputManager, 
+            SelectInventorySlotSignal selectInventorySlot, DeselectInventorySlotSignal deselectInventorySlot)
         {
             _playerInventory = playerController.PlayerInventory;
             _inputManager = inputManager;
+
+            _selectInventorySlotSignal = selectInventorySlot;
+            _deselectInventorySlotSignal = deselectInventorySlot;
         }
 
         public InventorySlotUI Initialize(InventorySlot item)
@@ -45,7 +48,10 @@ namespace InventorySystem.UI
 
         private void EquipItem()
         {
-            _playerInventory.Equipment.TryEquipItem(Item);
+            if (_playerInventory.Equipment.TryEquipItem(Item))
+            {
+                _deselectInventorySlotSignal.Fire();
+            }
         }
 
         private void DropItem()
@@ -57,7 +63,7 @@ namespace InventorySystem.UI
         {
             if (!gameObject.activeSelf) return;
 
-            OnSelected?.Invoke(this);
+            _selectInventorySlotSignal.Fire(this);
 
             _inputManager.OnLeftMouseClicked += EquipItem;
             _inputManager.OnRightMouseClicked += DropItem;
@@ -66,7 +72,7 @@ namespace InventorySystem.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            OnDeselected?.Invoke();
+            _deselectInventorySlotSignal.Fire();
 
             _inputManager.OnLeftMouseClicked -= EquipItem;
             _inputManager.OnRightMouseClicked -= DropItem;

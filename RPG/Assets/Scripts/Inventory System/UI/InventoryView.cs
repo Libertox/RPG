@@ -3,6 +3,7 @@ using InputSystem;
 using System;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace InventorySystem.UI

@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using InputSystem;
+using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -7,74 +9,99 @@ namespace InventorySystem.UI
 {
     public class ItemDescriptionView : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI itemName;
-        [SerializeField] private TextMeshProUGUI categoryName;
-        [SerializeField] private TextMeshProUGUI rarityName;
+        [SerializeField] private ItemInformationUI selectedItemInformation;
 
-        [SerializeField] private TextMeshProUGUI requiredLevelLabel;
-        [SerializeField] private TextMeshProUGUI weightLabel;
-        [SerializeField] private TextMeshProUGUI goldLabel;
+        [SerializeField] private ItemInformationUI equippedItemInformation;
 
-        private SelectInventorySlotSignal _selectInventorySlotSignal;
-        private DeselectInventorySlotSignal _deselectInventorySlotSignal;
+        private SelectInventorySlotSignal selectInventorySlotSignal;
+        private DeselectInventorySlotSignal deselectInventorySlotSignal;
+        private InputManager inputManager;
+        private PlayerInventory playerInventory;
+
+        private ItemConfigBase selectedItem;
 
         [Inject]
-        private void Construct(SelectInventorySlotSignal selectInventorySlotSignal, DeselectInventorySlotSignal deselectInventorySlotSignal)
+        private void Construct(SelectInventorySlotSignal selectInventorySlotSignal, 
+            DeselectInventorySlotSignal deselectInventorySlotSignal, 
+            InputManager inputManager,
+            PlayerInventory playerInventory)
         {
-            _selectInventorySlotSignal = selectInventorySlotSignal;
-            _deselectInventorySlotSignal = deselectInventorySlotSignal;
+            this.selectInventorySlotSignal = selectInventorySlotSignal;
+            this.deselectInventorySlotSignal = deselectInventorySlotSignal;
+            this.inputManager = inputManager;
+            this.playerInventory = playerInventory;
 
-            _selectInventorySlotSignal.Listen(OnItemSlotSelected);
-            _deselectInventorySlotSignal.Listen(Hide);
+            this.selectInventorySlotSignal.Listen(OnItemSlotSelected);
+            this.deselectInventorySlotSignal.Listen(OnItemSlotDeselected);
         }
 
         private void OnItemSlotSelected(InventorySlotUI slot)
         {
-            ShowAtPosition(slot.GetRightBottomCornerPosition());
-            Setup(slot.Item.ItemBase);
+            selectedItem = slot.Item.ItemBase;
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.transform as RectTransform);
+            selectedItemInformation.ShowAtPosition(slot.GetRightBottomCornerPosition());
+            selectedItemInformation.Setup(selectedItem);
+
+            selectedItemInformation.ActiveComparisonItemLabel(CanShowEquippedItemInformation());
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(selectedItemInformation.transform as RectTransform);
+
+            inputManager.OnCompareUIButtonStartHolded += ShowEquippedItemInformation;
+            inputManager.OnCompareUIButtonEndHolded += HideEquippedItemInformation;
+
+            if (inputManager.IsCompareButtonPressed())
+                ShowEquippedItemInformation();
         }
 
-        public void Setup(ItemConfigBase item)
+        private void ShowEquippedItemInformation()
         {
-            itemName.SetText(item.Name);
-            categoryName.SetText(item.Category.Name);
-            rarityName.SetText(item.Rarity.Name);
-            rarityName.color = item.Rarity.Color;
+            if (!CanShowEquippedItemInformation()) return;
 
-            requiredLevelLabel.SetText($"Required Level: {item.RequiredLevel}");
-            weightLabel.SetText(item.Weight.ToString());
-            goldLabel.SetText(item.Gold.ToString());
+            var equippedItem = playerInventory.Equipment.GetEquipped(selectedItem.EquipmentSlot, 0);
+
+            equippedItemInformation.ShowAtPosition(selectedItemInformation.GetRightTopCornerPosition());
+            equippedItemInformation.Setup(equippedItem.ItemBase);
+
+            var equippedItemComparable = equippedItem.ItemBase as IComparableItem;
+            var selectedItemComparable = selectedItem as IComparableItem;
+
+            equippedItemInformation.ActiveComparisonResult(true);
+            selectedItemInformation.ActiveComparisonResult(true);
+
+            equippedItemInformation.UpdateComparisonResult(equippedItemComparable.ComparisonValue - selectedItemComparable.ComparisonValue);
+            selectedItemInformation.UpdateComparisonResult(selectedItemComparable.ComparisonValue - equippedItemComparable.ComparisonValue);
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(equippedItemInformation.transform as RectTransform);
         }
 
-        public void ShowAtPosition(Vector3 worldPosition)
+        private bool CanShowEquippedItemInformation()
         {
-            gameObject.SetActive(true);
-
-            RectTransform rectTransform = (RectTransform)transform;
-
-            RectTransform parentRect = rectTransform.parent as RectTransform;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                parentRect,
-                RectTransformUtility.WorldToScreenPoint(null, worldPosition),
-                null,
-                out Vector2 localPoint
-            );
-
-            rectTransform.anchoredPosition = localPoint;
+            return selectedItem is IComparableItem 
+                && playerInventory.Equipment.GetEquipped(selectedItem.EquipmentSlot, 0) != null;
         }
 
-        public void Hide()
+        private void HideEquippedItemInformation()
         {
-            gameObject.SetActive(false);
+            equippedItemInformation.Hide();
+
+            equippedItemInformation.ActiveComparisonResult(false);
+            selectedItemInformation.ActiveComparisonResult(false);
         }
+
+        private void OnItemSlotDeselected()
+        {
+            equippedItemInformation.Hide();
+            selectedItemInformation.Hide();
+
+            inputManager.OnCompareUIButtonStartHolded -= ShowEquippedItemInformation;
+            inputManager.OnCompareUIButtonEndHolded -= HideEquippedItemInformation;
+        }
+            
 
         private void OnDestroy()
         {
-            _selectInventorySlotSignal.Unlisten(OnItemSlotSelected);
-            _deselectInventorySlotSignal.Unlisten(Hide);
+            selectInventorySlotSignal.Unlisten(OnItemSlotSelected);
+            deselectInventorySlotSignal.Unlisten(OnItemSlotDeselected);
         }
     }
 }

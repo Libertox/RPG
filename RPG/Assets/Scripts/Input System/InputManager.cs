@@ -18,6 +18,9 @@ namespace InputSystem
         public event Action OnContinueUIButtonPressed;
         public event Action OnCancelUIButtonPressed;
 
+        public event Action OnCompareUIButtonStartHolded;
+        public event Action OnCompareUIButtonEndHolded;
+
         public event Action OnLeftMouseClicked;
         public event Action OnRightMouseClicked;
 
@@ -60,6 +63,23 @@ namespace InputSystem
             _inputActions.UI.HoldLeftMouseButton.performed += OnHoldLeftMouseButtonStarted;
             _inputActions.UI.HoldLeftMouseButton.canceled += OnHoldLeftMouseButtonCanceled;
 
+            _inputActions.UI.Compare.started += OnHoldCompareButtonStarted;
+            _inputActions.UI.Compare.canceled += OnHoldCompareButtonEnded;
+        }
+
+        private void OnHoldCompareButtonEnded(InputAction.CallbackContext obj)
+        {
+            OnCompareUIButtonEndHolded?.Invoke();
+        }
+
+        private void OnHoldCompareButtonStarted(InputAction.CallbackContext action)
+        {
+            OnCompareUIButtonStartHolded?.Invoke();
+        }
+
+        public bool IsCompareButtonPressed()
+        {
+            return _inputActions.UI.Compare.IsPressed();
         }
 
         private void OnHoldLeftMouseButtonStarted(InputAction.CallbackContext action)

@@ -168,7 +168,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -693,6 +693,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.2)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Compare"",
+                    ""type"": ""Button"",
+                    ""id"": ""68c1178b-7c98-48df-9344-247fd5a8013e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1135,6 +1144,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""HoldLeftMouseButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eedeaf99-507e-406b-b484-087d74edbe92"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Compare"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1228,6 +1248,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_HoldLeftMouseButton = m_UI.FindAction("HoldLeftMouseButton", throwIfNotFound: true);
+        m_UI_Compare = m_UI.FindAction("Compare", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -1516,6 +1537,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_HoldLeftMouseButton;
+    private readonly InputAction m_UI_Compare;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1575,6 +1597,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/HoldLeftMouseButton".
         /// </summary>
         public InputAction @HoldLeftMouseButton => m_Wrapper.m_UI_HoldLeftMouseButton;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Compare".
+        /// </summary>
+        public InputAction @Compare => m_Wrapper.m_UI_Compare;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1637,6 +1663,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @HoldLeftMouseButton.started += instance.OnHoldLeftMouseButton;
             @HoldLeftMouseButton.performed += instance.OnHoldLeftMouseButton;
             @HoldLeftMouseButton.canceled += instance.OnHoldLeftMouseButton;
+            @Compare.started += instance.OnCompare;
+            @Compare.performed += instance.OnCompare;
+            @Compare.canceled += instance.OnCompare;
         }
 
         /// <summary>
@@ -1684,6 +1713,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @HoldLeftMouseButton.started -= instance.OnHoldLeftMouseButton;
             @HoldLeftMouseButton.performed -= instance.OnHoldLeftMouseButton;
             @HoldLeftMouseButton.canceled -= instance.OnHoldLeftMouseButton;
+            @Compare.started -= instance.OnCompare;
+            @Compare.performed -= instance.OnCompare;
+            @Compare.canceled -= instance.OnCompare;
         }
 
         /// <summary>
@@ -1951,5 +1983,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHoldLeftMouseButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Compare" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCompare(InputAction.CallbackContext context);
     }
 }

@@ -15,7 +15,7 @@ namespace InventorySystem
         [field: Header("Statistics")]
         [field: SerializeField] public float Weight { get; private set; }
         [field: SerializeField] public float Gold { get; private set; }
-        [field: SerializeField] public float RequiredLevel {  get; private set; }
+        [field: SerializeField] public float RequiredLevel { get; private set; }
 
 
         [field: Header("Inventory Configures")]

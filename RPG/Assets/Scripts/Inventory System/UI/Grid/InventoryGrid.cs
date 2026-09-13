@@ -11,6 +11,8 @@ namespace InventorySystem.UI
         private const int CONTAINER_HEIGHT = 650;
 
         [SerializeField] private InventoryGridConfig config;
+        [SerializeField] private ItemCategory itemCategory;
+
         [field: SerializeField] public RectTransform SlotsContainer { get; private set; }
 
         private int _currentRow = 0;
@@ -31,6 +33,8 @@ namespace InventorySystem.UI
         public bool Drop(InventorySlot item) 
         {
             if(item == null) return false;
+
+            if (item.ItemBase.Category != itemCategory) return false;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, InputManager.GetMousePosition(), null, out Vector2 localPoint);
 

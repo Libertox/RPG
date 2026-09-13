@@ -29,8 +29,6 @@ namespace InventorySystem.UI
 
         public void Initialize()
         {
-            SetSelectedItemCategory(defaultCategorySelected);
-
             foreach (var categoryButton in itemCategoryButtons)
             {
                 categoryButton.OnItemCategorySelected += SetSelectedItemCategory;
@@ -40,6 +38,8 @@ namespace InventorySystem.UI
             {
                 item.gameObject.SetActive(false);
             }
+
+            SetSelectedItemCategory(defaultCategorySelected);
         }
 
         public InventoryGrid GetGrid(ItemCategory category)

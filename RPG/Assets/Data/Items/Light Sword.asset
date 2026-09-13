@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a727b43a441a4d46827f61473578add, type: 3}
-  m_Name: Sword
-  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.ItemBase
-  <Name>k__BackingField: Sword
-  <Description>k__BackingField: Mushroom
+  m_Script: {fileID: 11500000, guid: 60df1232d791dfd49af9516dc0782a4e, type: 3}
+  m_Name: Light Sword
+  m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.WeaponConfig
+  <Name>k__BackingField: Light  Sword
   <Icon>k__BackingField: {fileID: 21300000, guid: 728709007f0360249a1c6ae249c1ff85, type: 3}
-  <Category>k__BackingField: {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
+  <Category>k__BackingField: {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
   <Rarity>k__BackingField: {fileID: 11400000, guid: 019b065d17dc761479c4a58d80405115, type: 2}
-  <Weight>k__BackingField: 11
-  <Gold>k__BackingField: 12
+  <Weight>k__BackingField: 12
+  <Gold>k__BackingField: 32
   <RequiredLevel>k__BackingField: 1
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}
+  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: e8b922373622f6a4f9c4db05404bb564, type: 2}
   <CanStack>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
+  <Damage>k__BackingField: 12

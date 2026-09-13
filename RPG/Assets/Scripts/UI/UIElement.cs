@@ -33,5 +33,12 @@ namespace UI
 
             return RectTransform.TransformPoint(localCorner);
         }
+
+        public Vector3 GetRightTopCornerPosition()
+        {
+            Vector3 localCorner = new Vector3(RectTransform.rect.width * (1 - RectTransform.pivot.x), RectTransform.rect.height * (1f - RectTransform.pivot.y), 0);
+
+            return RectTransform.TransformPoint(localCorner);
+        }
     }
 }

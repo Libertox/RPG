@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.RarityCategory
   <Name>k__BackingField: Rare
   <Presentation>k__BackingField: {fileID: 21300000, guid: 3e4f2f6869bc45146948e299bcc45aca, type: 3}
-  <Color>k__BackingField: {r: 0.28039736, g: 0.21787111, b: 0.9056604, a: 1}
+  <Color>k__BackingField: {r: 0.3426486, g: 0.46650136, b: 0.9433962, a: 1}

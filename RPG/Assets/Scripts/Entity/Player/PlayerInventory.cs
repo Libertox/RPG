@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity.Player;
+using System;
 
 namespace InventorySystem
 {
@@ -15,10 +16,10 @@ namespace InventorySystem
         public Wallet Wallet => wallet;
         public float Weight => inventoryStorage.CurrentWeight + equipment.CurrentWeight;
 
-        public PlayerInventory(InventorySettings inventorySettings)
+        public PlayerInventory(InventorySettings inventorySettings, PlayerController playerController)
         {
             inventoryStorage = new Inventory();
-            equipment = new(inventorySettings, inventoryStorage);    
+            equipment = new(inventorySettings, inventoryStorage, playerController);    
             wallet = new();
         }
 

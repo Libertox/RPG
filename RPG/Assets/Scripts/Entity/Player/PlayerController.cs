@@ -41,6 +41,8 @@ namespace Entity.Player
 
         private float _health = 10;
 
+        [field:SerializeField] public int Level { get; private set; }
+
         public bool IsDead => _isDead;
 
         [Inject]

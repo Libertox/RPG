@@ -15,10 +15,12 @@ namespace InventorySystem.UI
         [SerializeField] private Image icon;
         [SerializeField] private TextMeshProUGUI amount;
         [SerializeField] private Image background;
+        [SerializeField] private GameObject paddlockIcon;
 
         public InventorySlot Item { get; private set; }
 
         private PlayerInventory _playerInventory;
+        private PlayerController _playerController;
         private InputManager _inputManager;
         private SelectInventorySlotSignal _selectInventorySlotSignal;
         private DeselectInventorySlotSignal _deselectInventorySlotSignal;
@@ -29,6 +31,7 @@ namespace InventorySystem.UI
         {
             _playerInventory = playerController.PlayerInventory;
             _inputManager = inputManager;
+            _playerController = playerController;
 
             _selectInventorySlotSignal = selectInventorySlot;
             _deselectInventorySlotSignal = deselectInventorySlot;
@@ -42,6 +45,8 @@ namespace InventorySystem.UI
             background.sprite = item.ItemBase.Rarity.Presentation;
             amount.SetText(item.Amount.ToString());
             amount.gameObject.SetActive(item.ItemBase.CanStack);
+
+            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > _playerController.Level);
 
             return this;
         }

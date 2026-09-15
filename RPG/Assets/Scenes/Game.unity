@@ -3551,6 +3551,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: <Level>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: playerData.movementSpeed
       value: 4
       objectReference: {fileID: 0}

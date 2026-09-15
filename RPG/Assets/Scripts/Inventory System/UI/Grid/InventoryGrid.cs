@@ -1,4 +1,5 @@
-﻿using InputSystem;
+﻿using Entity.Player;
+using InputSystem;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,12 +23,14 @@ namespace InventorySystem.UI
         private InventorySlotFactory _inventorySlotFactory;
 
         private PlayerInventory _playerInventory;
+        private PlayerController _playerController;
 
         [Inject]
-        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, PlayerInventory playerInventory)
+        private void Construct(InventoryItemSlotPool inventoryItemSlotPool, PlayerInventory playerInventory, PlayerController playerController)
         {
             _inventorySlotFactory = new(inventoryItemSlotPool);
             _playerInventory = playerInventory;
+            _playerController = playerController;
         }
 
         public bool Drop(InventorySlot item) 
@@ -61,6 +64,9 @@ namespace InventorySystem.UI
             var node = GetNodeAtPosition(new Vector2Int(column, row));
 
             if (node == null) return null;
+
+            if (node.Slot.Item.ItemBase.RequiredLevel > _playerController.Level)
+                return null;
 
             return node.Slot.Item;
         }

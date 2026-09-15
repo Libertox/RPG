@@ -1,8 +1,10 @@
 ﻿
 
+using Entity.Player;
 using TMPro;
 using UI;
 using UnityEngine;
+using Zenject;
 
 namespace InventorySystem.UI
 {
@@ -23,6 +25,14 @@ namespace InventorySystem.UI
         [SerializeField] private Color betterComparisonColor;
         [SerializeField] private Color worseComparisonColor;
 
+        private PlayerController playerController;
+
+        [Inject]
+        private void Construct(PlayerController playerController)
+        {
+            this.playerController = playerController;
+        }
+
 
         public void Setup(ItemConfigBase item)
         {
@@ -31,9 +41,13 @@ namespace InventorySystem.UI
             rarityName.SetText(item.Rarity.Name);
             rarityName.color = item.Rarity.Color;
 
-            requiredLevelLabel.SetText($"Required Level: {item.RequiredLevel}");
+            Color requiredLevelColor = item.RequiredLevel > playerController.Level ? worseComparisonColor : itemName.color;
+            string levelColor = ColorUtility.ToHtmlStringRGB(requiredLevelColor);
+            requiredLevelLabel.SetText($"Required Level: <color=#{levelColor}>{item.RequiredLevel}</color>");
             weightLabel.SetText(item.Weight.ToString());
             goldLabel.SetText(item.Gold.ToString());
+
+
         }
 
         public void ActiveComparisonItemLabel(bool active)

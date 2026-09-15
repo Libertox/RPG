@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity.Player;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,13 +16,15 @@ namespace InventorySystem
 
         private readonly Dictionary<EquipmentSlotCategory, InventorySlot[]> equipmentItems;
         private readonly IInventoryStorage inventoryStorage;
+        private readonly PlayerController playerController;
 
         public float CurrentWeight { get; private set; }
 
-        public Equipment(InventorySettings inventorySettings, IInventoryStorage inventoryStorage)
+        public Equipment(InventorySettings inventorySettings, IInventoryStorage inventoryStorage, PlayerController playerController)
         {
             equipmentItems = new();
             this.inventoryStorage = inventoryStorage;
+            this.playerController = playerController;
 
             if (inventorySettings == null) return;
 
@@ -45,6 +48,9 @@ namespace InventorySystem
         public bool TryEquipItem(InventorySlot inventoryItem, int slot)
         {
             if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
+                return false;
+
+            if (inventoryItem.ItemBase.RequiredLevel > playerController.Level)
                 return false;
 
             EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;

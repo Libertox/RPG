@@ -48,6 +48,11 @@ namespace InventorySystem.UI
             return grid;
         }
 
+        public InventoryGrid GetCurrentGrid()
+        {
+            return GetGrid(selectedItemCategory);
+        }
+
         public override void Refresh()
         {
             GetGrid(selectedItemCategory).Refresh(playerInventory.InventoryStorage.GetItemsInCategory(selectedItemCategory));

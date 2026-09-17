@@ -46,7 +46,6 @@ namespace InventorySystem.UI
             _playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
         }
 
-  
         private void OnItemSwapInInventory(InventorySlot currentItem, InventorySlot newItem)
         {
             var grid = inventoryCategorySelector.GetGrid(newItem.ItemBase.Category);
@@ -84,6 +83,12 @@ namespace InventorySystem.UI
             _inputManager.EnableUIMap(true);
 
             _inputManager.OnCancelUIButtonPressed += OpenPreviousView;
+            _inputManager.OnSortItemsButtonPressed += SortGrid;
+        }
+
+        private void SortGrid()
+        {
+            inventoryCategorySelector.GetCurrentGrid().Sort();
         }
 
         public override void UnsubscribeToInputEvents()
@@ -91,6 +96,7 @@ namespace InventorySystem.UI
             _inputManager.EnableUIMap(false);
 
             _inputManager.OnCancelUIButtonPressed -= OpenPreviousView;
+            _inputManager.OnSortItemsButtonPressed -= SortGrid;
         }
 
         private async void OpenPreviousView()

@@ -84,6 +84,19 @@ namespace InventorySystem.UI
             RemoveUnusedNodes(items);
         }
 
+        public void Sort()
+        {
+            List<InventorySlot> inventorySlots = _nodes.Keys.ToList();
+
+            foreach (InventorySlot slot in inventorySlots)
+            {
+                RemoveItemFromGrid(slot);
+            }
+
+            _nodes.Clear();
+            Refresh(inventorySlots);
+        }
+
         private void RemoveUnusedNodes(List<InventorySlot> items)
         {
             foreach (var key in _nodes.Keys.ToList())
@@ -92,8 +105,7 @@ namespace InventorySystem.UI
                 {
                     Debug.Log("Remove From Unused Nodes");
                     RemoveItemFromGrid(key);
-                }
-                    
+                }              
             }
         }
 

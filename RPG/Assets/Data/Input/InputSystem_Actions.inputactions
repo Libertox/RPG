@@ -616,6 +616,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SortItems",
+                    "type": "Button",
+                    "id": "c40179dc-e199-4985-b91a-e110d31cdc75",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1067,6 +1076,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Compare",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66e6553e-8428-4d69-b288-b1f1d7e3748c",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SortItems",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

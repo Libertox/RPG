@@ -21,6 +21,8 @@ namespace InputSystem
         public event Action OnCompareUIButtonStartHolded;
         public event Action OnCompareUIButtonEndHolded;
 
+        public event Action OnSortItemsButtonPressed;
+
         public event Action OnLeftMouseClicked;
         public event Action OnRightMouseClicked;
 
@@ -65,9 +67,16 @@ namespace InputSystem
 
             _inputActions.UI.Compare.started += OnHoldCompareButtonStarted;
             _inputActions.UI.Compare.canceled += OnHoldCompareButtonEnded;
+
+            _inputActions.UI.SortItems.started += OnSortItemsButtonPerformed;
         }
 
-        private void OnHoldCompareButtonEnded(InputAction.CallbackContext obj)
+        private void OnSortItemsButtonPerformed(InputAction.CallbackContext action)
+        {
+            OnSortItemsButtonPressed?.Invoke();
+        }
+
+        private void OnHoldCompareButtonEnded(InputAction.CallbackContext action)
         {
             OnCompareUIButtonEndHolded?.Invoke();
         }

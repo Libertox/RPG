@@ -702,6 +702,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SortItems"",
+                    ""type"": ""Button"",
+                    ""id"": ""c40179dc-e199-4985-b91a-e110d31cdc75"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1155,6 +1164,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Compare"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66e6553e-8428-4d69-b288-b1f1d7e3748c"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SortItems"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1249,6 +1269,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_HoldLeftMouseButton = m_UI.FindAction("HoldLeftMouseButton", throwIfNotFound: true);
         m_UI_Compare = m_UI.FindAction("Compare", throwIfNotFound: true);
+        m_UI_SortItems = m_UI.FindAction("SortItems", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -1538,6 +1559,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_HoldLeftMouseButton;
     private readonly InputAction m_UI_Compare;
+    private readonly InputAction m_UI_SortItems;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1601,6 +1623,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Compare".
         /// </summary>
         public InputAction @Compare => m_Wrapper.m_UI_Compare;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SortItems".
+        /// </summary>
+        public InputAction @SortItems => m_Wrapper.m_UI_SortItems;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1666,6 +1692,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Compare.started += instance.OnCompare;
             @Compare.performed += instance.OnCompare;
             @Compare.canceled += instance.OnCompare;
+            @SortItems.started += instance.OnSortItems;
+            @SortItems.performed += instance.OnSortItems;
+            @SortItems.canceled += instance.OnSortItems;
         }
 
         /// <summary>
@@ -1716,6 +1745,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Compare.started -= instance.OnCompare;
             @Compare.performed -= instance.OnCompare;
             @Compare.canceled -= instance.OnCompare;
+            @SortItems.started -= instance.OnSortItems;
+            @SortItems.performed -= instance.OnSortItems;
+            @SortItems.canceled -= instance.OnSortItems;
         }
 
         /// <summary>
@@ -1990,5 +2022,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCompare(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SortItems" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSortItems(InputAction.CallbackContext context);
     }
 }

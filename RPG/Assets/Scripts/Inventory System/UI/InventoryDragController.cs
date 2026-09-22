@@ -24,8 +24,8 @@ namespace InventorySystem.UI
 
         private void Start()
         {
-            _inputManager.OnLeftMouseStartHolded += OnLeftMouseStartHolded;
-            _inputManager.OnLeftMouseCancelHolded += OnLeftMouseCancelHolded;
+            _inputManager.OnLeftMouseHoldStarted += OnLeftMouseStartHolded;
+            _inputManager.OnLeftMouseHoldCanceled += OnLeftMouseCancelHolded;
         }
 
         private void OnLeftMouseCancelHolded()

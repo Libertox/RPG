@@ -46,8 +46,8 @@ namespace InventorySystem.UI
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(selectedItemInformation.transform as RectTransform);
 
-            inputManager.OnCompareUIButtonStartHolded += ShowEquippedItemInformation;
-            inputManager.OnCompareUIButtonEndHolded += HideEquippedItemInformation;
+            inputManager.OnCompareHoldStarted += ShowEquippedItemInformation;
+            inputManager.OnCompareHoldCanceled += HideEquippedItemInformation;
 
             if (inputManager.IsCompareButtonPressed())
                 ShowEquippedItemInformation();
@@ -93,8 +93,8 @@ namespace InventorySystem.UI
             equippedItemInformation.Hide();
             selectedItemInformation.Hide();
 
-            inputManager.OnCompareUIButtonStartHolded -= ShowEquippedItemInformation;
-            inputManager.OnCompareUIButtonEndHolded -= HideEquippedItemInformation;
+            inputManager.OnCompareHoldStarted -= ShowEquippedItemInformation;
+            inputManager.OnCompareHoldCanceled -= HideEquippedItemInformation;
         }
             
 

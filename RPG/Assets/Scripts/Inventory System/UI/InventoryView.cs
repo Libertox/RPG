@@ -80,10 +80,10 @@ namespace InventorySystem.UI
 
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnableUIMap(true);
+            _inputManager.EnableUIActions(true);
 
-            _inputManager.OnCancelUIButtonPressed += OpenPreviousView;
-            _inputManager.OnSortItemsButtonPressed += SortGrid;
+            _inputManager.OnCancelPressed += OpenPreviousView;
+            _inputManager.OnSortItemsPressed += SortGrid;
         }
 
         private void SortGrid()
@@ -93,10 +93,10 @@ namespace InventorySystem.UI
 
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnableUIMap(false);
+            _inputManager.EnableUIActions(false);
 
-            _inputManager.OnCancelUIButtonPressed -= OpenPreviousView;
-            _inputManager.OnSortItemsButtonPressed -= SortGrid;
+            _inputManager.OnCancelPressed -= OpenPreviousView;
+            _inputManager.OnSortItemsPressed -= SortGrid;
         }
 
         private async void OpenPreviousView()

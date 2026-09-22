@@ -27,8 +27,8 @@ namespace InputSystem
             return controllerType switch
             {
                 ControllerType.PC => PcIcon,
-                ControllerType.PSGamePad => PlayStationIcon,
-                ControllerType.XboxGamePad => XboxIcon,
+                ControllerType.PlayStationGamepad => PlayStationIcon,
+                ControllerType.XboxGamepad => XboxIcon,
                 _ => null,
             };
         }

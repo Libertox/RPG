@@ -42,12 +42,12 @@ namespace UI
 
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnableUIMap(true);
+            _inputManager.EnableUIActions(true);
         }
 
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnableUIMap(false);
+            _inputManager.EnableUIActions(false);
         }
 
         public override void Open()

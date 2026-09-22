@@ -56,14 +56,14 @@ namespace UI.DialogueView
 
         public override void SubscribeToInputEvents()
         {
-            inputManager.OnSubmitUIButtonPressed += ShowNextDialogueLine;
-            inputManager.OnContinueUIButtonPressed += ShowNextDialogueLine;
+            inputManager.OnSubmitPressed += ShowNextDialogueLine;
+            inputManager.OnContinuePressed += ShowNextDialogueLine;
         }
 
         public override void UnsubscribeToInputEvents()
         {
-            inputManager.OnSubmitUIButtonPressed -= ShowNextDialogueLine;
-            inputManager.OnContinueUIButtonPressed -= ShowNextDialogueLine;
+            inputManager.OnSubmitPressed -= ShowNextDialogueLine;
+            inputManager.OnContinuePressed -= ShowNextDialogueLine;
         }
 
         private void SubscribeDialogueEvents()

@@ -52,8 +52,8 @@ namespace Entity.Player
             _inputManager = inputManager;
 
             _inputManager.OnMoveStarted += OnMoveStarted;
-            _inputManager.OnMoveEnded += OnMoveEnded;
-            _inputManager.OnAttackButtonPressed += OnAttackButtonPressed;
+            _inputManager.OnMoveCanceled += OnMoveEnded;
+            _inputManager.OnAttackPressed += OnAttackButtonPressed;
         }
 
         private void OnAttackButtonPressed()

@@ -28,7 +28,7 @@ namespace InputSystem
                     if (device.displayName == "Mouse" || device.displayName == "Keyboard")
                         _currentControllerType = ControllerType.PC;
                     else
-                        _currentControllerType = ControllerType.PSGamePad;
+                        _currentControllerType = ControllerType.PlayStationGamepad;
 
                     if (_lastControllerType != _currentControllerType)
                     {

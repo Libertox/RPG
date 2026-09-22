@@ -21,17 +21,17 @@ namespace UI.HUD
      
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnableGameMap(true);
+            _inputManager.EnablePlayerActions(true);
 
-            _inputManager.OnInventoryButtonPressed += OpenInventoryView;
+            _inputManager.OnInventoryPressed += OpenInventoryView;
         }
 
       
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnableGameMap(false);
+            _inputManager.EnablePlayerActions(false);
 
-            _inputManager.OnInventoryButtonPressed -= OpenInventoryView;
+            _inputManager.OnInventoryPressed -= OpenInventoryView;
         }
 
         private async void OpenInventoryView()

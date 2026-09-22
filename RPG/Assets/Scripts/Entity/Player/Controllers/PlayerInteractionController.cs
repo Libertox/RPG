@@ -28,7 +28,7 @@ namespace Entity.Player
         public void Construct(InputManager inputManager)
         {
             _inputManager = inputManager;
-            _inputManager.OnInteractButtonPressed += TryInteractWithInteractableObject;
+            _inputManager.OnInteractPressed += TryInteractWithInteractableObject;
         }
 
         public void TryInteractWithInteractableObject()
@@ -46,7 +46,7 @@ namespace Entity.Player
 
         private void OnDestroy()
         {
-            _inputManager.OnInteractButtonPressed -= TryInteractWithInteractableObject;
+            _inputManager.OnInteractPressed -= TryInteractWithInteractableObject;
         }
     }
 }

@@ -6,8 +6,8 @@ namespace InputSystem.Enums
     {
         None = 0,
         PC = 1,
-        PSGamePad = 2,
-        XboxGamePad = 3,
+        PlayStationGamepad = 2,
+        XboxGamepad = 3,
     }
 
 }

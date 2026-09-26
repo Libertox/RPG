@@ -6,24 +6,24 @@ namespace UI
 {
     public class ButtonSelectionEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] private float _targetScale;
-        [SerializeField] private float _scaleDuration;
+        [SerializeField] private float targetScale = 1.1f;
+        [SerializeField] private float scaleDuration = 0.5f;
 
-        private Vector3 _startScale;
+        private Vector3 startScale;
 
         private void Start()
         {
-            _startScale = transform.localScale;
+            startScale = transform.localScale;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            transform.DOScale(_targetScale, _scaleDuration);
+            transform.DOScale(targetScale, scaleDuration);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            transform.DOScale(_startScale, _scaleDuration);
+            transform.DOScale(startScale, scaleDuration);
         }
     }
 }

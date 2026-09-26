@@ -9,10 +9,10 @@ namespace InputSystem
     {
         public Action<ControllerType> OnControllerChanged;
 
-        private ControllerType _currentControllerType = ControllerType.PC;
-        private ControllerType _lastControllerType;
+        private ControllerType currentControllerType = ControllerType.PC;
+        private ControllerType lastControllerType;
 
-        public ControllerType CurrentControllerType => _currentControllerType;
+        public ControllerType CurrentControllerType => currentControllerType;
 
         public void Tick()
         {
@@ -26,16 +26,16 @@ namespace InputSystem
                 if (device.wasUpdatedThisFrame)
                 {
                     if (device.displayName == "Mouse" || device.displayName == "Keyboard")
-                        _currentControllerType = ControllerType.PC;
+                        currentControllerType = ControllerType.PC;
                     else
-                        _currentControllerType = ControllerType.PlayStationGamepad;
+                        currentControllerType = ControllerType.PlayStationGamepad;
 
-                    if (_lastControllerType != _currentControllerType)
+                    if (lastControllerType != currentControllerType)
                     {
-                        OnControllerChanged?.Invoke(_currentControllerType);
+                        OnControllerChanged?.Invoke(currentControllerType);
                     }
 
-                    _lastControllerType = _currentControllerType;
+                    lastControllerType = currentControllerType;
                 }
             }
         }

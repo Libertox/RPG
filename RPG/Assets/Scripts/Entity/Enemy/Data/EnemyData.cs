@@ -1,6 +1,4 @@
-﻿
-using Entity.Player;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Entity.Enemy
 {
@@ -12,8 +10,6 @@ namespace Entity.Enemy
         [field: SerializeField] public float RotationSpeed { get; private set; }
         [field: SerializeField] public float Acceleration { get; private set; }
 
-        [field: Header("Patroling Parameters")]
-        [field: SerializeField] public float WaitingTime { get; private set; }
 
         [field: Header("Attack Parameters")]
         [field: SerializeField] public float PlayerDetectionRadius { get; private set; }

@@ -6,11 +6,11 @@ namespace Area
 {
     public abstract class Area
     {
-        protected Vector3 _centerPosition;
+        protected Vector3 centerPosition;
 
         public Area(Vector3 centerPosition)
         {
-            _centerPosition = centerPosition;
+            this.centerPosition = centerPosition;
         }
 
         public abstract Vector3 GetRandomPositionWithin();

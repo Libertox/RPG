@@ -9,19 +9,19 @@ namespace DialogueSystem
     {
         [SerializeField] private DialogueContainer dialogue;
 
-        private DialogueManager _dialogueManager;
+        private DialogueManager dialogueManager;
 
         [Inject]
         public void Construct(DialogueManager dialogueManager)
         {
-            _dialogueManager = dialogueManager;
+            this.dialogueManager = dialogueManager;
         }
 
         public override void Execute(PlayerController playerController)
         {
             base.Execute(playerController);
 
-            _dialogueManager.StartDialogue(dialogue);
+            dialogueManager.StartDialogue(dialogue);
         }
     }
 

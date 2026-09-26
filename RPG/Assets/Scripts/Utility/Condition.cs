@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-namespace StateMachines
+namespace Utility
 {
     public abstract class Condition : ScriptableObject
     {

@@ -8,15 +8,14 @@ namespace InteractionPromptSystem.Presentation
     public class PromptIcon : MonoBehaviour
     {
         [SerializeField] private Image icon;
-
         [SerializeField] private CanvasGroup canvasGroup;
 
-        private Camera _mainCamera;
-        private Sprite _baseIcon;
+        private Camera mainCamera;
+        private Sprite baseIcon;
 
         public PromptIcon SetBaseIcon(Sprite baseIcon)
         {
-            _baseIcon = baseIcon;
+            this.baseIcon = baseIcon;
             icon.sprite = baseIcon;
             return this;
         }
@@ -43,7 +42,7 @@ namespace InteractionPromptSystem.Presentation
 
         public void ResetIcon()
         {
-            this.icon.sprite = _baseIcon;
+            this.icon.sprite = baseIcon;
         }
 
         public void SetVisibility(float visible)
@@ -53,10 +52,10 @@ namespace InteractionPromptSystem.Presentation
 
         public void LookAtCameraPosition()
         {
-            if(!_mainCamera)
-                _mainCamera = Camera.main;
+            if(!mainCamera)
+                mainCamera = Camera.main;
 
-            icon.transform.LookAt(_mainCamera.transform.position, Vector3.down);
+            icon.transform.LookAt(mainCamera.transform.position, Vector3.down);
         }
 
     }

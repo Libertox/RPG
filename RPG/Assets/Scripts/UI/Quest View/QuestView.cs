@@ -12,16 +12,16 @@ namespace UI.QuestView
         [SerializeField] private TextMeshProUGUI questName;
         [SerializeField] private TextMeshProUGUI questStepName;
 
-        private QuestManager _questManager;
+        private QuestManager questManager;
 
         [Inject]
         private void Construct(QuestManager questManager)
         {
-            _questManager = questManager;
+            this.questManager = questManager;
 
-            _questManager.OnQuestCompleted += OnQuestCompleted;
-            _questManager.OnQuestStarted += OnQuestStarted;
-            _questManager.OnQuestStepChanged += OnQuestStepChanged;
+            this.questManager.OnQuestCompleted += OnQuestCompleted;
+            this.questManager.OnQuestStarted += OnQuestStarted;
+            this.questManager.OnQuestStepChanged += OnQuestStepChanged;
         }
 
         private void OnQuestStepChanged(QuestStep questStep)
@@ -62,9 +62,9 @@ namespace UI.QuestView
 
         private void OnDestroy()
         {
-            _questManager.OnQuestCompleted -= OnQuestCompleted;
-            _questManager.OnQuestStarted -= OnQuestStarted;
-            _questManager.OnQuestStepChanged -= OnQuestStepChanged;
+            questManager.OnQuestCompleted -= OnQuestCompleted;
+            questManager.OnQuestStarted -= OnQuestStarted;
+            questManager.OnQuestStepChanged -= OnQuestStepChanged;
         }
     }
 

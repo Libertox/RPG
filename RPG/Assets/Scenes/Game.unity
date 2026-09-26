@@ -722,7 +722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3075dacf691fe1044b16b65d93c2808e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _quests:
+  quests:
   - {fileID: 11400000, guid: 327fdb0e562f74b478c6e507350370d3, type: 2}
 --- !u!4 &335866927
 Transform:
@@ -1120,7 +1120,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolArea: {fileID: 1500670001}
   enemyData: {fileID: 11400000, guid: 0e409de81ea81ab4ca70f95f0960425f, type: 2}
-  animator: {fileID: 1156507232}
   attackCollisionPoint: {fileID: 638636908}
 --- !u!4 &659365981
 Transform:

@@ -21,15 +21,14 @@ namespace QuestSystem
         [SerializeField] private bool enableMidQuestDialogue;
         [SerializeField, ShowIf(nameof(enableMidQuestDialogue))] private DialogueContainer dialogueDuringQuest;
 
-
-        private DialogueManager _dialogueManager;
-        private QuestManager _questManager;
+        private DialogueManager dialogueManager;
+        private QuestManager questManager;
 
         [Inject]
         private void Construct(DialogueManager dialogueManager, QuestManager questManager)
         {
-            _dialogueManager = dialogueManager;
-            _questManager = questManager;
+            this.dialogueManager = dialogueManager;
+            this.questManager = questManager;
         }
 
         public override bool CanInteract()
@@ -48,8 +47,8 @@ namespace QuestSystem
         {
             if(quest.IsInactive())
             {
-                _dialogueManager.StartDialogue(dialogueOnQuestStart);
-                _dialogueManager.OnDialogueCompleted += ActiveQeust;
+                dialogueManager.StartDialogue(dialogueOnQuestStart);
+                dialogueManager.OnDialogueCompleted += ActiveQeust;
             }
         }
 
@@ -57,7 +56,7 @@ namespace QuestSystem
         {
             if (quest.IsInProgress() && enableMidQuestDialogue && !questStep.IsActive)
             {
-                _dialogueManager.StartDialogue(dialogueDuringQuest);
+                dialogueManager.StartDialogue(dialogueDuringQuest);
             }
         }
 
@@ -65,22 +64,22 @@ namespace QuestSystem
         {
             if (questStep.IsActive)
             {
-                _dialogueManager.StartDialogue(dialogueOnQuestEnd);
+                dialogueManager.StartDialogue(dialogueOnQuestEnd);
 
-                _dialogueManager.OnDialogueCompleted += FinishQuest;
+                dialogueManager.OnDialogueCompleted += FinishQuest;
             }
         }
 
         private void FinishQuest()
         {
-            _questManager.TryMoveToNextQuestStep();
-            _dialogueManager.OnDialogueCompleted -= FinishQuest;
+            questManager.TryMoveToNextQuestStep();
+            dialogueManager.OnDialogueCompleted -= FinishQuest;
         }
 
         private void ActiveQeust()
         {
-            _questManager.AddQuest(quest);
-            _dialogueManager.OnDialogueCompleted -= ActiveQeust;
+            questManager.AddQuest(quest);
+            dialogueManager.OnDialogueCompleted -= ActiveQeust;
         }
     }
 }

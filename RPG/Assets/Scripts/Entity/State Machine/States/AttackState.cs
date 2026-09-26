@@ -3,27 +3,27 @@ namespace Entity
 {
     public class AttackState : BaseState
     {
-        private readonly IAnimationController _animationController;
-        private readonly ICombatController _combatController;
+        private readonly IAnimationController animationController;
+        private readonly ICombatController combatController;
 
         public AttackState(EntityController entityController) : base(entityController)
         {
-            _animationController = entityController.GetController<IAnimationController>();
-            _combatController = entityController.GetController<ICombatController>();
+            animationController = entityController.GetController<IAnimationController>();
+            combatController = entityController.GetController<ICombatController>();
         }
 
         public override void OnEnter()
         {
-            _animationController.SetAttackAnimation();
+            animationController.SetAttackAnimation();
 
-            _combatController.Attack();
+            combatController.Attack();
 
-            _animationController.WaitForEndAnimation(AnimationName.ATTACK, OnAttackAnimationComplete);      
+            animationController.WaitForEndAnimation(AnimationName.ATTACK, OnAttackAnimationComplete);      
         }
 
         public void OnAttackAnimationComplete()
         {
-            _combatController.SetIsAttacking(false);
+            combatController.SetIsAttacking(false);
         }
 
     }

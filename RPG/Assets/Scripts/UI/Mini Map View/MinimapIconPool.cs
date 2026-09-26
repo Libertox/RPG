@@ -5,23 +5,23 @@ namespace UI.MinimapView
 {
     public class MinimapIconPool
     {
-        private readonly MinimapIcon _minimapIconPrefab;
+        private readonly MinimapIcon minimapIconPrefab;
 
-        private readonly ObjectPool<MinimapIcon> _iconsPool;
+        private readonly ObjectPool<MinimapIcon> iconsPool;
 
-        private readonly Transform _iconsParent;
+        private readonly Transform iconsParent;
 
         public MinimapIconPool(MinimapIcon minimapIconPrefab, Transform iconsParent)
         {
-            _minimapIconPrefab = minimapIconPrefab;
-            _iconsParent = iconsParent;
+            this.minimapIconPrefab = minimapIconPrefab;
+            this.iconsParent = iconsParent;
 
-            _iconsPool = new ObjectPool<MinimapIcon>(CreateMinimapIcon, OnMinimapIconGet, OnMinimapIconReleased);
+            iconsPool = new ObjectPool<MinimapIcon>(CreateMinimapIcon, OnMinimapIconGet, OnMinimapIconReleased);
         }
 
         private MinimapIcon CreateMinimapIcon()
         {
-            return Object.Instantiate(_minimapIconPrefab, _iconsParent);
+            return Object.Instantiate(minimapIconPrefab, iconsParent);
         }
 
         private void OnMinimapIconGet(MinimapIcon minimapIcon)
@@ -36,12 +36,12 @@ namespace UI.MinimapView
 
         public MinimapIcon GetMinimapIcon()
         {
-            return _iconsPool.Get();
+            return iconsPool.Get();
         } 
 
         public void ReleaseMinimapIcon(MinimapIcon minimapIcon)
         {
-            _iconsPool.Release(minimapIcon);
+            iconsPool.Release(minimapIcon);
         }
 
     }

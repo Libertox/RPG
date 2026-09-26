@@ -10,12 +10,12 @@ namespace InventorySystem
         public event Action<InventorySlot> OnItemAdded;
         public event Action<InventorySlot> OnItemRemoved;
 
-        private readonly Dictionary<ItemCategory, List<InventorySlot>> _items;
+        private readonly Dictionary<ItemCategory, List<InventorySlot>> items;
         public float CurrentWeight { get; set; }
 
         public Inventory()
         {
-            _items = new();
+            items = new();
         }
 
         public void AddItemAndNotify(InventorySlot item)
@@ -40,10 +40,10 @@ namespace InventorySystem
             var itemBase = item.ItemBase;
             var amountToAdd = item.Amount;
 
-            if (!_items.TryGetValue(itemBase.Category, out var list))
+            if (!items.TryGetValue(itemBase.Category, out var list))
             {
                 list = new List<InventorySlot>();
-                _items[itemBase.Category] = list;
+                items[itemBase.Category] = list;
             }
 
             if (!itemBase.CanStack)
@@ -97,8 +97,8 @@ namespace InventorySystem
 
             Debug.Log($"Removing {inventoryItem.Amount} of {inventoryItem.ItemBase.Name} from inventory");
 
-            if (!_items[inventoryItem.ItemBase.Category].Remove(inventoryItem))
-                _items[inventoryItem.ItemBase.Category].Remove(FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount));
+            if (!items[inventoryItem.ItemBase.Category].Remove(inventoryItem))
+                items[inventoryItem.ItemBase.Category].Remove(FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount));
 
             CurrentWeight -= inventoryItem.ItemBase.Weight * inventoryItem.Amount;
 
@@ -108,22 +108,22 @@ namespace InventorySystem
         public InventorySlot FindInventoryItem(ItemConfigBase item, int amount = 1)
         {
             if (item == null) return null;
-            if (!_items.TryGetValue(item.Category, out var list)) return null;
+            if (!items.TryGetValue(item.Category, out var list)) return null;
 
             return list.FirstOrDefault(i => i.ItemBase == item && i.Amount == amount);
         }
 
         public List<InventorySlot> GetItemsInCategory(ItemCategory category)
         {
-            return _items.TryGetValue(category, out var itemsList) ? itemsList : new List<InventorySlot>();
+            return items.TryGetValue(category, out var itemsList) ? itemsList : new List<InventorySlot>();
         }
 
         public void Show()
         {
-            foreach (var category in _items.Keys)
+            foreach (var category in items.Keys)
             {
                 Debug.Log($"Category: {category}");
-                foreach (var item in _items[category])
+                foreach (var item in items[category])
                 {
                     Debug.Log($"Item: {item.ItemBase.Name}, Amount: {item.Amount}");
                 }

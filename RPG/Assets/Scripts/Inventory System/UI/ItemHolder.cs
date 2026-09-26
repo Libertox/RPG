@@ -9,7 +9,7 @@ namespace InventorySystem.UI
         [SerializeField] private Image icon;
         public InventorySlot HoldItem { get; private set; }
 
-        private IItemContainer _startSlot;
+        private IItemContainer startSlot;
 
         public void Setup(InventorySlot item, IItemContainer startSlot)
         {
@@ -17,7 +17,7 @@ namespace InventorySystem.UI
 
             gameObject.SetActive(true);
             HoldItem = item;
-            _startSlot = startSlot;
+            this.startSlot = startSlot;
             SetIcon(HoldItem.ItemBase.Icon);
         }
 
@@ -28,7 +28,7 @@ namespace InventorySystem.UI
 
         public void ReturnToStartSlot()
         {
-            _startSlot?.Drop(HoldItem);
+            startSlot?.Drop(HoldItem);
             Hide();
         }
 

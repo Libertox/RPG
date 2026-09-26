@@ -10,12 +10,12 @@ namespace QuestSystem
 
         [SerializeField] private QuestStep questStep;
 
-        private QuestManager _questManager;
+        private QuestManager questManager;
 
         [Inject]
         private void Construct(QuestManager questManager)
         {
-            _questManager = questManager;
+            this.questManager = questManager;
         }
 
         protected override void Start()
@@ -27,8 +27,8 @@ namespace QuestSystem
 
             if (this.quest)
             {
-                _questManager.OnQuestStarted += OnQuestStarted;
-                _questManager.OnQuestCompleted += OnQuestCompleted;
+                questManager.OnQuestStarted += OnQuestStarted;
+                questManager.OnQuestCompleted += OnQuestCompleted;
             }
                 
         }
@@ -60,7 +60,7 @@ namespace QuestSystem
             questStep.OnStarted -= OnQuestStepStart;
             questStep.OnCompleted -= OnQuestStepComplete;
 
-            _questManager.OnQuestStarted -= OnQuestStarted;
+            questManager.OnQuestStarted -= OnQuestStarted;
 
             base.OnDestroy();
         }

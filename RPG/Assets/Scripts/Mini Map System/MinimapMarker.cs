@@ -18,12 +18,12 @@ namespace MiniMapSystem
         public MinimapMarkerData MarkerData => markerData;
         public Vector3 Position => transform.position;
 
-        private MinimapController _minimapController;
+        private MinimapController minimapController;
 
         [Inject]
         public void Construct(MinimapController minimapController)
         {
-            _minimapController = minimapController;
+            this.minimapController = minimapController;
         }
 
         protected virtual void Start()
@@ -34,12 +34,12 @@ namespace MiniMapSystem
 
         public void Register()
         {
-            _minimapController.RegisterMinimapEntity(this);
+            minimapController.RegisterMinimapEntity(this);
         }
 
         public void Unregister()
         {
-            _minimapController?.UnregisterMinimapEntity(this);
+            minimapController?.UnregisterMinimapEntity(this);
         }
 
         protected virtual void OnDestroy()

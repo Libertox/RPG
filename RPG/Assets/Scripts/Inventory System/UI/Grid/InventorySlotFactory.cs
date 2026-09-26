@@ -6,16 +6,16 @@ namespace InventorySystem.UI
 {
     public class InventorySlotFactory 
     {
-        private readonly InventoryItemSlotPool _pool;
+        private readonly InventoryItemSlotPool pool;
 
         public InventorySlotFactory(InventoryItemSlotPool pool)
         {
-            _pool = pool;
+            this.pool = pool;
         }
 
         public InventorySlotUI Create(InventorySlot item, RectTransform parent, Vector2 position, Vector2 size)
         {
-            return _pool.Spawn()
+            return pool.Spawn()
                 .Initialize(item)
                 .SetParent(parent)
                 .SetAnchoredPosition(position)
@@ -24,7 +24,7 @@ namespace InventorySystem.UI
 
         public void Release(InventorySlotUI slot)
         {
-            _pool.Despawn(slot);
+            pool.Despawn(slot);
         }
 
     }

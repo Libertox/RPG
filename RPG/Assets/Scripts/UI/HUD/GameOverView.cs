@@ -15,16 +15,16 @@ namespace UI
 
         [SerializeField] private float fadeDuration;
 
-        private InputManager _inputManager;
-        private PlayerController _playerController;
-        private UIViewManager _viewManager;
+        private InputManager inputManager;
+        private PlayerController playerController;
+        private UIViewManager viewManager;
 
         [Inject]
         private void Construct(InputManager inputManager, PlayerController playerController, UIViewManager viewManager)
         {
-            _inputManager = inputManager;
-            _playerController = playerController;
-            _viewManager = viewManager;
+            this.inputManager = inputManager;
+            this.playerController = playerController;
+            this.viewManager = viewManager;
         }
 
         public override void Initialize()
@@ -32,22 +32,22 @@ namespace UI
             base.Initialize();
 
             canvasGroup.alpha = 0f;
-            _playerController.OnDie += OnPlayerDie;
+            playerController.OnDie += OnPlayerDie;
         }
 
         public async void OnPlayerDie()
         {
-            await _viewManager.TryOpenView(ViewID);  
+            await viewManager.TryOpenView(ViewID);  
         }
 
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnableUIActions(true);
+            inputManager.EnableUIActions(true);
         }
 
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnableUIActions(false);
+            inputManager.EnableUIActions(false);
         }
 
         public override void Open()

@@ -8,35 +8,35 @@ namespace UI.HUD
     {
         [SerializeField] private UIViewSO inventoryViewID;
 
-        private InputManager _inputManager;
-        private UIViewManager _viewManager;
+        private InputManager inputManager;
+        private UIViewManager viewManager;
 
         [Inject]
         private void Construct(InputManager inputManager, UIViewManager viewManager)
         {
-            _inputManager = inputManager;
-            _viewManager = viewManager;
+            this.inputManager = inputManager;
+            this.viewManager = viewManager;
         }
 
      
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnablePlayerActions(true);
+            inputManager.EnablePlayerActions(true);
 
-            _inputManager.OnInventoryPressed += OpenInventoryView;
+            inputManager.OnInventoryPressed += OpenInventoryView;
         }
 
       
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnablePlayerActions(false);
+            inputManager.EnablePlayerActions(false);
 
-            _inputManager.OnInventoryPressed -= OpenInventoryView;
+            inputManager.OnInventoryPressed -= OpenInventoryView;
         }
 
         private async void OpenInventoryView()
         {
-            await _viewManager.TryOpenView(inventoryViewID, true);
+            await viewManager.TryOpenView(inventoryViewID, true);
         }
 
 

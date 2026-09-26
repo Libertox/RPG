@@ -9,40 +9,40 @@ namespace InteractionPromptSystem
 {
     public class InteractionPromptManager : MonoBehaviour
     {
-        private PromptIconFactory _promptIconFactory;
-        private PlayerController _playerMotionController;
-        private InputDeviceChanger _inputDeviceChanger;
+        private PromptIconFactory promptIconFactory;
+        private PlayerController playerMotionController;
+        private InputDeviceChanger inputDeviceChanger;
 
-        [SerializeField] private float _showPromptMaxDistance = 8f;
-        [SerializeField] private float _showPromptMinDistance = 1f;
+        [SerializeField] private float showPromptMaxDistance = 8f;
+        [SerializeField] private float showPromptMinDistance = 1f;
 
-        [SerializeField] private float _interactionRange = 2f;
+        [SerializeField] private float interactionRange = 2f;
 
-        private readonly List<IPromptProvider> _providers = new();
-        private readonly Dictionary<IPromptProvider, PromptIcon> _icons = new();
+        private readonly List<IPromptProvider> providers = new();
+        private readonly Dictionary<IPromptProvider, PromptIcon> icons = new();
 
         private void Awake()
         {
-            _promptIconFactory = GetComponent<PromptIconFactory>();
+            promptIconFactory = GetComponent<PromptIconFactory>();
         }
 
         [Inject]
         private void Construct(PlayerController motionController, InputDeviceChanger inputDeviceChanger)
         {
-            _playerMotionController = motionController;
-            _inputDeviceChanger = inputDeviceChanger;
+            playerMotionController = motionController;
+            this.inputDeviceChanger = inputDeviceChanger;
         }
 
         public void RegisterPromptProvider(IPromptProvider promptProvider)
         {
-            _providers.Add(promptProvider);
+            providers.Add(promptProvider);
         }
 
         public void UnregisterPromptProvider(IPromptProvider promptProvider)
         {
             RemovePrompt(promptProvider);
 
-            _providers.Remove(promptProvider);
+            providers.Remove(promptProvider);
         }
 
 
@@ -53,10 +53,10 @@ namespace InteractionPromptSystem
 
         private void UpdateInteractionPrompts()
         {
-            foreach (var provider in _providers)
+            foreach (var provider in providers)
             {
-                float distance = Vector3.Distance(_playerMotionController.Position, provider.TargetPosition);
-                bool withinPromptRange = distance < _showPromptMaxDistance;
+                float distance = Vector3.Distance(playerMotionController.Position, provider.TargetPosition);
+                bool withinPromptRange = distance < showPromptMaxDistance;
 
                 if (withinPromptRange && provider.CanInteract())
                 {
@@ -71,19 +71,19 @@ namespace InteractionPromptSystem
 
         private void HandlePrompt(IPromptProvider provider, float distance)
         {
-            if (!_icons.TryGetValue(provider, out var icon))
+            if (!icons.TryGetValue(provider, out var icon))
             {
-                icon = _promptIconFactory.Get();
+                icon = promptIconFactory.Get();
                 icon.transform.position = provider.PromptPosition;
-                _icons.Add(provider, icon);
+                icons.Add(provider, icon);
             }
 
-            icon.SetVisibility(Mathf.InverseLerp(_showPromptMaxDistance, _showPromptMinDistance, distance));
+            icon.SetVisibility(Mathf.InverseLerp(showPromptMaxDistance, showPromptMinDistance, distance));
             icon.LookAtCameraPosition();
 
-            if (distance < _interactionRange)
+            if (distance < interactionRange)
             {
-                icon.SetIcon(provider.Icon.GetInputIcons(_inputDeviceChanger.CurrentControllerType));
+                icon.SetIcon(provider.Icon.GetInputIcons(inputDeviceChanger.CurrentControllerType));
             }
             else
             {
@@ -93,10 +93,10 @@ namespace InteractionPromptSystem
 
         private void RemovePrompt(IPromptProvider provider)
         {
-            if (_icons.TryGetValue(provider, out var icon))
+            if (icons.TryGetValue(provider, out var icon))
             {
-                _promptIconFactory.Release(icon);
-                _icons.Remove(provider);
+                promptIconFactory.Release(icon);
+                icons.Remove(provider);
             }
         }
 

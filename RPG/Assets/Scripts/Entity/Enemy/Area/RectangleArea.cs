@@ -23,33 +23,33 @@ namespace Area
             float randomX = UnityEngine.Random.Range(minPosition.x, maxPosition.x);
             float randomZ = UnityEngine.Random.Range(minPosition.z, maxPosition.z);
 
-            return new Vector3(randomX, _centerPosition.y, randomZ);
+            return new Vector3(randomX, centerPosition.y, randomZ);
         }
 
         private Vector3 GetMinRectanglePosition()
         {
-            float minX = _centerPosition.x - _width;
-            float minZ = _centerPosition.z - _height;
+            float minX = centerPosition.x - _width;
+            float minZ = centerPosition.z - _height;
 
-            return new Vector3(minX, _centerPosition.y, minZ);
+            return new Vector3(minX, centerPosition.y, minZ);
         }
 
         private Vector3 GetMaxRectanglePosition()
         {
-            float maxX = _centerPosition.x + _width;
-            float maxZ = _centerPosition.z + _height;
+            float maxX = centerPosition.x + _width;
+            float maxZ = centerPosition.z + _height;
 
-            return new Vector3(maxX, _centerPosition.y, maxZ);
+            return new Vector3(maxX, centerPosition.y, maxZ);
         }
 
         public override void DrawArea(Vector3 centerPosition, Color lineColor)
         {
-            _centerPosition = centerPosition;
+            base.centerPosition = centerPosition;
 
             Vector3 rightUpperCorner = GetMaxRectanglePosition();
             Vector3 leftDownCorner = GetMinRectanglePosition();
-            Vector3 leftUpperCorner = new Vector3(leftDownCorner.x, _centerPosition.y,  rightUpperCorner.z);
-            Vector3 rightDownCorner = new Vector3(rightUpperCorner.x, _centerPosition.y, leftDownCorner.z);
+            Vector3 leftUpperCorner = new Vector3(leftDownCorner.x, base.centerPosition.y,  rightUpperCorner.z);
+            Vector3 rightDownCorner = new Vector3(rightUpperCorner.x, base.centerPosition.y, leftDownCorner.z);
 
             Debug.DrawLine(rightUpperCorner, leftUpperCorner, lineColor);
             Debug.DrawLine(rightUpperCorner, rightDownCorner, lineColor);

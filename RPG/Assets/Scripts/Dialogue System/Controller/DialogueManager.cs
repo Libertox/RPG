@@ -8,25 +8,25 @@ namespace DialogueSystem
         public event Action OnDialogueCompleted;
         public event Action<DialogueLine> OnDialgoueLineChanged;
 
-        private DialogueContainer _currentDialogue;
-        private int _currentDialogueLine;
+        private DialogueContainer currentDialogue;
+        private int currentDialogueLine;
 
         public void StartDialogue(DialogueContainer dialogueContainer)
         {
             if (dialogueContainer == null) return;
 
-            _currentDialogue = dialogueContainer;
+            currentDialogue = dialogueContainer;
 
-            _currentDialogueLine = 0;
+            currentDialogueLine = 0;
 
             OnDialogueStarted?.Invoke();
 
-            OnDialgoueLineChanged?.Invoke(_currentDialogue.Dialogues[_currentDialogueLine]);       
+            OnDialgoueLineChanged?.Invoke(currentDialogue.Dialogues[currentDialogueLine]);       
         }
 
         public void ChangeDialogueLine()
         {
-            _currentDialogueLine++;
+            currentDialogueLine++;
 
             if (IsDialogueComplete())
             {
@@ -34,12 +34,12 @@ namespace DialogueSystem
                 return;
             }
 
-            OnDialgoueLineChanged?.Invoke(_currentDialogue.Dialogues[_currentDialogueLine]);
+            OnDialgoueLineChanged?.Invoke(currentDialogue.Dialogues[currentDialogueLine]);
         }
 
         private bool IsDialogueComplete()
         {
-            return _currentDialogueLine >= _currentDialogue.Dialogues.Length;
+            return currentDialogueLine >= currentDialogue.Dialogues.Length;
         }
 
     }

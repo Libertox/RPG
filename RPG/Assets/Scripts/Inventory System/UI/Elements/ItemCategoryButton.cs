@@ -13,12 +13,12 @@ namespace InventorySystem.UI
 
         [SerializeField] private Transform selector;
 
-        private Button _button;
+        private Button button;
 
         private void Awake()
         {
-            _button = GetComponent<Button>();
-            _button.onClick.AddListener(SelectItemCategory);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(SelectItemCategory);
         }
 
         private void SelectItemCategory()

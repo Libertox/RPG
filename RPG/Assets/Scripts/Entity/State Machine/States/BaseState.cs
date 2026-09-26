@@ -5,11 +5,11 @@ namespace Entity
 {
     public abstract class BaseState : IState
     {
-        protected EntityController _entityController;
+        protected EntityController entityController;
 
         public BaseState(EntityController entityController)
         {
-            _entityController = entityController;
+            this.entityController = entityController;
         }
 
         public virtual void OnEnter()

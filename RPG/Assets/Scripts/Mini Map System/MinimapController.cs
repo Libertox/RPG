@@ -10,27 +10,27 @@ namespace MiniMapSystem
         public event Action<IMinimapEntity> OnMinimapEntityAdded;
         public event Action<IMinimapEntity> OnMinimapEntityRemoved;
 
+        private readonly List<IMinimapEntity> minimapEntities;
+
         public MinimapController()
         {
-            _minimapEntities = new();
+            minimapEntities = new();
         }
-
-        private List<IMinimapEntity> _minimapEntities;
 
         public void RegisterMinimapEntity(IMinimapEntity minimapEntity)
         {
-            if (_minimapEntities.Contains(minimapEntity)) return;
+            if (minimapEntities.Contains(minimapEntity)) return;
 
-            _minimapEntities.Add(minimapEntity);
+            minimapEntities.Add(minimapEntity);
 
             OnMinimapEntityAdded?.Invoke(minimapEntity);    
         }
 
         public void UnregisterMinimapEntity(IMinimapEntity minimapEntity)
         {
-            if (!_minimapEntities.Contains(minimapEntity)) return;
+            if (!minimapEntities.Contains(minimapEntity)) return;
 
-            _minimapEntities.Remove(minimapEntity);
+            minimapEntities.Remove(minimapEntity);
 
             OnMinimapEntityRemoved?.Invoke(minimapEntity);
         }

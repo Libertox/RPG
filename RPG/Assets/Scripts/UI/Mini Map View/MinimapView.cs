@@ -15,10 +15,10 @@ namespace UI.MinimapView
 
         [SerializeField] private MinimapIcon iconPrefab;
 
-        private Vector2 _miniMapScale;
-        private PlayerController _playerController;
-        private MinimapController _minimapController;
-        private MinimapIconPool _iconPool;
+        private Vector2 miniMapScale;
+        private PlayerController playerController;
+        private MinimapController minimapController;
+        private MinimapIconPool iconPool;
 
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _staticIcons = new();
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _dynamicIcons = new();
@@ -26,13 +26,13 @@ namespace UI.MinimapView
         [Inject]
         public void Construct(PlayerController playerController, MinimapController minimapController)
         {
-            _playerController = playerController;
-            _minimapController = minimapController;
+            this.playerController = playerController;
+            this.minimapController = minimapController;
 
-            _minimapController.OnMinimapEntityAdded += OnMinimapEntityAdded;
-            _minimapController.OnMinimapEntityRemoved += OnMinimapEntityRemoved;
+            this.minimapController.OnMinimapEntityAdded += OnMinimapEntityAdded;
+            this.minimapController.OnMinimapEntityRemoved += OnMinimapEntityRemoved;
 
-            _iconPool = new(iconPrefab, mapTexture.transform);
+            iconPool = new(iconPrefab, mapTexture.transform);
         }
 
         private void Awake()
@@ -42,7 +42,7 @@ namespace UI.MinimapView
 
         private void CalculateMapSize()
         {
-            _miniMapScale = mapTexture.sizeDelta / new Vector2(worldMap.bounds.size.x, worldMap.bounds.size.z);
+            miniMapScale = mapTexture.sizeDelta / new Vector2(worldMap.bounds.size.x, worldMap.bounds.size.z);
         }
 
         private void OnMinimapEntityRemoved(IMinimapEntity minimapEntity)
@@ -60,12 +60,12 @@ namespace UI.MinimapView
                 _dynamicIcons.Remove(minimapEntity);
             }
 
-            _iconPool.ReleaseMinimapIcon(icon);
+            iconPool.ReleaseMinimapIcon(icon);
         }
 
         private void OnMinimapEntityAdded(IMinimapEntity minimapEntity)
         {
-            MinimapIcon icon = _iconPool.GetMinimapIcon()
+            MinimapIcon icon = iconPool.GetMinimapIcon()
                 .SetIcon(minimapEntity.MarkerData.Icon)
                 .SetSize(minimapEntity.MarkerData.Size)
                 .SetPosition(ConvertWorldPositionToMinimapPosition(minimapEntity.Position));
@@ -87,7 +87,7 @@ namespace UI.MinimapView
 
         private void UpdateMapPosition()
         {
-            var miniMapPosition = ConvertWorldPositionToMinimapPosition(-_playerController.Position);
+            var miniMapPosition = ConvertWorldPositionToMinimapPosition(-playerController.Position);
             mapTexture.anchoredPosition = miniMapPosition;
         }
 
@@ -99,18 +99,18 @@ namespace UI.MinimapView
 
         private Vector2 ConvertWorldPositionToMinimapPosition(Vector3 worldPosition)
         {
-            return new Vector2(worldPosition.x * _miniMapScale.x, worldPosition.z * _miniMapScale.y);
+            return new Vector2(worldPosition.x * miniMapScale.x, worldPosition.z * miniMapScale.y);
         }
 
         private void RotatePlayerIcon()
         {
-            playerIcon.localEulerAngles = new Vector3(0f, 0f, -_playerController.Rotation.eulerAngles.y);
+            playerIcon.localEulerAngles = new Vector3(0f, 0f, -playerController.Rotation.eulerAngles.y);
         }
 
         private void OnDestroy()
         {
-            _minimapController.OnMinimapEntityAdded -= OnMinimapEntityAdded;
-            _minimapController.OnMinimapEntityRemoved -= OnMinimapEntityRemoved;
+            minimapController.OnMinimapEntityAdded -= OnMinimapEntityAdded;
+            minimapController.OnMinimapEntityRemoved -= OnMinimapEntityRemoved;
         }
     }
 }

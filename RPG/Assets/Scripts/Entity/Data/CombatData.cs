@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Entity.Player
+namespace Entity
 {
     [System.Serializable]
     public class CombatData

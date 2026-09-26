@@ -10,7 +10,7 @@ namespace Entity
 
         public override void OnEnter()
         {
-            _entityController.GetController<IAnimationController>().SetDieAnimation();
+            entityController.GetController<IAnimationController>().SetDieAnimation();
         }
 
     }

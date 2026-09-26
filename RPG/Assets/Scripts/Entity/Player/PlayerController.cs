@@ -23,22 +23,22 @@ namespace Entity.Player
         public PlayerInventory PlayerInventory { get; private set; }
         public PlayerData PlayerData => playerData;
 
-        private InputManager _inputManager;
+        private InputManager inputManager;
 
-        private bool _isTakingDamage;
-        private float _health = 10;
+        private bool isTakingDamage;
+        private float health = 10;
 
         [field:SerializeField] public int Level { get; private set; }
 
-        public bool IsTakingDamage => _isTakingDamage;
+        public bool IsTakingDamage => isTakingDamage;
 
         [Inject]
         private void Construct(InputManager inputManager, PlayerInventory playerInventory)
         {
             PlayerInventory = playerInventory;
-            _inputManager = inputManager;
+            this.inputManager = inputManager;
 
-            _inputManager.OnAttackPressed += OnAttackButtonPressed;
+            this.inputManager.OnAttackPressed += OnAttackButtonPressed;
         }
 
         private void OnAttackButtonPressed()
@@ -57,7 +57,7 @@ namespace Entity.Player
 
         private void SetupRefernces()
         {
-            RegisterController(new PlayerMotionController(this, _inputManager, playerData, playerPresentation));
+            RegisterController(new PlayerMotionController(this, inputManager, playerData, playerPresentation));
             RegisterController(new MeleeCombatController(attackCollisionPoint, playerData.CombatData));
         }
 
@@ -66,9 +66,9 @@ namespace Entity.Player
         {
             if (IsDead) return;
 
-            _health -= damage;
+            health -= damage;
 
-            if (_health <= 0) Die();
+            if (health <= 0) Die();
             else SetTakeDamge(true);
         }
 
@@ -80,7 +80,7 @@ namespace Entity.Player
 
         public void SetTakeDamge(bool isTakimgDamge)
         {
-            _isTakingDamage = isTakimgDamge;
+            isTakingDamage = isTakimgDamge;
         }
 
         public float GetMovementSpeed()

@@ -9,11 +9,11 @@ namespace UI.DialogueView
     {
         public bool IsAnimationPlaying { get; private set; }
 
-        private readonly WaitForSeconds _effectSpeed;
+        private readonly WaitForSeconds effectSpeed;
 
         public TypewriterEffect(float effectDuration)
         {
-            _effectSpeed = new WaitForSeconds(effectDuration);
+            effectSpeed = new WaitForSeconds(effectDuration);
         }
 
         public IEnumerator PlayAnimation(TextMeshProUGUI target, string message, Action OnAnimationCompleted = null)
@@ -27,7 +27,7 @@ namespace UI.DialogueView
             {
                 target.maxVisibleCharacters++;
 
-                yield return _effectSpeed;
+                yield return effectSpeed;
             }
 
             OnAnimationCompleted?.Invoke();

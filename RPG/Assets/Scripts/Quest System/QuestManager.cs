@@ -11,19 +11,19 @@ namespace QuestSystem
 
         public event Action<QuestStep> OnQuestStepChanged;
 
-        [SerializeField] private Quest[] _quests;
+        [SerializeField] private Quest[] quests;
 
-        private Quest _activeQuest;
+        private Quest activeQuest;
 
-        private List<Quest> _availableQuests = new();
-        private List<Quest> _finishedQuests = new();
+        private List<Quest> availableQuests = new();
+        private List<Quest> finishedQuests = new();
 
 
         public void AddQuest(Quest newQuest)
         {
-            _availableQuests.Add(newQuest);
+            availableQuests.Add(newQuest);
 
-            _activeQuest = newQuest;
+            activeQuest = newQuest;
 
             Debug.Log("Quest: " + newQuest.name + " Activated");
 
@@ -36,32 +36,32 @@ namespace QuestSystem
 
         public void TryMoveToNextQuestStep()
         {
-            if (_activeQuest.CanMoveToNextStep())
+            if (activeQuest.CanMoveToNextStep())
             {
-                _activeQuest.MoveToNextStep();
-                OnQuestStepChanged?.Invoke(_activeQuest.CurrentQuestStep);
+                activeQuest.MoveToNextStep();
+                OnQuestStepChanged?.Invoke(activeQuest.CurrentQuestStep);
             }    
             else
-                FinishQuest(_activeQuest);
+                FinishQuest(activeQuest);
         }
 
 
         public void FinishQuest(Quest finishedQuest)
         {
-            _availableQuests.Remove(finishedQuest);
+            availableQuests.Remove(finishedQuest);
 
             Debug.Log("Quest: " + finishedQuest.name + " Finished");
 
             finishedQuest.SetQuestState(QuestState.Finished);
 
-            _finishedQuests.Add(finishedQuest);
+            finishedQuests.Add(finishedQuest);
 
             OnQuestCompleted?.Invoke(finishedQuest);
         }
 
         private void OnDestroy()
         {
-            foreach(var quest in _quests)
+            foreach(var quest in quests)
             {
                 quest.Reset();
             }

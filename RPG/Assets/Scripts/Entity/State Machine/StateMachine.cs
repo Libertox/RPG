@@ -1,6 +1,7 @@
 ﻿using Entity;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace StateMachines
 {
@@ -12,10 +13,9 @@ namespace StateMachines
 
         [SerializeField] private EntityController entityController;
 
-        private StateNode _current;
+        private StateNode current;
 
-        private readonly Dictionary<BaseStateConfig, StateNode> _nodes = new();
-        private readonly HashSet<ITransition> _anyTransitions = new();
+        private readonly Dictionary<BaseStateConfig, StateNode> nodes = new();
 
         private void Start()
         {
@@ -39,41 +39,41 @@ namespace StateMachines
             if (transition != null)
                 ChangeState(transition.To);
 
-            _current.State?.Update();
+            current.State?.Update();
 
-            Debug.Log(_current.State?.ToString());
+            Debug.Log(current.State?.ToString());
         }
 
         private void FixedUpdate()
         {
-            _current.State?.FixedUpdate();
+            current.State?.FixedUpdate();
         }
 
         public void SetState(BaseStateConfig state)
         {
-            _current = _nodes[state];
-            _current.State?.OnEnter();
+            current = nodes[state];
+            current.State?.OnEnter();
         }
 
         private void ChangeState(BaseStateConfig state)
         {
-            if (state == _current.StateConfig) return;
+            if (state == current.StateConfig) return;
 
-            var previousState = _current.State;
-            var nextState = _nodes[state].State;
+            var previousState = current.State;
+            var nextState = nodes[state].State;
 
             previousState?.OnExit();
             nextState?.OnEnter();
-            _current = _nodes[state];
+            current = nodes[state];
         }
 
         private ITransition GetTransition()
         {
-            foreach (var transition in _anyTransitions)
+            foreach (var transition in anyTransitions)
                 if (transition.Conditions.Evaluate(entityController))
                     return transition;
 
-            foreach (var transition in _current.Transitions)
+            foreach (var transition in current.Transitions)
                 if (transition.Conditions.Evaluate(entityController))
                     return transition;
 
@@ -87,18 +87,17 @@ namespace StateMachines
 
         public void AddAnyTransition(Transition transition)
         {
-            _anyTransitions.Add(transition);
             GetOrAddNode(transition.To);
         }
 
         private StateNode GetOrAddNode(BaseStateConfig state)
         {
-            var node = _nodes.GetValueOrDefault(state);
+            var node = nodes.GetValueOrDefault(state);
 
             if (node == null)
             {
                 node = new StateNode(state, entityController);
-                _nodes.Add(state, node);
+                nodes.Add(state, node);
             }
 
             return node;

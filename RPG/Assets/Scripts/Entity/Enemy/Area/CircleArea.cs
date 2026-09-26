@@ -6,23 +6,23 @@ namespace Area
 {
     public class CircleArea : Area
     {
-        private readonly float _radius;
+        private readonly float radius;
 
-        public CircleArea(Vector3 _centerPosition,  float radius) : base(_centerPosition)
+        public CircleArea(Vector3 centerPosition,  float radius) : base(centerPosition)
         {
-            _radius = radius;
+            this.radius = radius;
         }
 
         public override Vector3 GetRandomPositionWithin()
         {
-            float randomDistance = UnityEngine.Random.Range(0, _radius);
+            float randomDistance = UnityEngine.Random.Range(0, radius);
             float randomAngle = UnityEngine.Random.Range(0, 360);
 
             Vector3 pointPosition = new Vector3(Mathf.Sin(Mathf.Deg2Rad * randomAngle), 0, Mathf.Cos(Mathf.Deg2Rad * randomAngle));
 
             pointPosition *= randomDistance;
 
-            pointPosition += _centerPosition;
+            pointPosition += centerPosition;
 
             return pointPosition;
         }
@@ -34,8 +34,8 @@ namespace Area
                 Vector3 pointPosition = new Vector3(Mathf.Sin(Mathf.Deg2Rad * i), 0, Mathf.Cos(Mathf.Deg2Rad * i));
                 Vector3 nextPointPosition = new Vector3(Mathf.Sin(Mathf.Deg2Rad * (i + 1)), 0, Mathf.Cos(Mathf.Deg2Rad * (i + 1)));
 
-                pointPosition *= _radius;
-                nextPointPosition *= _radius;
+                pointPosition *= radius;
+                nextPointPosition *= radius;
 
                 pointPosition += centerPosition;
                 nextPointPosition += centerPosition;

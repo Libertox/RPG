@@ -13,22 +13,22 @@ namespace InteractionPromptSystem.Presentation
         [SerializeField] private float promptIconHeight;
         [SerializeField] private float promptIconWidth;
 
-        private ObjectPool<PromptIcon> _iconsPool;
+        private ObjectPool<PromptIcon> iconsPool;
 
         private void Awake()
         {
-            _iconsPool = new ObjectPool<PromptIcon>(OnCreateIcon, OnGetIcon, OnReleaseIcon);
+            iconsPool = new ObjectPool<PromptIcon>(OnCreateIcon, OnGetIcon, OnReleaseIcon);
         }
 
         public PromptIcon Get()
         {
-            return _iconsPool.Get();
+            return iconsPool.Get();
         }
 
         public void Release(PromptIcon promptIcon)
         {
             if(promptIcon != null)
-                _iconsPool.Release(promptIcon);
+                iconsPool.Release(promptIcon);
         }
 
         private PromptIcon OnCreateIcon()

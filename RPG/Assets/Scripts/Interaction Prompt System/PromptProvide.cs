@@ -13,31 +13,31 @@ namespace InteractionPromptSystem
         public Vector3 TargetPosition => transform.position;
         public Vector3 PromptPosition => promptPosition.position;
 
-        private InteractionPromptManager _promptManager;
+        private InteractionPromptManager promptManager;
 
-        private IInteractablePrompt _interactable;
+        private IInteractablePrompt interactable;
 
         [Inject]
         public void Construct(InteractionPromptManager interactionPromptManager)
         {
-            _promptManager = interactionPromptManager;
+            promptManager = interactionPromptManager;
         }
 
         private void Start()
         {
-            _promptManager.RegisterPromptProvider(this);
+            promptManager.RegisterPromptProvider(this);
 
-            _interactable = GetComponent<IInteractablePrompt>();
+            interactable = GetComponent<IInteractablePrompt>();
         }
 
         private void OnDestroy()
         {
-            _promptManager.UnregisterPromptProvider(this);
+            promptManager.UnregisterPromptProvider(this);
         }
 
         public bool CanInteract()
         {
-            return gameObject.activeSelf && _interactable.CanInteract();
+            return gameObject.activeSelf && interactable.CanInteract();
         }
 
     }

@@ -3,30 +3,30 @@ namespace Entity.Enemy
 {
     public class FollowState : BaseState
     {
-        private readonly EnemyController _enemyController;
+        private readonly EnemyController enemyController;
 
         public FollowState(EntityController entityController) : base(entityController)
         {
-            _enemyController = (EnemyController)entityController;
+            enemyController = (EnemyController)entityController;
         }
 
         public override void OnEnter()
         {
-            _enemyController.MoveTowardsTarget();
+            enemyController.MoveTowardsTarget();
 
-            if (!_enemyController.IsOnDestination())
-                _enemyController.GetController<IAnimationController>().SetMoveAnimation();
+            if (!enemyController.IsOnDestination())
+                enemyController.GetController<IAnimationController>().SetMoveAnimation();
         }
 
         public override void Update()
         {
-            _enemyController.MoveTowardsTarget();
+            enemyController.MoveTowardsTarget();
   
-            if (_enemyController.IsOnDestination())
+            if (enemyController.IsOnDestination())
             {
-                _enemyController.RotateTowardsTarget();
+                enemyController.RotateTowardsTarget();
 
-                _enemyController.GetController<ICombatController>().SetIsAttacking(true);
+                enemyController.GetController<ICombatController>().SetIsAttacking(true);
             }
         }
     }

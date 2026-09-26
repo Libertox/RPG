@@ -29,17 +29,17 @@ namespace InputSystem
         public event Action OnLeftMouseHoldStarted;
         public event Action OnLeftMouseHoldCanceled;
 
-        private readonly InputActions _inputActions;
+        private readonly InputActions inputActions;
 
-        public Vector2 MoveDirection => _inputActions.Player.Move.ReadValue<Vector2>();
+        public Vector2 MoveDirection => inputActions.Player.Move.ReadValue<Vector2>();
 
         private bool isHoldLeftMouseButton;
 
         public InputManager()
         {
-            _inputActions = new();
+            inputActions = new();
 
-            _inputActions.Enable();
+            inputActions.Enable();
 
             EnableUIActions(false);
 
@@ -48,27 +48,27 @@ namespace InputSystem
 
         private void SubscribeInputActions()
         {
-            _inputActions.Player.Move.performed += OnMoveButtonStarted;
-            _inputActions.Player.Move.canceled += OnMoveButtonCanceled;
+            inputActions.Player.Move.performed += OnMoveButtonStarted;
+            inputActions.Player.Move.canceled += OnMoveButtonCanceled;
 
-            _inputActions.Player.Attack.performed += OnAttackButtonPerformed;
-            _inputActions.Player.Interact.performed += OnInteractButtonPerformed;
+            inputActions.Player.Attack.performed += OnAttackButtonPerformed;
+            inputActions.Player.Interact.performed += OnInteractButtonPerformed;
 
-            _inputActions.Player.Inventory.performed += OnInventoryButtonPerformed;
+            inputActions.Player.Inventory.performed += OnInventoryButtonPerformed;
 
-            _inputActions.UI.Submit.performed += OnSubmitButtonPerformed;
-            _inputActions.UI.Continue.performed += OnContinueButtonPerformed;
-            _inputActions.UI.Cancel.performed += OnCancelButtonPerformed;
+            inputActions.UI.Submit.performed += OnSubmitButtonPerformed;
+            inputActions.UI.Continue.performed += OnContinueButtonPerformed;
+            inputActions.UI.Cancel.performed += OnCancelButtonPerformed;
 
-            _inputActions.UI.Click.canceled += OnLeftMouseClickCanceled;
-            _inputActions.UI.RightClick.performed += OnRightMouseButtonPerformed;
-            _inputActions.UI.HoldLeftMouseButton.performed += OnHoldLeftMouseButtonStarted;
-            _inputActions.UI.HoldLeftMouseButton.canceled += OnHoldLeftMouseButtonCanceled;
+            inputActions.UI.Click.canceled += OnLeftMouseClickCanceled;
+            inputActions.UI.RightClick.performed += OnRightMouseButtonPerformed;
+            inputActions.UI.HoldLeftMouseButton.performed += OnHoldLeftMouseButtonStarted;
+            inputActions.UI.HoldLeftMouseButton.canceled += OnHoldLeftMouseButtonCanceled;
 
-            _inputActions.UI.Compare.started += OnHoldCompareButtonStarted;
-            _inputActions.UI.Compare.canceled += OnHoldCompareButtonEnded;
+            inputActions.UI.Compare.started += OnHoldCompareButtonStarted;
+            inputActions.UI.Compare.canceled += OnHoldCompareButtonEnded;
 
-            _inputActions.UI.SortItems.started += OnSortItemsButtonPerformed;
+            inputActions.UI.SortItems.started += OnSortItemsButtonPerformed;
         }
 
         private void OnSortItemsButtonPerformed(InputAction.CallbackContext action)
@@ -88,7 +88,7 @@ namespace InputSystem
 
         public bool IsCompareButtonPressed()
         {
-            return _inputActions.UI.Compare.IsPressed();
+            return inputActions.UI.Compare.IsPressed();
         }
 
         private void OnHoldLeftMouseButtonStarted(InputAction.CallbackContext action)
@@ -161,14 +161,14 @@ namespace InputSystem
 
         public void EnablePlayerActions(bool enable = true)
         {
-            if (enable) _inputActions.Player.Enable();
-            else _inputActions.Player.Disable();
+            if (enable) inputActions.Player.Enable();
+            else inputActions.Player.Disable();
         }
 
         public void EnableUIActions(bool enable = true)
         {
-            if (enable) _inputActions.UI.Enable();
-            else _inputActions.UI.Disable();
+            if (enable) inputActions.UI.Enable();
+            else inputActions.UI.Disable();
         }
 
         public static Vector2 GetMousePosition()
@@ -178,35 +178,35 @@ namespace InputSystem
 
         private void UnsubscribeInputActions()
         {
-            _inputActions.Player.Move.performed -= OnMoveButtonStarted;
-            _inputActions.Player.Move.canceled -= OnMoveButtonCanceled;
+            inputActions.Player.Move.performed -= OnMoveButtonStarted;
+            inputActions.Player.Move.canceled -= OnMoveButtonCanceled;
 
-            _inputActions.Player.Attack.performed -= OnAttackButtonPerformed;
-            _inputActions.Player.Interact.performed -= OnInteractButtonPerformed;
+            inputActions.Player.Attack.performed -= OnAttackButtonPerformed;
+            inputActions.Player.Interact.performed -= OnInteractButtonPerformed;
 
-            _inputActions.Player.Inventory.performed -= OnInventoryButtonPerformed;
+            inputActions.Player.Inventory.performed -= OnInventoryButtonPerformed;
 
-            _inputActions.UI.Submit.performed -= OnSubmitButtonPerformed;
-            _inputActions.UI.Continue.performed -= OnContinueButtonPerformed;
-            _inputActions.UI.Cancel.performed -= OnCancelButtonPerformed;
+            inputActions.UI.Submit.performed -= OnSubmitButtonPerformed;
+            inputActions.UI.Continue.performed -= OnContinueButtonPerformed;
+            inputActions.UI.Cancel.performed -= OnCancelButtonPerformed;
 
-            _inputActions.UI.Click.canceled -= OnLeftMouseClickCanceled;
-            _inputActions.UI.RightClick.performed -= OnRightMouseButtonPerformed;
-            _inputActions.UI.HoldLeftMouseButton.performed -= OnHoldLeftMouseButtonStarted;
-            _inputActions.UI.HoldLeftMouseButton.canceled -= OnHoldLeftMouseButtonCanceled;
+            inputActions.UI.Click.canceled -= OnLeftMouseClickCanceled;
+            inputActions.UI.RightClick.performed -= OnRightMouseButtonPerformed;
+            inputActions.UI.HoldLeftMouseButton.performed -= OnHoldLeftMouseButtonStarted;
+            inputActions.UI.HoldLeftMouseButton.canceled -= OnHoldLeftMouseButtonCanceled;
 
-            _inputActions.UI.Compare.started -= OnHoldCompareButtonStarted;
-            _inputActions.UI.Compare.canceled -= OnHoldCompareButtonEnded;
+            inputActions.UI.Compare.started -= OnHoldCompareButtonStarted;
+            inputActions.UI.Compare.canceled -= OnHoldCompareButtonEnded;
 
-            _inputActions.UI.SortItems.started -= OnSortItemsButtonPerformed;
+            inputActions.UI.SortItems.started -= OnSortItemsButtonPerformed;
         }
 
         public void Dispose()
         {
             UnsubscribeInputActions();
 
-            _inputActions.Disable();
-            _inputActions.Dispose();
+            inputActions.Disable();
+            inputActions.Dispose();
         }
 
        

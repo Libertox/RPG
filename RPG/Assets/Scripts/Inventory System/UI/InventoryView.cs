@@ -14,16 +14,16 @@ namespace InventorySystem.UI
         [SerializeField] private InventoryCategorySelector inventoryCategorySelector;
         [SerializeField] private UIVisualizer[] inventoryVisualizers;
 
-        private PlayerController _playerController;
-        private InputManager _inputManager;
-        private UIViewManager _viewManager;
+        private PlayerController playerController;
+        private InputManager inputManager;
+        private UIViewManager viewManager;
 
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager, UIViewManager viewManager)
         {
-            _playerController = playerController;
-            _inputManager = inputManager;
-            _viewManager = viewManager;
+            this.playerController = playerController;
+            this.inputManager = inputManager;
+            this.viewManager = viewManager;
         }
 
         public override void Initialize()
@@ -33,17 +33,17 @@ namespace InventorySystem.UI
 
         private void OnEnable()
         {
-            _playerController.PlayerInventory.InventoryStorage.OnItemRemoved += OnItemRemovedFromInventory;
-            _playerController.PlayerInventory.InventoryStorage.OnItemAdded += OnItemAddedToInventory;
-            _playerController.PlayerInventory.Equipment.OnItemSwapped += OnItemSwapInInventory;
+            playerController.PlayerInventory.InventoryStorage.OnItemRemoved += OnItemRemovedFromInventory;
+            playerController.PlayerInventory.InventoryStorage.OnItemAdded += OnItemAddedToInventory;
+            playerController.PlayerInventory.Equipment.OnItemSwapped += OnItemSwapInInventory;
         }
 
 
         private void OnDisable()
         {
-            _playerController.PlayerInventory.InventoryStorage.OnItemRemoved -= OnItemRemovedFromInventory;
-            _playerController.PlayerInventory.InventoryStorage.OnItemAdded -= OnItemAddedToInventory;
-            _playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
+            playerController.PlayerInventory.InventoryStorage.OnItemRemoved -= OnItemRemovedFromInventory;
+            playerController.PlayerInventory.InventoryStorage.OnItemAdded -= OnItemAddedToInventory;
+            playerController.PlayerInventory.Equipment.OnItemSwapped -= OnItemSwapInInventory;
         }
 
         private void OnItemSwapInInventory(InventorySlot currentItem, InventorySlot newItem)
@@ -80,10 +80,10 @@ namespace InventorySystem.UI
 
         public override void SubscribeToInputEvents()
         {
-            _inputManager.EnableUIActions(true);
+            inputManager.EnableUIActions(true);
 
-            _inputManager.OnCancelPressed += OpenPreviousView;
-            _inputManager.OnSortItemsPressed += SortGrid;
+            inputManager.OnCancelPressed += OpenPreviousView;
+            inputManager.OnSortItemsPressed += SortGrid;
         }
 
         private void SortGrid()
@@ -93,15 +93,15 @@ namespace InventorySystem.UI
 
         public override void UnsubscribeToInputEvents()
         {
-            _inputManager.EnableUIActions(false);
+            inputManager.EnableUIActions(false);
 
-            _inputManager.OnCancelPressed -= OpenPreviousView;
-            _inputManager.OnSortItemsPressed -= SortGrid;
+            inputManager.OnCancelPressed -= OpenPreviousView;
+            inputManager.OnSortItemsPressed -= SortGrid;
         }
 
         private async void OpenPreviousView()
         {
-            await _viewManager.OpenPreviousView();
+            await viewManager.OpenPreviousView();
         }
 
         private void RefreshInventory()

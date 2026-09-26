@@ -19,22 +19,22 @@ namespace InventorySystem.UI
 
         public InventorySlot Item { get; private set; }
 
-        private PlayerInventory _playerInventory;
-        private PlayerController _playerController;
-        private InputManager _inputManager;
-        private SelectInventorySlotSignal _selectInventorySlotSignal;
-        private DeselectInventorySlotSignal _deselectInventorySlotSignal;
+        private PlayerInventory playerInventory;
+        private PlayerController playerController;
+        private InputManager inputManager;
+        private SelectInventorySlotSignal selectInventorySlotSignal;
+        private DeselectInventorySlotSignal deselectInventorySlotSignal;
 
         [Inject]
         public void Construct(PlayerController playerController, InputManager inputManager, 
             SelectInventorySlotSignal selectInventorySlot, DeselectInventorySlotSignal deselectInventorySlot)
         {
-            _playerInventory = playerController.PlayerInventory;
-            _inputManager = inputManager;
-            _playerController = playerController;
+            playerInventory = playerController.PlayerInventory;
+            this.inputManager = inputManager;
+            this.playerController = playerController;
 
-            _selectInventorySlotSignal = selectInventorySlot;
-            _deselectInventorySlotSignal = deselectInventorySlot;
+            selectInventorySlotSignal = selectInventorySlot;
+            deselectInventorySlotSignal = deselectInventorySlot;
         }
 
         public InventorySlotUI Initialize(InventorySlot item)
@@ -46,47 +46,47 @@ namespace InventorySystem.UI
             amount.SetText(item.Amount.ToString());
             amount.gameObject.SetActive(item.ItemBase.CanStack);
 
-            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > _playerController.Level);
+            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > playerController.Level);
 
             return this;
         }
 
         private void EquipItem()
         {
-            if (_playerInventory.Equipment.TryEquipItem(Item))
+            if (playerInventory.Equipment.TryEquipItem(Item))
             {
-                _deselectInventorySlotSignal.Fire();
+                deselectInventorySlotSignal.Fire();
             }
         }
 
         private void DropItem()
         {
-            _playerInventory.DropItem(Item);
+            playerInventory.DropItem(Item);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (!gameObject.activeSelf) return;
 
-            _selectInventorySlotSignal.Fire(this);
+            selectInventorySlotSignal.Fire(this);
 
-            _inputManager.OnLeftMouseClicked += EquipItem;
-            _inputManager.OnRightMouseClicked += DropItem;
+            inputManager.OnLeftMouseClicked += EquipItem;
+            inputManager.OnRightMouseClicked += DropItem;
         }
 
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _deselectInventorySlotSignal.Fire();
+            deselectInventorySlotSignal.Fire();
 
-            _inputManager.OnLeftMouseClicked -= EquipItem;
-            _inputManager.OnRightMouseClicked -= DropItem;
+            inputManager.OnLeftMouseClicked -= EquipItem;
+            inputManager.OnRightMouseClicked -= DropItem;
         }
 
         private void OnDisable()
         {
-            _inputManager.OnLeftMouseClicked -= EquipItem;
-            _inputManager.OnRightMouseClicked -= DropItem;
+            inputManager.OnLeftMouseClicked -= EquipItem;
+            inputManager.OnRightMouseClicked -= DropItem;
         }
     }
 }

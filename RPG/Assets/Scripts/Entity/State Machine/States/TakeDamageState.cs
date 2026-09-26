@@ -4,16 +4,16 @@ namespace Entity
 {
     public class TakeDamageState : BaseState
     {
-        private readonly IDamageable _damageable;
+        private readonly IDamageable damageable;
 
         public TakeDamageState(EntityController entityController) : base(entityController)
         {
-            _damageable = entityController as IDamageable;
+            damageable = entityController as IDamageable;
         }
 
         public override void OnEnter()
         {
-            IAnimationController animationController = _entityController.GetController<IAnimationController>();
+            IAnimationController animationController = entityController.GetController<IAnimationController>();
 
             animationController.SetGetHitAnimation();
 
@@ -23,7 +23,7 @@ namespace Entity
 
         private void OnAnimationComplete()
         {
-            _damageable?.SetTakeDamge(false);
+            damageable?.SetTakeDamge(false);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Area
         [SerializeField, HideInInspector] private bool isRectangle;
         [SerializeField, HideInInspector] private bool isCircle;
 
-        private Area _patrolArea;
+        private Area patrolArea;
 
         private void OnValidate()
         {
@@ -25,19 +25,19 @@ namespace Area
             isCircle = areaType == AreaType.Circle;
 
             if (isRectangle)
-                _patrolArea = new RectangleArea(transform.position, width, height);
+                patrolArea = new RectangleArea(transform.position, width, height);
             else if(isCircle)
-                _patrolArea = new CircleArea(transform.position, radius);
+                patrolArea = new CircleArea(transform.position, radius);
         }
 
         public Vector3 GetRandomPositionWithin()
         {
-            return _patrolArea.GetRandomPositionWithin();
+            return patrolArea.GetRandomPositionWithin();
         }
 
         private void OnDrawGizmosSelected()
         {
-            _patrolArea.DrawArea(transform.position, Color.white);
+            patrolArea.DrawArea(transform.position, Color.white);
         }
     }
 }

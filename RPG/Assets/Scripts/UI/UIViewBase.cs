@@ -6,7 +6,6 @@ namespace UI
     public abstract class UIViewBase : UIElement<UIViewBase>, IInputListener
     {
         [field: SerializeField] public UIViewSO ViewID { get; private set; }
-
         [field: SerializeField] public bool OpenOnStart { get; private set; }
 
         public virtual void Initialize()

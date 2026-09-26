@@ -21,8 +21,8 @@ namespace InventorySystem.UI
 
         private PlayerInventory playerInventory;
 
-        private Equipment _equipment;
-        private IInventoryStorage _inventoryStorage;
+        private Equipment equipment;
+        private IInventoryStorage inventoryStorage;
 
         [Inject]
         private void Construct(PlayerInventory playerInventory) 
@@ -37,21 +37,21 @@ namespace InventorySystem.UI
             SetIcon(slotCategory.Icon);
             amountLabel.gameObject.SetActive(false);
 
-            _equipment = playerInventory.Equipment;
-            _inventoryStorage = playerInventory.InventoryStorage;
+            equipment = playerInventory.Equipment;
+            inventoryStorage = playerInventory.InventoryStorage;
         }
 
         private void OnEnable()
         {
             button.onClick.AddListener(OnClick);
-            _equipment.OnItemEquipped += HandleItemEquipped;
+            equipment.OnItemEquipped += HandleItemEquipped;
             Refresh();
         }
 
         private void OnDisable()
         {
             button.onClick.RemoveListener(OnClick);
-            _equipment.OnItemEquipped -= HandleItemEquipped;
+            equipment.OnItemEquipped -= HandleItemEquipped;
         }
 
         private void HandleItemEquipped(InventorySlot item, int index)
@@ -69,7 +69,7 @@ namespace InventorySystem.UI
 
         private void Refresh()
         {
-            var item = _equipment.GetEquipped(slotCategory, slotIndex);
+            var item = equipment.GetEquipped(slotCategory, slotIndex);
             SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
             SetAmountLabel(item != null && item.ItemBase.CanStack ? item.Amount : 0);
             SetBackground(item?.ItemBase.Rarity.Presentation);
@@ -94,21 +94,21 @@ namespace InventorySystem.UI
 
         private void OnClick()
         {
-            var item = _equipment.GetEquipped(slotCategory, slotIndex);
+            var item = equipment.GetEquipped(slotCategory, slotIndex);
 
-            if (_equipment.TryUnequipItem(slotCategory, slotIndex))
+            if (equipment.TryUnequipItem(slotCategory, slotIndex))
             {
                 Refresh();
-                _inventoryStorage.AddItemAndNotify(item);
+                inventoryStorage.AddItemAndNotify(item);
             }
                 
         }
 
         public InventorySlot Get()
         {
-            var equippedItem = _equipment.GetEquipped(slotCategory, slotIndex);
+            var equippedItem = equipment.GetEquipped(slotCategory, slotIndex);
 
-            if (_equipment.TryUnequipItem(slotCategory, slotIndex))
+            if (equipment.TryUnequipItem(slotCategory, slotIndex))
             {
                 Refresh();
             }
@@ -123,7 +123,7 @@ namespace InventorySystem.UI
             if (slotCategory != item.ItemBase.EquipmentSlot)
                 return false;
 
-            _equipment.TryEquipItem(item, slotIndex);
+            equipment.TryEquipItem(item, slotIndex);
 
             return true;
         }

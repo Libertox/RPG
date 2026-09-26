@@ -11,12 +11,12 @@ namespace QuestSystem
 
         [SerializeField] private QuestStep questStep;
 
-        private QuestItemFactory _questItemFactory;
+        private QuestItemFactory questItemFactory;
 
         [Inject]
         private void Construct(QuestItemFactory questItemFactory)
         {
-            _questItemFactory = questItemFactory;
+            this.questItemFactory = questItemFactory;
         }
     
         private void Start()
@@ -26,23 +26,23 @@ namespace QuestSystem
 
         private void SpawnItem()
         {
-            _questItemFactory.Create(questItemPrefab, transform.position);
+            questItemFactory.Create(questItemPrefab, transform.position);
         }
     }
 
     public class QuestItemFactory : Factory<ItemInteractable>
     {
-        private DiContainer _container;
+        private DiContainer container;
 
         [Inject]
         private void Construct(DiContainer container)
         {
-            _container = container;
+            this.container = container;
         }
 
         public ItemInteractable Create(ItemInteractable prefab, Vector3 position)
         {
-            return _container.InstantiatePrefabForComponent<ItemInteractable>(prefab, position, Quaternion.identity, null);
+            return container.InstantiatePrefabForComponent<ItemInteractable>(prefab, position, Quaternion.identity, null);
         }
     }
 }

@@ -8,11 +8,11 @@ namespace UI
 {
     public class UIViewManager : MonoBehaviour
     {
-        private Dictionary<UIViewSO, UIViewBase> _views;
+        private Dictionary<UIViewSO, UIViewBase> views;
 
-        private readonly Stack<UIViewBase> _viewsStack = new();
+        private readonly Stack<UIViewBase> viewsStack = new();
 
-        private bool _isOpeningView;
+        private bool isOpeningView;
 
         private void Awake()
         {
@@ -21,13 +21,13 @@ namespace UI
 
         public async Task TryOpenView(UIViewSO menuID, bool closeOpenedViewFirst = false)
         {
-            if (_isOpeningView) return;
+            if (isOpeningView) return;
 
-            _views.TryGetValue(menuID, out var view);
+            views.TryGetValue(menuID, out var view);
 
             if (view == null) return;
 
-            _isOpeningView = true;
+            isOpeningView = true;
 
             UIViewBase peekView = TryPeekView();
             peekView?.UnsubscribeToInputEvents();
@@ -42,9 +42,9 @@ namespace UI
             if (!closeOpenedViewFirst)
                 peekView?.Close();
    
-            _viewsStack.Push(view);
+            viewsStack.Push(view);
 
-            _isOpeningView = false;
+            isOpeningView = false;
 
 
             Debug.Log("Open View: " + view.GetType().Name);
@@ -53,18 +53,18 @@ namespace UI
 
         private UIViewBase TryPeekView()
         {
-            if (_viewsStack.Count == 0) return default;
+            if (viewsStack.Count == 0) return default;
 
-            return _viewsStack.Peek();
+            return viewsStack.Peek();
         }
 
         public async Task OpenPreviousView()
         {
-            if (_isOpeningView) return;
+            if (isOpeningView) return;
 
-            _isOpeningView = true;
+            isOpeningView = true;
 
-            UIViewBase view = _viewsStack.Pop();
+            UIViewBase view = viewsStack.Pop();
             UIViewBase peekView = TryPeekView();
 
             view.UnsubscribeToInputEvents();
@@ -74,7 +74,7 @@ namespace UI
 
             await view.CloseAsync();
 
-            _isOpeningView = false;
+            isOpeningView = false;
 
             Debug.Log("Close View: " + view.GetType().Name);
             Debug.Log("Open View: " + peekView.GetType().Name);
@@ -82,24 +82,24 @@ namespace UI
 
         public void ClearStack()
         {
-            foreach (var view in _viewsStack)
+            foreach (var view in viewsStack)
             {
                 view.UnsubscribeToInputEvents();
                 view.Close();
             }
 
-            _viewsStack.Clear();
+            viewsStack.Clear();
         }
 
         private void GatherViews()
         {
-            _views = new();
+            views = new();
 
             foreach (Transform child in transform)
             {
                 if (child.TryGetComponent(out UIViewBase view))
                 {
-                    _views.Add(view.ViewID, view);
+                    views.Add(view.ViewID, view);
                     view.Initialize();
 
                     if (view.OpenOnStart)
@@ -112,18 +112,18 @@ namespace UI
 
         public void RegisterView(UIViewBase view)
         {
-            if (!_views.ContainsKey(view.ViewID))
+            if (!views.ContainsKey(view.ViewID))
             {
                 view.Initialize();
-                _views.Add(view.ViewID, view);
+                views.Add(view.ViewID, view);
             }
 
         }
 
         public void UnregisterView(UIViewBase view)
         {
-            if (_views.ContainsKey(view.ViewID))
-                _views.Remove(view.ViewID);
+            if (views.ContainsKey(view.ViewID))
+                views.Remove(view.ViewID);
         }
 
 

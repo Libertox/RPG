@@ -14,18 +14,18 @@ namespace InventorySystem.UI
 
         [SerializeField] private ItemHolder itemHolder;
 
-        private InputManager _inputManager;
+        private InputManager inputManager;
 
         [Inject]
         private void Construct(InputManager inputManager)
         {
-            _inputManager = inputManager;
+            this.inputManager = inputManager;
         }
 
         private void Start()
         {
-            _inputManager.OnLeftMouseHoldStarted += OnLeftMouseStartHolded;
-            _inputManager.OnLeftMouseHoldCanceled += OnLeftMouseCancelHolded;
+            inputManager.OnLeftMouseHoldStarted += OnLeftMouseStartHolded;
+            inputManager.OnLeftMouseHoldCanceled += OnLeftMouseCancelHolded;
         }
 
         private void OnLeftMouseCancelHolded()

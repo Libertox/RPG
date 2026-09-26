@@ -8,9 +8,9 @@ namespace Entity
 {
     public class EntityController : MonoBehaviour
     {
-        private Dictionary<Type, IController> _controllers = new();
-        private bool _isDead;
-        public bool IsDead => _isDead;
+        private readonly Dictionary<Type, IController> controllers = new();
+        private bool isDead;
+        public bool IsDead => isDead;
 
         protected virtual void Awake()
         {
@@ -34,13 +34,13 @@ namespace Entity
 
             var type = controller.GetType();
 
-            _controllers[type] = controller;
+            controllers[type] = controller;
 
             foreach (var interfaceType in type.GetInterfaces())
             {
                 if (typeof(IController).IsAssignableFrom(interfaceType))
                 {
-                    _controllers[interfaceType] = controller;
+                    controllers[interfaceType] = controller;
                 }
             }
         }
@@ -49,15 +49,15 @@ namespace Entity
         {
             var controllerType = controller.GetType();
 
-            if (!_controllers.ContainsKey(controllerType))
+            if (!controllers.ContainsKey(controllerType))
                 return;
 
-            _controllers.Remove(controllerType);
+            controllers.Remove(controllerType);
         }
 
         public T GetController<T>() where T : class, IController
         {
-            if (_controllers.TryGetValue(typeof(T), out var controller))
+            if (controllers.TryGetValue(typeof(T), out var controller))
                 return controller as T;
 
             var attribute = typeof(T).GetCustomAttribute<DefaultControllerAttribute>();
@@ -85,19 +85,19 @@ namespace Entity
 
             Debug.LogError($"Created default controller {typeof(T).Name}.");
 
-            _controllers.Add(typeof(T), instance);
+            controllers.Add(typeof(T), instance);
 
             return instance;
         }
 
         public void SetIsDead(bool isDead)
         {
-            _isDead = isDead;
+            this.isDead = isDead;
         }
 
         private void OnDestroy()
         {
-            foreach (var controller in _controllers)
+            foreach (var controller in controllers)
             {
                 if (controller.Value is IDisposable disposable)
                     disposable.Dispose();

@@ -9,17 +9,17 @@ namespace InventorySystem
     {
         [SerializeField] private Loot lootPrefab;
 
-        private ObjectPool<Loot> _lootPools;
+        private ObjectPool<Loot> lootPools;
 
-        private Loot _currentLoot;
-        private PlayerController _playerController;
-        private DiContainer _container;
+        private Loot currentLoot;
+        private PlayerController playerController;
+        private DiContainer container;
 
         [Inject]
         private void Construct(PlayerController playerController, DiContainer container)
         {
-            _playerController = playerController;
-            _container = container;
+            this.playerController = playerController;
+            this.container = container;
          
         }
 
@@ -30,41 +30,41 @@ namespace InventorySystem
 
         private void Start()
         {
-            _playerController.PlayerInventory.OnItemDropped += OnItemDropped;
+            playerController.PlayerInventory.OnItemDropped += OnItemDropped;
         }
 
         private void InitializePool()
         {
-            _lootPools = new ObjectPool<Loot>(OnCreateLoot, OnGetLoot, OnReleaseLoot);
+            lootPools = new ObjectPool<Loot>(OnCreateLoot, OnGetLoot, OnReleaseLoot);
         }
 
         private void OnGetLoot(Loot loot) => loot.gameObject.SetActive(true);
         private void OnReleaseLoot(Loot loot) => loot.gameObject.SetActive(false);
-        private Loot OnCreateLoot() => _container.InstantiatePrefabForComponent<Loot>(lootPrefab).Initalize(this);
+        private Loot OnCreateLoot() => container.InstantiatePrefabForComponent<Loot>(lootPrefab).Initalize(this);
 
         public void ReleaseLoot(Loot loot)
         {
-            if (loot == _currentLoot)
-                _currentLoot = null;
+            if (loot == currentLoot)
+                currentLoot = null;
 
-            _lootPools.Release(loot);
+            lootPools.Release(loot);
         }
 
         private void OnItemDropped(InventorySlot item)
         {
             if (ShouldCreateNewLoot())
             {
-                _currentLoot = _lootPools.Get();
-                _currentLoot.transform.position = _playerController.transform.position;
+                currentLoot = lootPools.Get();
+                currentLoot.transform.position = playerController.transform.position;
             }
 
-            _currentLoot.AddItem(item);
+            currentLoot.AddItem(item);
                 
         }
 
         private bool ShouldCreateNewLoot()
         {
-            return _currentLoot == null || Vector3.Distance(_currentLoot.transform.position, _playerController.transform.position) > 1f;
+            return currentLoot == null || Vector3.Distance(currentLoot.transform.position, playerController.transform.position) > 1f;
         }
     }
 }

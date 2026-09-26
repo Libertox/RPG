@@ -3,8 +3,9 @@ namespace StateMachines
 {
     public interface ITransition
     {
-        public IState To {  get; }
-        public IPredicate Condition { get; }
+        public BaseStateConfig To {  get; }
+        public BaseStateConfig From { get; }
+        public EntityCondition[] Conditions { get; }
 
     }
 }

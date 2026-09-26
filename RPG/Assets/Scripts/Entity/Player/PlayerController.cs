@@ -23,27 +23,14 @@ namespace Entity.Player
         public PlayerInventory PlayerInventory { get; private set; }
         public PlayerData PlayerData => playerData;
 
-        private IState _idleState;
-        private IState _locomotionState;
-        private IState _attackState;
-        private IState _takeDamageState;
-        private IState _dieState;
-
-        private StateMachine _stateMachine;
-
         private InputManager _inputManager;
 
-        private IMotionController _motionController;
-
-        private bool _isMoving;
         private bool _isTakingDamage;
-        private bool _isDead;
-
         private float _health = 10;
 
         [field:SerializeField] public int Level { get; private set; }
 
-        public bool IsDead => _isDead;
+        public bool IsTakingDamage => _isTakingDamage;
 
         [Inject]
         private void Construct(InputManager inputManager, PlayerInventory playerInventory)
@@ -51,82 +38,33 @@ namespace Entity.Player
             PlayerInventory = playerInventory;
             _inputManager = inputManager;
 
-            _inputManager.OnMoveStarted += OnMoveStarted;
-            _inputManager.OnMoveCanceled += OnMoveEnded;
             _inputManager.OnAttackPressed += OnAttackButtonPressed;
         }
 
         private void OnAttackButtonPressed()
         {
-            if (_combatController.IsAttacking || _animationController.IsWaitingForEndAnimation) return;
+            if (GetController<ICombatController>().IsAttacking || GetController<IAnimationController>().IsWaitingForEndAnimation) return;
 
-            _combatController.SetIsAttacking(true);
+            GetController<ICombatController>().SetIsAttacking(true);
         }
 
-        private void OnMoveEnded()
+        protected override void Awake()
         {
-            _isMoving = false;
-        }
+            base.Awake();
 
-        private void OnMoveStarted()
-        {
-            _isMoving = true;
-        }
-
-        private void Awake()
-        {
             SetupRefernces();
-            SetupStateMachine();
         }
 
         private void SetupRefernces()
         {
-            _animationController = new PlayerAnimationController(playerPresentation.GetComponent<Animator>());
-            _motionController = new PlayerMotionController(this, _inputManager, playerData, playerPresentation);
-            _combatController = new MeleeCombatController(attackCollisionPoint, playerData.CombatData);
+            RegisterController(new PlayerMotionController(this, _inputManager, playerData, playerPresentation));
+            RegisterController(new MeleeCombatController(attackCollisionPoint, playerData.CombatData));
         }
 
-        private void SetupStateMachine()
-        {
-            _stateMachine = new StateMachine();
-
-            _idleState = new IdleState(this);
-            _locomotionState = new LocomotionState(this, _motionController);
-            _attackState = new AttackState(this);
-            _takeDamageState = new TakeDamageState(this);
-            _dieState = new DieState(this);
-
-            _stateMachine.AddTransition(_idleState, _locomotionState, new FuncPredicate(() => _isMoving));
-            _stateMachine.AddTransition(_locomotionState, _idleState, new FuncPredicate(() => !_isMoving));
-
-            _stateMachine.AddTransition(_idleState, _attackState, new FuncPredicate(() => _combatController.IsAttacking));
-            _stateMachine.AddTransition(_locomotionState, _attackState, new FuncPredicate(() => _combatController.IsAttacking));
-
-            _stateMachine.AddTransition(_attackState, _idleState, new FuncPredicate(() => !_combatController.IsAttacking));
-
-            _stateMachine.AddTransition(_takeDamageState, _idleState, new FuncPredicate(() => !_isMoving));
-            _stateMachine.AddTransition(_takeDamageState, _locomotionState, new FuncPredicate(() => _isMoving));
-            _stateMachine.AddTransition(_takeDamageState, _attackState, new FuncPredicate(() => _combatController.IsAttacking));
-
-            _stateMachine.AddAnyTransition(_takeDamageState, new FuncPredicate(() => _isTakingDamage));
-            _stateMachine.AddAnyTransition(_dieState, new FuncPredicate(() => _isDead));
-
-            _stateMachine.SetState(_idleState);
-        }
-
-        private void Update()
-        {
-            _stateMachine.Update();
-        }
-
-        private void FixedUpdate()
-        {
-            _stateMachine.FixedUpdate();
-        }
 
         public void TakeDamage(float damage)
         {
-            if (_isDead) return;
+            if (IsDead) return;
 
             _health -= damage;
 
@@ -143,11 +81,6 @@ namespace Entity.Player
         public void SetTakeDamge(bool isTakimgDamge)
         {
             _isTakingDamage = isTakimgDamge;
-        }
-
-        public void SetIsDead(bool isDead)
-        {
-            _isDead = isDead;
         }
 
         public float GetMovementSpeed()

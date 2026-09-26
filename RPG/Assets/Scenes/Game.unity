@@ -1097,13 +1097,15 @@ GameObject:
   - component: {fileID: 659365977}
   - component: {fileID: 659365982}
   - component: {fileID: 659365983}
+  - component: {fileID: 659365984}
+  - component: {fileID: 659365985}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &659365977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1181,6 +1183,45 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &659365984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659365976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0e93612a2c9bb4fbaba5a16b9764a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entity.EntityAnimatorController
+  animator: {fileID: 1156507232}
+--- !u!114 &659365985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659365976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a5e64a4c824034b9d72b656b48540d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachines.StateMachine
+  defaultState: {fileID: 11400000, guid: 10e798039a18bf9499a1a7377330f713, type: 2}
+  transitions:
+  - {fileID: 11400000, guid: 5a2d061e26ef0f748b1000413cc99043, type: 2}
+  - {fileID: 11400000, guid: 6edc0a5879feaab4b9ecf9e4c6e56931, type: 2}
+  - {fileID: 11400000, guid: 826fde25a9c615449826e2b72619d313, type: 2}
+  - {fileID: 11400000, guid: c7468b1a1069f874fb5ab7f1c5e43551, type: 2}
+  - {fileID: 11400000, guid: 4622f6133c7ef20478c821cc3f1e3a24, type: 2}
+  - {fileID: 11400000, guid: 78652e0063dc3f644908620a9a5fea69, type: 2}
+  - {fileID: 11400000, guid: 4b49d21e0d17bc74dbf7bed57652cf86, type: 2}
+  - {fileID: 11400000, guid: 72af8b29226f79b4d98547c4e7202599, type: 2}
+  anyTransitions:
+  - {fileID: 11400000, guid: f7ae322060e603240903427729908758, type: 2}
+  - {fileID: 11400000, guid: 2d290db53f7e55041a24103f1d3350a5, type: 2}
+  entityController: {fileID: 659365977}
 --- !u!224 &732717406 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9040752540320868302, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}
@@ -1539,7 +1580,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
   m_PrefabInstance: {fileID: 1539925079076479852}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1539925079076479853}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b30f5da2d8565f6418f296833ce21a5d, type: 3}
@@ -3478,21 +3519,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1712001998656139361, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6661819237477692141, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.106
-      objectReference: {fileID: 0}
-    - target: {fileID: 8560191391898738384, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8603425933299631374, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3534,75 +3563,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData
-      value: 
-      objectReference: {fileID: 11400000, guid: 37e56e2db1cd7b94a8ea78e01407e1e7, type: 2}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_Name
-      value: Debug
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerInventory
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: <Level>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.movementSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.encumberedSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_ExpectedControlType
-      value: Button
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.maxLiftingCapacity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.<MovementSpeed>k__BackingField
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_SingletonActionBindings.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.<InventorySettings>k__BackingField
-      value: 
-      objectReference: {fileID: 11400000, guid: a2079d24d4b15ee4eadfa5c5213f8e77, type: 2}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: playerData.<MaxLiftingCapacity>k__BackingField
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Id
-      value: ac5c57bf-0909-4e67-a662-963de825bf31
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <Keyboard>/f1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
-      propertyPath: _debug.m_SingletonActionBindings.Array.data[0].m_Action
-      value: Debug
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1539925079076479854}
   m_SourcePrefab: {fileID: 100100000, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+--- !u!1 &1539925079076479853 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6297428251163025965, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+  m_PrefabInstance: {fileID: 1539925079076479852}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1539925079076479854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539925079076479853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a5e64a4c824034b9d72b656b48540d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachines.StateMachine
+  defaultState: {fileID: 11400000, guid: b9f8ccd95914a3c4281dc08d2e8d95fe, type: 2}
+  transitions:
+  - {fileID: 11400000, guid: 4960bf2966195e34690adb145a556e56, type: 2}
+  - {fileID: 11400000, guid: 38aac92d2be12694b933c9cc802c90d4, type: 2}
+  - {fileID: 11400000, guid: 7f16346280cf012459c3460fcc6a1855, type: 2}
+  - {fileID: 11400000, guid: 897ad03e4b1ac624b8a3512a761c66fa, type: 2}
+  - {fileID: 11400000, guid: 8beb8d91416dd844aa3e38d6cfee8b75, type: 2}
+  - {fileID: 11400000, guid: f666713b377aa5e4e99629c0345d5561, type: 2}
+  - {fileID: 11400000, guid: 7f3f2e47b0a0d674b9d2afccfc7b1e18, type: 2}
+  - {fileID: 11400000, guid: 4451f4c2f756c27429389e2c2c06cabd, type: 2}
+  anyTransitions:
+  - {fileID: 11400000, guid: f7ae322060e603240903427729908758, type: 2}
+  - {fileID: 11400000, guid: 2d290db53f7e55041a24103f1d3350a5, type: 2}
+  entityController: {fileID: 949731252}
 --- !u!1001 &5095444954476120088
 PrefabInstance:
   m_ObjectHideFlags: 0

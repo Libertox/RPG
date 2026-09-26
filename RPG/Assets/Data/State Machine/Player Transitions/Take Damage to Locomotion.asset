@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f72b52a7120fb4297da7c698dd5189, type: 3}
+  m_Name: Take Damage to Locomotion
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachines.Transition
+  conditions:
+  - {fileID: 11400000, guid: ffd4f640ffc3cd74d80c6cabd2acb84c, type: 2}
+  toState: {fileID: 11400000, guid: 0ac7557a3c045f747bed84e24d1681c1, type: 2}
+  fromState: {fileID: 11400000, guid: 4473e93f533df5148a6d4e4adb274ac8, type: 2}

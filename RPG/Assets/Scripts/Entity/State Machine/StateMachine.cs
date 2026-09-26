@@ -1,80 +1,104 @@
-﻿using System;
+﻿using Entity;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace StateMachines
 {
-    public class StateMachine
+    public class StateMachine : MonoBehaviour
     {
+        [SerializeField] private BaseStateConfig defaultState;
+        [SerializeField] private Transition[] transitions;
+        [SerializeField] private Transition[] anyTransitions;
+
+        [SerializeField] private EntityController entityController;
+
         private StateNode _current;
-        private readonly Dictionary<Type, StateNode> _nodes = new();
+
+        private readonly Dictionary<BaseStateConfig, StateNode> _nodes = new();
         private readonly HashSet<ITransition> _anyTransitions = new();
 
-        public void Update()
+        private void Start()
+        {
+            foreach (var transition in transitions)
+            {
+                AddTransition(transition);
+            }
+
+            foreach (var transition in anyTransitions)
+            {
+                AddAnyTransition(transition);
+            }
+
+            SetState(defaultState);
+        }
+
+        private void Update()
         {
             var transition = GetTransition();
+
             if (transition != null)
                 ChangeState(transition.To);
 
             _current.State?.Update();
 
-            //Debug.Log(_current?.State.ToString());
+            Debug.Log(_current.State?.ToString());
         }
 
-        public void FixedUpdate()
+        private void FixedUpdate()
         {
             _current.State?.FixedUpdate();
         }
 
-        public void SetState(IState state)
+        public void SetState(BaseStateConfig state)
         {
-            _current = _nodes[state.GetType()];
+            _current = _nodes[state];
             _current.State?.OnEnter();
         }
 
-        private void ChangeState(IState state)
+        private void ChangeState(BaseStateConfig state)
         {
-            if (state == _current.State) return;
+            if (state == _current.StateConfig) return;
 
             var previousState = _current.State;
-            var nextState = _nodes[state.GetType()].State;
+            var nextState = _nodes[state].State;
 
             previousState?.OnExit();
             nextState?.OnEnter();
-            _current = _nodes[state.GetType()];
+            _current = _nodes[state];
         }
 
         private ITransition GetTransition()
         {
             foreach (var transition in _anyTransitions)
-                if (transition.Condition.Evaluate())
+                if (transition.Conditions.Evaluate(entityController))
                     return transition;
 
             foreach (var transition in _current.Transitions)
-                if (transition.Condition.Evaluate())
+                if (transition.Conditions.Evaluate(entityController))
                     return transition;
 
             return null;
         }
 
-        public void AddTransition(IState from, IState to, IPredicate condition)
+        public void AddTransition(Transition transition)
         {
-            GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
+            GetOrAddNode(transition.From).AddTransition(transition);
         }
 
-        public void AddAnyTransition(IState to, IPredicate condition)
+        public void AddAnyTransition(Transition transition)
         {
-            _anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
+            _anyTransitions.Add(transition);
+            GetOrAddNode(transition.To);
         }
 
-        private StateNode GetOrAddNode(IState state)
+        private StateNode GetOrAddNode(BaseStateConfig state)
         {
-            var node = _nodes.GetValueOrDefault(state.GetType());
+            var node = _nodes.GetValueOrDefault(state);
 
             if (node == null)
             {
-                node = new StateNode(state);
-                _nodes.Add(state.GetType(), node);
+                node = new StateNode(state, entityController);
+                _nodes.Add(state, node);
             }
 
             return node;
@@ -82,18 +106,20 @@ namespace StateMachines
 
         private class StateNode
         {
+            public BaseStateConfig StateConfig { get; }
             public IState State { get; }
-            public HashSet<ITransition> Transitions { get; }
+            public HashSet<Transition> Transitions { get; }
 
-            public StateNode(IState state)
+            public StateNode(BaseStateConfig stateConfig, EntityController entityController)
             {
-                State = state;
-                Transitions = new HashSet<ITransition>();
+                StateConfig = stateConfig;
+                State = stateConfig.CreateState(entityController);
+                Transitions = new HashSet<Transition>();
             }
 
-            public void AddTransition(IState to, IPredicate condition)
+            public void AddTransition(Transition transition)
             {
-                Transitions.Add(new Transition(to, condition));
+                Transitions.Add(transition);
             }
         }
 

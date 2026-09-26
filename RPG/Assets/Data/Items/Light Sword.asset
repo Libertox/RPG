@@ -16,7 +16,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 728709007f0360249a1c6ae249c1ff85, type: 3}
   <Category>k__BackingField: {fileID: 11400000, guid: 875955059c278ab41bbec0d38b0e06b8, type: 2}
   <Rarity>k__BackingField: {fileID: 11400000, guid: 019b065d17dc761479c4a58d80405115, type: 2}
-  <Weight>k__BackingField: 12
+  <Weight>k__BackingField: 6
   <Gold>k__BackingField: 32
   <RequiredLevel>k__BackingField: 1
   <InventorySize>k__BackingField: {x: 1, y: 1}

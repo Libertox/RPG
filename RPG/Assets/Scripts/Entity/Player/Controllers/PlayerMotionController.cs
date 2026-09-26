@@ -1,10 +1,11 @@
 ﻿using InputSystem;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Entity.Player
 {
-    public class PlayerMotionController : IMotionController
+    public class PlayerMotionController : IMotionController, IDisposable
     {
         private readonly InputManager _inputManager;
         private readonly NavMeshAgent _agent;
@@ -13,6 +14,9 @@ namespace Entity.Player
         private readonly PlayerController _playerController;
 
         private float _turnSmoothVelocity;
+        private bool _isMoving;
+
+        public bool IsMoving => _isMoving;
 
         public PlayerMotionController(PlayerController controller, InputManager inputManager,
             PlayerData playerMovementData, Transform playerPresentation)
@@ -22,8 +26,21 @@ namespace Entity.Player
             _movementData = playerMovementData;
             _playerPresentation = playerPresentation;
             _playerController = controller;
+
+            _inputManager.OnMoveStarted += OnMoveStarted;
+            _inputManager.OnMoveCanceled += OnMoveCanceled;
         }
-      
+
+        private void OnMoveCanceled()
+        {
+            _isMoving = false;
+        }
+
+        private void OnMoveStarted()
+        {
+            _isMoving = true;
+        }
+
         public void Move()
         {
             bool isMove = _inputManager.MoveDirection != Vector2.zero;
@@ -47,6 +64,12 @@ namespace Entity.Player
                                          _movementData.RotationSpeed * Time.deltaTime);
 
             _playerPresentation.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+        }
+
+        public void Dispose()
+        {
+            _inputManager.OnMoveStarted -= OnMoveStarted;
+            _inputManager.OnMoveCanceled -= OnMoveCanceled;
         }
     }
 }

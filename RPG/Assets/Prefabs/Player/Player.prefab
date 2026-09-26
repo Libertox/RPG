@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2865087963724332008}
   - component: {fileID: 3605570324687053527}
   - component: {fileID: 2577112384445274926}
+  - component: {fileID: 3571797329179877589}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -50,15 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPresentation: {fileID: 86334268435367112}
   attackCollisionPoint: {fileID: 8364789285035231029}
-  playerData:
-    <MovementSpeed>k__BackingField: 2.5
-    <RotationSpeed>k__BackingField: 6
-    <CombatData>k__BackingField:
-      <TargetLayerMask>k__BackingField:
-        serializedVersion: 2
-        m_Bits: 128
-      <AttackRange>k__BackingField: 2
-      <Damage>k__BackingField: 3
+  playerData: {fileID: 11400000, guid: 37e56e2db1cd7b94a8ea78e01407e1e7, type: 2}
+  <Level>k__BackingField: 2
 --- !u!114 &2865087963724332008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,6 +114,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3571797329179877589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6297428251163025965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba942e8a5e396c40af2e8550300c114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Entity.Player.PlayerAnimationController
+  animator: {fileID: 484139100645274002}
 --- !u!1 &8592425476947362606
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +253,10 @@ PrefabInstance:
     - target: {fileID: 2744017060783973484, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855922900249034057, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.106
       objectReference: {fileID: 0}
     - target: {fileID: 2875515774379764080, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
       propertyPath: m_Layer
@@ -466,6 +477,11 @@ PrefabInstance:
 --- !u!4 &86334268435367112 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8855052669661678444, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
+  m_PrefabInstance: {fileID: 8922140983148646308}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &484139100645274002 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9036980633323257398, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
   m_PrefabInstance: {fileID: 8922140983148646308}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1499531048953421768 stripped

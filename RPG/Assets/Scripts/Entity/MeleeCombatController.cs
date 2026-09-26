@@ -1,6 +1,4 @@
-﻿
-
-using Entity.Player;
+﻿using Entity.Player;
 using UnityEngine;
 
 namespace Entity

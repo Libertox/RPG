@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f72b52a7120fb4297da7c698dd5189, type: 3}
+  m_Name: Attack to Idle
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachines.Transition
+  conditions:
+  - {fileID: 11400000, guid: 6bc5c1dee03c6b945891f00a026e0ebc, type: 2}
+  toState: {fileID: 11400000, guid: b9f8ccd95914a3c4281dc08d2e8d95fe, type: 2}
+  fromState: {fileID: 11400000, guid: 2226ae6a7ce619343913b6f82b018699, type: 2}

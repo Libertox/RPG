@@ -21,4 +21,4 @@ MonoBehaviour:
       m_Bits: 128
     <AttackRange>k__BackingField: 2
     <Damage>k__BackingField: 4
-  <MaxLiftingCapacity>k__BackingField: 10
+  <MaxLiftingCapacity>k__BackingField: 100

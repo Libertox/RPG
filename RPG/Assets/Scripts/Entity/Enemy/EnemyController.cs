@@ -8,7 +8,7 @@ using Area;
 
 namespace Entity.Enemy
 {
-    public class EnemyController : EntityController, IDamageable
+    public class EnemyController : EntityController, IDamageable, IPatrolable, IPlayerFollower
     {
         [SerializeField] private PatrolArea patrolArea;
 
@@ -18,22 +18,16 @@ namespace Entity.Enemy
 
         [SerializeField] private Transform attackCollisionPoint;
 
-        private IState _patrolState;
-        private IState _idleState;
-        private IState _followState;
-        private IState _attackState;
-        private IState _takeDamageState;
-        private IState _dieState;
-
         private NavMeshAgent _agent;
-        private StateMachine _stateMachine;
-
         private bool _isPatroling;
         private bool _isFollowing;
         private bool _isTakingDamage;
-        private bool _isDead;
 
         private PlayerController _playerController;
+        public PatrolArea PatrolArea => patrolArea;
+        public bool IsTakingDamage => _isTakingDamage;
+        public bool IsPatroling => _isPatroling;
+        public bool IsFollowing => _isFollowing;
 
         private float _health = 8;
 
@@ -43,10 +37,11 @@ namespace Entity.Enemy
             _playerController = player;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             InitializeAgent();
-            SetupStateMachine();
         }
 
         private void InitializeAgent()
@@ -56,46 +51,13 @@ namespace Entity.Enemy
             _agent.speed = enemyData.MovementSpeed;
             _agent.angularSpeed = enemyData.RotationSpeed;
             _agent.acceleration = enemyData.Acceleration;
-
-            _animationController = new EntityAnimatorController(animator);
-            _combatController = new MeleeCombatController(attackCollisionPoint, enemyData.CombatData);
-        }
-
-        private void SetupStateMachine() 
-        {
             _isPatroling = true;
 
-            _stateMachine = new StateMachine();
-
-            _patrolState = new PatrolState(this, patrolArea);
-            _idleState = new WaitingState(this, enemyData.WaitingTime);
-            _followState = new FollowState(this);
-            _attackState = new AttackState(this);
-            _takeDamageState = new TakeDamageState(this);
-            _dieState = new DieState(this);
-
-            _stateMachine.AddTransition(_idleState, _patrolState, new FuncPredicate(() => _isPatroling));
-            _stateMachine.AddTransition(_patrolState, _idleState, new FuncPredicate(() => !_isPatroling));
-
-            _stateMachine.AddTransition(_idleState, _followState, new FuncPredicate(() => _isFollowing));
-            _stateMachine.AddTransition(_patrolState, _followState, new FuncPredicate(() => _isFollowing));
-
-            _stateMachine.AddTransition(_followState, _patrolState, new FuncPredicate(() => !_isFollowing));
-
-            _stateMachine.AddTransition(_followState, _attackState, new FuncPredicate(() => _combatController.IsAttacking));
-            _stateMachine.AddTransition(_attackState, _followState, new FuncPredicate(() => !_combatController.IsAttacking));
-
-            _stateMachine.AddTransition(_takeDamageState, _followState, new FuncPredicate(() => !_isTakingDamage));
-
-            _stateMachine.AddAnyTransition(_takeDamageState, new FuncPredicate(() => _isTakingDamage));
-            _stateMachine.AddAnyTransition(_dieState, new FuncPredicate(() => _isDead));
-
-            _stateMachine.SetState(_patrolState);
+            RegisterController(new MeleeCombatController(attackCollisionPoint, enemyData.CombatData));
         }
 
         private void Update()
         {
-            _stateMachine.Update();
             FindFollowTarget();
         }
 
@@ -134,7 +96,7 @@ namespace Entity.Enemy
 
         public void TakeDamage(float damage)
         {
-            if (_isDead) return;
+            if (IsDead) return;
 
             _health -= damage;
 
@@ -149,22 +111,10 @@ namespace Entity.Enemy
             _isTakingDamage = isTakimgDamge;
         }
 
-        public void SetIsDead(bool isDead)
-        {
-            _isDead = isDead;
-        }
-
         public void SetPatroling(bool isPatroling)
         {
             _isPatroling = isPatroling;
         }
-
-        public override void Destroy()
-        {
-
-        }
-
-
 
     }
 }

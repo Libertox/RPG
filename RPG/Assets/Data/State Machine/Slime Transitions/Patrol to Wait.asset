@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f72b52a7120fb4297da7c698dd5189, type: 3}
+  m_Name: Patrol to Wait
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachines.Transition
+  conditions:
+  - {fileID: 11400000, guid: 68313905d5a17f547a971005a8b7e169, type: 2}
+  fromState: {fileID: 11400000, guid: 10e798039a18bf9499a1a7377330f713, type: 2}
+  toState: {fileID: 11400000, guid: 60302a7d2a3bb3647b7fb1455d98011e, type: 2}

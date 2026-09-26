@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: Armor
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.ItemBase
   <Name>k__BackingField: Armor
-  <Description>k__BackingField: Mushroom
   <Icon>k__BackingField: {fileID: 21300000, guid: 261dd1f8f1582d440a8f3447e25e5c03, type: 3}
   <Category>k__BackingField: {fileID: 11400000, guid: ce6085086c405134cbb4dfaf0a8a318e, type: 2}
   <Rarity>k__BackingField: {fileID: 11400000, guid: 77b5bb0be0a97914db35019512cd2c02, type: 2}
-  <Weight>k__BackingField: 11
+  <Weight>k__BackingField: 10
   <Gold>k__BackingField: 30
   <RequiredLevel>k__BackingField: 1
   <InventorySize>k__BackingField: {x: 1, y: 1}
   <CanEquip>k__BackingField: 1
-  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 73e7cbe0aa937754ab0cd343f364e3e5, type: 2}
+  <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: 697a36ba06138ce4b81d9c028e275d60, type: 2}
   <CanStack>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1

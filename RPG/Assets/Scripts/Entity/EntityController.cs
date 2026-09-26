@@ -8,13 +8,19 @@ namespace Entity
 {
     public class EntityController : MonoBehaviour
     {
+        [SerializeField] protected EntityData entityData;
+
         private readonly Dictionary<Type, IController> controllers = new();
         private bool isDead;
+
+        public EntityStatistic Statistic { get; private set; }
         public bool IsDead => isDead;
 
         protected virtual void Awake()
         {
             GatherControllers();
+
+            Statistic = new EntityStatistic(entityData);
         }
 
         private void GatherControllers()

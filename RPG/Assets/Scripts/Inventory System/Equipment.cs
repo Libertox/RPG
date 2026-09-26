@@ -50,7 +50,7 @@ namespace InventorySystem
             if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
                 return false;
 
-            if (inventoryItem.ItemBase.RequiredLevel > playerController.Level)
+            if (inventoryItem.ItemBase.RequiredLevel > playerController.Statistic.Level.Value)
                 return false;
 
             EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;

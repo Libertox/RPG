@@ -10,7 +10,6 @@ namespace Entity.Enemy
     public class EnemyController : EntityController, IDamageable, IPatrolable, IPlayerFollower
     {
         [SerializeField] private PatrolArea patrolArea;
-        [SerializeField] private EnemyData enemyData;
         [SerializeField] private Transform attackCollisionPoint;
 
         private NavMeshAgent _agent;
@@ -18,13 +17,13 @@ namespace Entity.Enemy
         private bool isFollowing;
         private bool isTakingDamage;
 
+        private EnemyData EnemyData => (EnemyData) entityData;
         private PlayerController playerController;
         public PatrolArea PatrolArea => patrolArea;
         public bool IsTakingDamage => isTakingDamage;
         public bool IsPatroling => isPatroling;
         public bool IsFollowing => isFollowing;
 
-        private float health = 8;
 
         [Inject]
         private void Construct(PlayerController player)
@@ -43,12 +42,12 @@ namespace Entity.Enemy
         {
             _agent = GetComponent<NavMeshAgent>();
 
-            _agent.speed = enemyData.MovementSpeed;
-            _agent.angularSpeed = enemyData.RotationSpeed;
-            _agent.acceleration = enemyData.Acceleration;
+            _agent.speed = EnemyData.MovementSpeed;
+            _agent.angularSpeed = EnemyData.RotationSpeed;
+            _agent.acceleration = EnemyData.Acceleration;
             isPatroling = true;
 
-            RegisterController(new MeleeCombatController(attackCollisionPoint, enemyData.CombatData));
+            RegisterController(new MeleeCombatController(attackCollisionPoint, EnemyData.CombatData));
         }
 
         private void Update()
@@ -76,7 +75,7 @@ namespace Entity.Enemy
 
             float distance = Vector3.Distance(playerController.transform.position, transform.position);
 
-            isFollowing = distance < enemyData.PlayerDetectionRadius;
+            isFollowing = distance < EnemyData.PlayerDetectionRadius;
         }
 
         public void MoveTowardsTarget()
@@ -93,9 +92,9 @@ namespace Entity.Enemy
         {
             if (IsDead) return;
 
-            health -= damage;
+            Statistic.Health.Subtract(damage);
 
-            if (health <= 0)
+            if (Statistic.Health.Value <= 0)
                 SetIsDead(true);
             else
                 SetTakeDamge(true);

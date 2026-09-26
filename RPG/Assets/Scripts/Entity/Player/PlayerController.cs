@@ -1,6 +1,5 @@
 ﻿using InputSystem;
 using InventorySystem;
-using StateMachines;
 using System;
 using UnityEngine;
 using Zenject;
@@ -14,23 +13,16 @@ namespace Entity.Player
         [SerializeField] private Transform playerPresentation;
         [SerializeField] private Transform attackCollisionPoint;
 
-        [Header("Settings")]
-        [SerializeField] private PlayerData playerData;
+        private InputManager inputManager;
+        private bool isTakingDamage;
 
         public Vector3 Position => transform.localPosition;
         public Quaternion Rotation => playerPresentation.rotation;
-
-        public PlayerInventory PlayerInventory { get; private set; }
-        public PlayerData PlayerData => playerData;
-
-        private InputManager inputManager;
-
-        private bool isTakingDamage;
-        private float health = 10;
-
-        [field:SerializeField] public int Level { get; private set; }
-
         public bool IsTakingDamage => isTakingDamage;
+        public PlayerInventory PlayerInventory { get; private set; }
+        public PlayerData PlayerData => (PlayerData)entityData;
+
+
 
         [Inject]
         private void Construct(InputManager inputManager, PlayerInventory playerInventory)
@@ -57,8 +49,8 @@ namespace Entity.Player
 
         private void SetupRefernces()
         {
-            RegisterController(new PlayerMotionController(this, inputManager, playerData, playerPresentation));
-            RegisterController(new MeleeCombatController(attackCollisionPoint, playerData.CombatData));
+            RegisterController(new PlayerMotionController(this, inputManager, PlayerData, playerPresentation));
+            RegisterController(new MeleeCombatController(attackCollisionPoint, PlayerData.CombatData));
         }
 
 
@@ -66,9 +58,9 @@ namespace Entity.Player
         {
             if (IsDead) return;
 
-            health -= damage;
+            Statistic.Health.Subtract(damage);
 
-            if (health <= 0) Die();
+            if (Statistic.Health.Value <= 0) Die();
             else SetTakeDamge(true);
         }
 
@@ -85,8 +77,8 @@ namespace Entity.Player
 
         public float GetMovementSpeed()
         {
-            float speed = PlayerInventory.Weight >= playerData.MaxLiftingCapacity 
-                ? playerData.EncumberedSpeed : playerData.MovementSpeed;
+            float speed = PlayerInventory.Weight >= PlayerData.MaxLiftingCapacity 
+                ? PlayerData.EncumberedSpeed : PlayerData.MovementSpeed;
 
             return speed;
         }

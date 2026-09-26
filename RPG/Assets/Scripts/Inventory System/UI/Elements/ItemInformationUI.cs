@@ -41,7 +41,7 @@ namespace InventorySystem.UI
             rarityName.SetText(item.Rarity.Name);
             rarityName.color = item.Rarity.Color;
 
-            Color requiredLevelColor = item.RequiredLevel > playerController.Level ? worseComparisonColor : itemName.color;
+            Color requiredLevelColor = item.RequiredLevel > playerController.Statistic.Level.Value ? worseComparisonColor : itemName.color;
             string levelColor = ColorUtility.ToHtmlStringRGB(requiredLevelColor);
             requiredLevelLabel.SetText($"Required Level: <color=#{levelColor}>{item.RequiredLevel}</color>");
             weightLabel.SetText(item.Weight.ToString());

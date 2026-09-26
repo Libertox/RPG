@@ -65,7 +65,7 @@ namespace InventorySystem.UI
 
             if (node == null) return null;
 
-            if (node.Slot.Item.ItemBase.RequiredLevel > playerController.Level)
+            if (node.Slot.Item.ItemBase.RequiredLevel > playerController.Statistic.Level.Value)
                 return null;
 
             return node.Slot.Item;

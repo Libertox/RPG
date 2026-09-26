@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   <MovementSpeed>k__BackingField: 2
-  <RotationSpeed>k__BackingField: 360
-  <Acceleration>k__BackingField: 8
-  <WaitingTime>k__BackingField: 8
-  <PlayerDetectionRadius>k__BackingField: 4
+  <BaseHealth>k__BackingField: 10
+  <BaseLevel>k__BackingField: 1
   <CombatData>k__BackingField:
     <TargetLayerMask>k__BackingField:
       serializedVersion: 2
       m_Bits: 256
     <AttackRange>k__BackingField: 1
     <Damage>k__BackingField: 4
+  <RotationSpeed>k__BackingField: 360
+  <Acceleration>k__BackingField: 8
+  <PlayerDetectionRadius>k__BackingField: 4

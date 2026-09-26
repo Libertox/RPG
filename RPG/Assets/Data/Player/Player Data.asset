@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Player Data
   m_EditorClassIdentifier: Assembly-CSharp::Entity.Player.PlayerData
   <MovementSpeed>k__BackingField: 4
-  <EncumberedSpeed>k__BackingField: 2
-  <RotationSpeed>k__BackingField: 3
+  <BaseHealth>k__BackingField: 100
+  <BaseLevel>k__BackingField: 1
   <CombatData>k__BackingField:
     <TargetLayerMask>k__BackingField:
       serializedVersion: 2
       m_Bits: 128
     <AttackRange>k__BackingField: 2
     <Damage>k__BackingField: 4
+  <EncumberedSpeed>k__BackingField: 2
+  <RotationSpeed>k__BackingField: 3
   <MaxLiftingCapacity>k__BackingField: 100

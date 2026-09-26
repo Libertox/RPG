@@ -46,7 +46,7 @@ namespace InventorySystem.UI
             amount.SetText(item.Amount.ToString());
             amount.gameObject.SetActive(item.ItemBase.CanStack);
 
-            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > playerController.Level);
+            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > playerController.Statistic.Level.Value);
 
             return this;
         }

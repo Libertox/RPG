@@ -1118,8 +1118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592100bb9f8347040ac6243fd323cc0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityData: {fileID: 11400000, guid: 0e409de81ea81ab4ca70f95f0960425f, type: 2}
   patrolArea: {fileID: 1500670001}
-  enemyData: {fileID: 11400000, guid: 0e409de81ea81ab4ca70f95f0960425f, type: 2}
   attackCollisionPoint: {fileID: 638636908}
 --- !u!4 &659365981
 Transform:
@@ -3562,6 +3562,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9062629941647329015, guid: 305fde7a26156d94294ab141b12189f0, type: 3}
+      propertyPath: entityData
+      value: 
+      objectReference: {fileID: 11400000, guid: 37e56e2db1cd7b94a8ea78e01407e1e7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

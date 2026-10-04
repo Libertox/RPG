@@ -10,6 +10,7 @@ namespace Entity
         public EntityStatistic(EntityData entityData)
         {
             Health = new ObservableFloat(entityData.BaseHealth);
+            Level = new ObservableInt(entityData.BaseLevel);
         }
 
     }

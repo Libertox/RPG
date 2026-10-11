@@ -3,20 +3,14 @@ using Entity;
 
 namespace InventorySystem.StatisticModifier
 {
-    public class AttackDamageModifier : IStatisticModifier
+    public class AttackDamageModifier : StatisticModifier
     {
-        private readonly IValueModifier valueModifier;
-        private readonly float modifierValue;
-
-        private float originalValue;
-
-        public AttackDamageModifier(ModifierType modifierType,  float modifierValue)
+        public AttackDamageModifier(ModifierType modifierType,  float modifierValue) : base(modifierType, modifierValue)
         {
-            valueModifier = ValueModifierFactory.Create(modifierType);
-            this.modifierValue = modifierValue;
+        
         }
 
-        public void Apply(EntityStatistic entityStatistic)
+        public override void Apply(EntityStatistic entityStatistic)
         {
             originalValue = entityStatistic.AttackDamage.Value;
 
@@ -25,7 +19,7 @@ namespace InventorySystem.StatisticModifier
             entityStatistic.AttackDamage.Set(modifiedValue);
         }
 
-        public void Revert(EntityStatistic entityStatistic)
+        public override void Revert(EntityStatistic entityStatistic)
         {
             float modifiedValue = valueModifier.Apply(originalValue, modifierValue);
 

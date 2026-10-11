@@ -3,20 +3,14 @@ using Utility;
 
 namespace InventorySystem.StatisticModifier
 {
-    public class HealthModifier : IStatisticModifier
+    public class HealthModifier : StatisticModifier
     {
-        private readonly IValueModifier valueModifier;
-        private readonly float modifierValue;
-
-        private float originalValue;
-
-        public HealthModifier(ModifierType modifierType, float modifierValue)
+        public HealthModifier(ModifierType modifierType, float modifierValue) : base(modifierType, modifierValue)
         {
-            valueModifier = ValueModifierFactory.Create(modifierType);
-            this.modifierValue = modifierValue;
+   
         }
 
-        public void Apply(EntityStatistic entityStatistic)
+        public override void Apply(EntityStatistic entityStatistic)
         {
             originalValue = entityStatistic.Health.Value;
 
@@ -25,7 +19,7 @@ namespace InventorySystem.StatisticModifier
             entityStatistic.Health.Set(modifiedValue);
         }
 
-        public void Revert(EntityStatistic entityStatistic)
+        public override void Revert(EntityStatistic entityStatistic)
         {
             float modifiedValue = valueModifier.Apply(originalValue, modifierValue);
 

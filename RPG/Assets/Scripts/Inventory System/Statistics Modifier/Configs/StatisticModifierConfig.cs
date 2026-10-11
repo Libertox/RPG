@@ -14,6 +14,6 @@ namespace InventorySystem.StatisticModifier
         [field: SerializeField, HideIf(nameof(IsRangeModifier))] public float ModifierValue { get; private set; }
         [field: SerializeField, ShowIf(nameof(IsRangeModifier))] public RandomValue ModifierValueRange {  get; private set; }
 
-        public abstract IStatisticModifier Create();
+        public abstract StatisticModifier Create();
     }
 }

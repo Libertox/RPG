@@ -1,5 +1,4 @@
 ﻿using Entity;
-using InventorySystem.StatisticModifier;
 using System.Collections.Generic;
 
 namespace InventorySystem
@@ -7,7 +6,7 @@ namespace InventorySystem
     public class InventorySlot
     {
         public ItemConfigBase ItemBase { get; }
-        public List<IStatisticModifier> statisticModifiers;
+        public List<StatisticModifier.StatisticModifier> statisticModifiers;
         public int Amount;
 
         public InventorySlot(ItemConfigBase itemBase, int amount)
@@ -21,15 +20,18 @@ namespace InventorySystem
 
         private void SetupStatisticModifers(ItemConfigBase itemBase)
         {
-            if (itemBase is IStatModifierProvider statModifierProvider)
-            {
-                statisticModifiers.Add(statModifierProvider.MainStatisticModifier.Create());
+            if (itemBase.MainStatisticModifier)
+                statisticModifiers.Add(itemBase.MainStatisticModifier.Create());
 
-                foreach (var modifier in statModifierProvider.AdditionalStatisticModifiers)
-                {
-                    statisticModifiers.Add(modifier.Create());
-                }
+            foreach (var modifier in itemBase.AdditionalStatisticModifiers)
+            {
+                statisticModifiers.Add(modifier.Create());
             }
+        }
+
+        public List<StatisticModifier.StatisticModifier> GetStatisticModifiers()
+        {
+            return statisticModifiers;
         }
 
         public void ApplyAllModifiers(EntityStatistic entityStatistic)

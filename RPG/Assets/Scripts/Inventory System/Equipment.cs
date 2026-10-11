@@ -1,6 +1,8 @@
 ﻿using Entity.Player;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
 namespace InventorySystem
 {
@@ -27,7 +29,7 @@ namespace InventorySystem
 
             if (inventorySettings == null) return;
 
-            foreach(var category in inventorySettings.MaxEquipmentSlotsAmount)
+            foreach (var category in inventorySettings.MaxEquipmentSlotsAmount)
             {
                 equipmentItems.Add(category.Key, new InventorySlot[category.Value]);
             }
@@ -39,7 +41,7 @@ namespace InventorySystem
                 return false;
 
             EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;
-            int slot = GetFreeConsumableSlot(category);
+            int slot = GetEmptySlotIndex(category);
 
             return TryEquipItem(inventoryItem, slot);
         }
@@ -81,10 +83,12 @@ namespace InventorySystem
 
             OnItemEquipped?.Invoke(inventoryItem, slot);
 
+            RefreshItemModifiers();
+
             return true;
         }
 
-        private int GetFreeConsumableSlot(EquipmentSlotCategory category)
+        private int GetEmptySlotIndex(EquipmentSlotCategory category)
         {
             for (int i = 0; i < equipmentItems[category].Length; i++)
             {
@@ -95,13 +99,39 @@ namespace InventorySystem
             return INVALID_SLOT;
         }
 
+        private void RefreshItemModifiers()
+        {
+            List<StatisticModifier.StatisticModifier> statisticModifiers = new();
+
+            foreach (var item in equipmentItems)
+            {
+                for (int i = 0; i < item.Value.Length; i++)
+                {
+                    if (item.Value[i] == null) continue;
+
+                    item.Value[i].RevertAllModifiers(playerController.Statistic);
+
+                    statisticModifiers.AddRange(item.Value[i].GetStatisticModifiers());
+                }            
+            }
+
+            statisticModifiers = statisticModifiers.OrderByDescending(modifier => modifier.Type).ToList();
+
+            foreach (var modifier in statisticModifiers)
+            {
+                Debug.Log(modifier.Type);
+                modifier.Apply(playerController.Statistic);
+            }
+                      
+        }
+
         public bool TryUnequipItem(EquipmentSlotCategory slotCategory, int slotIndex)
         {
             if (slotIndex < 0) return false;
 
             var item = equipmentItems[slotCategory][slotIndex];
 
-            if(item == null) return false;
+            if (item == null) return false;
 
             CurrentWeight -= item.ItemBase.Weight;
 
@@ -110,6 +140,8 @@ namespace InventorySystem
             OnItemUnequipped?.Invoke(item);
             equipmentItems[slotCategory][slotIndex] = null;
 
+            RefreshItemModifiers();
+
             return true;
         }
 
@@ -117,11 +149,5 @@ namespace InventorySystem
         {
             return equipmentItems[slotCategory][slotIndex];
         }
-
-        public bool IsSlotOccupied(EquipmentSlotCategory slotCategory, int slotIndex)
-        {
-            return equipmentItems[slotCategory][slotIndex] != null;
-        }
-
     }
 }

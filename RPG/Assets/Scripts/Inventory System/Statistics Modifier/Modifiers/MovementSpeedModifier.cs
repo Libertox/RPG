@@ -3,20 +3,14 @@ using Utility;
 
 namespace InventorySystem.StatisticModifier
 {
-    public class MovementSpeedModifier : IStatisticModifier
+    public class MovementSpeedModifier : StatisticModifier
     {
-        private readonly IValueModifier valueModifier;
-        private readonly float modifierValue;
-
-        private float originalValue;
-
-        public MovementSpeedModifier(ModifierType modifierType, float modifierValue)
+        public MovementSpeedModifier(ModifierType modifierType, float modifierValue) : base(modifierType, modifierValue)
         {
-            valueModifier = ValueModifierFactory.Create(modifierType);
-            this.modifierValue = modifierValue;
+
         }
 
-        public void Apply(EntityStatistic entityStatistic)
+        public override void Apply(EntityStatistic entityStatistic)
         {
             originalValue = entityStatistic.MovementSpeed.Value;
 
@@ -25,7 +19,7 @@ namespace InventorySystem.StatisticModifier
             entityStatistic.MovementSpeed.Set(modifiedValue);
         }
 
-        public void Revert(EntityStatistic entityStatistic)
+        public override void Revert(EntityStatistic entityStatistic)
         {
             float modifiedValue = valueModifier.Apply(originalValue, modifierValue);
 

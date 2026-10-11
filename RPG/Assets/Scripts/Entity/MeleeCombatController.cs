@@ -8,22 +8,24 @@ namespace Entity
 
         private readonly Transform weaponOrigin;
         private readonly Collider[] targets;
-        private readonly CombatData combatData;
+        private readonly EntityStatistic entity;
+        private readonly LayerMask targetsLayerMask;
 
         public bool IsAttacking => isAttacking;
 
         private bool isAttacking;
 
-        public MeleeCombatController(Transform weaponOrigin, CombatData combatData)
+        public MeleeCombatController(Transform weaponOrigin, EntityStatistic combatData, LayerMask targetsLayerMask)
         {
             this.weaponOrigin = weaponOrigin;
             targets = new Collider[MAX_TARGET];
-            this.combatData = combatData;
+            this.entity = combatData;
+            this.targetsLayerMask = targetsLayerMask;
         }
 
         public void Attack()
         {
-            int targetCount = Physics.OverlapSphereNonAlloc(weaponOrigin.position, combatData.AttackRange, targets, combatData.TargetLayerMask);
+            int targetCount = Physics.OverlapSphereNonAlloc(weaponOrigin.position, entity.AttackRange.Value, targets, targetsLayerMask);
 
             if (targetCount == 0) return;
 
@@ -31,7 +33,7 @@ namespace Entity
             {
                 if (targets[i].TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(combatData.Damage);
+                    damageable.TakeDamage(entity.AttackDamage.Value);
                 }
             }
         }

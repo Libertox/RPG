@@ -1,7 +1,6 @@
 ﻿using Entity.Player;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace InventorySystem
 {
@@ -62,6 +61,8 @@ namespace InventorySystem
 
             if (replaced != null)
             {
+                replaced.RevertAllModifiers(playerController.Statistic);
+
                 OnItemSwapped?.Invoke(inventoryItem, replaced);
                 inventoryStorage.RemoveItem(inventoryItem);
                 inventoryStorage.AddItem(replaced);
@@ -75,6 +76,9 @@ namespace InventorySystem
 
             CurrentWeight += inventoryItem.ItemBase.Weight;
             equipmentItems[category][slot] = inventoryItem;
+
+            inventoryItem.ApplyAllModifiers(playerController.Statistic);
+
             OnItemEquipped?.Invoke(inventoryItem, slot);
 
             return true;
@@ -100,6 +104,9 @@ namespace InventorySystem
             if(item == null) return false;
 
             CurrentWeight -= item.ItemBase.Weight;
+
+            item.RevertAllModifiers(playerController.Statistic);
+
             OnItemUnequipped?.Invoke(item);
             equipmentItems[slotCategory][slotIndex] = null;
 

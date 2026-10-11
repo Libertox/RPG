@@ -41,7 +41,7 @@ namespace StateMachines
 
             current.State?.Update();
 
-            Debug.Log(current.State?.ToString());
+            //Debug.Log(current.State?.ToString());
         }
 
         private void FixedUpdate()

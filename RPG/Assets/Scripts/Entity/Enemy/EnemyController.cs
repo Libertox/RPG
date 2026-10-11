@@ -42,12 +42,12 @@ namespace Entity.Enemy
         {
             _agent = GetComponent<NavMeshAgent>();
 
-            _agent.speed = EnemyData.MovementSpeed;
+            _agent.speed = EnemyData.BaseMovementSpeed;
             _agent.angularSpeed = EnemyData.RotationSpeed;
             _agent.acceleration = EnemyData.Acceleration;
             isPatroling = true;
 
-            RegisterController(new MeleeCombatController(attackCollisionPoint, EnemyData.CombatData));
+            RegisterController(new MeleeCombatController(attackCollisionPoint, Statistic, EnemyData.TargetsLayerMask));
         }
 
         private void Update()

@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec875a4fddd051d4db45f17c6e3eedc8, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  <MovementSpeed>k__BackingField: 2
+  <BaseMovementSpeed>k__BackingField: 2
   <BaseHealth>k__BackingField: 10
   <BaseLevel>k__BackingField: 1
-  <CombatData>k__BackingField:
-    <TargetLayerMask>k__BackingField:
-      serializedVersion: 2
-      m_Bits: 256
-    <AttackRange>k__BackingField: 1
-    <Damage>k__BackingField: 4
+  <TargetsLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 256
+  <BaseAttackRange>k__BackingField: 2
+  <BaseAttackDamage>k__BackingField: 10
   <RotationSpeed>k__BackingField: 360
   <Acceleration>k__BackingField: 8
   <PlayerDetectionRadius>k__BackingField: 4

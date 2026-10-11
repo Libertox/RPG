@@ -50,7 +50,7 @@ namespace Entity.Player
         private void SetupRefernces()
         {
             RegisterController(new PlayerMotionController(this, inputManager, PlayerData, playerPresentation));
-            RegisterController(new MeleeCombatController(attackCollisionPoint, PlayerData.CombatData));
+            RegisterController(new MeleeCombatController(attackCollisionPoint, Statistic, PlayerData.TargetsLayerMask));
         }
 
 
@@ -78,7 +78,7 @@ namespace Entity.Player
         public float GetMovementSpeed()
         {
             float speed = PlayerInventory.Weight >= PlayerData.MaxLiftingCapacity 
-                ? PlayerData.EncumberedSpeed : PlayerData.MovementSpeed;
+                ? PlayerData.EncumberedSpeed : Statistic.MovementSpeed.Value;
 
             return speed;
         }

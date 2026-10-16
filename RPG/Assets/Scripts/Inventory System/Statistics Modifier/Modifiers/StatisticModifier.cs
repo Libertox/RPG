@@ -1,26 +1,25 @@
-﻿
-
-using Entity;
-using Mono.Cecil;
+﻿using Entity;
 using Utility;
 
-namespace InventorySystem.StatisticModifier
+namespace InventorySystem.StatisticModifiers
 {
     public abstract class StatisticModifier
     {
         protected readonly IValueModifier valueModifier;
-        protected readonly float modifierValue;
-        public ModifierType Type { get; private set; }
+        protected readonly StatisticModifierConfig config;
+
+        public StatisticModifierConfig Config => config;
 
         protected float originalValue;
 
-        public StatisticModifier(ModifierType modifierType, float modifierValue)
+        public StatisticModifier(StatisticModifierConfig statisticModifierConfig)
         {
-            this.valueModifier = ValueModifierFactory.Create(modifierType);
-            this.modifierValue = modifierValue;
-            Type = modifierType;
+            this.valueModifier = ValueModifierFactory.Create(statisticModifierConfig.ModifierType);
+          
+            this.config = statisticModifierConfig;
         }
 
+        public abstract float GetModifiedValue(EntityStatistic entityStatistic);
         public abstract void Apply(EntityStatistic entityStatistic);
         public abstract void Revert(EntityStatistic entityStatistic);
     }

@@ -34,10 +34,10 @@ namespace InventorySystem
 
         public bool AddItem(InventorySlot item)
         {
-            if (item == null || item.ItemBase == null || item.Amount <= 0)
+            if (item == null || item.ItemConfig == null || item.Amount <= 0)
                 return false;
  
-            var itemBase = item.ItemBase;
+            var itemBase = item.ItemConfig;
             var amountToAdd = item.Amount;
 
             if (!items.TryGetValue(itemBase.Category, out var list))
@@ -55,7 +55,7 @@ namespace InventorySystem
             {
                 var remainingAmount = amountToAdd;
 
-                foreach (var stack in list.Where(i => i.ItemBase == itemBase).OrderBy(i => i.Amount))
+                foreach (var stack in list.Where(i => i.ItemConfig == itemBase).OrderBy(i => i.Amount))
                 {
                     var spaceLeft = itemBase.MaxStackSize - stack.Amount;
 
@@ -92,15 +92,15 @@ namespace InventorySystem
 
         public bool RemoveItem(InventorySlot inventoryItem)
         {
-            if (inventoryItem == null || inventoryItem.ItemBase == null)
+            if (inventoryItem == null || inventoryItem.ItemConfig == null)
                 return false;
 
-            Debug.Log($"Removing {inventoryItem.Amount} of {inventoryItem.ItemBase.Name} from inventory");
+            Debug.Log($"Removing {inventoryItem.Amount} of {inventoryItem.ItemConfig.Name} from inventory");
 
-            if (!items[inventoryItem.ItemBase.Category].Remove(inventoryItem))
-                items[inventoryItem.ItemBase.Category].Remove(FindInventoryItem(inventoryItem.ItemBase, inventoryItem.Amount));
+            if (!items[inventoryItem.ItemConfig.Category].Remove(inventoryItem))
+                items[inventoryItem.ItemConfig.Category].Remove(FindInventoryItem(inventoryItem.ItemConfig, inventoryItem.Amount));
 
-            CurrentWeight -= inventoryItem.ItemBase.Weight * inventoryItem.Amount;
+            CurrentWeight -= inventoryItem.ItemConfig.Weight * inventoryItem.Amount;
 
             return true;
         }
@@ -110,7 +110,7 @@ namespace InventorySystem
             if (item == null) return null;
             if (!items.TryGetValue(item.Category, out var list)) return null;
 
-            return list.FirstOrDefault(i => i.ItemBase == item && i.Amount == amount);
+            return list.FirstOrDefault(i => i.ItemConfig == item && i.Amount == amount);
         }
 
         public List<InventorySlot> GetItemsInCategory(ItemCategory category)
@@ -125,7 +125,7 @@ namespace InventorySystem
                 Debug.Log($"Category: {category}");
                 foreach (var item in items[category])
                 {
-                    Debug.Log($"Item: {item.ItemBase.Name}, Amount: {item.Amount}");
+                    Debug.Log($"Item: {item.ItemConfig.Name}, Amount: {item.Amount}");
                 }
             }
         }

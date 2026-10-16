@@ -64,15 +64,15 @@ namespace InventorySystem.UI
 
         private bool Matches(InventorySlot item, int index)
         {
-            return item.ItemBase.EquipmentSlot == slotCategory && index == slotIndex;
+            return item.ItemConfig.EquipmentSlot == slotCategory && index == slotIndex;
         }
 
         private void Refresh()
         {
             var item = equipment.GetEquipped(slotCategory, slotIndex);
-            SetIcon(item != null ? item.ItemBase.Icon : slotCategory.Icon);
-            SetAmountLabel(item != null && item.ItemBase.CanStack ? item.Amount : 0);
-            SetBackground(item?.ItemBase.Rarity.Presentation);
+            SetIcon(item != null ? item.ItemConfig.Icon : slotCategory.Icon);
+            SetAmountLabel(item != null && item.ItemConfig.CanStack ? item.Amount : 0);
+            SetBackground(item?.ItemConfig.Rarity.Presentation);
         }
 
         private void SetIcon(Sprite icon)
@@ -120,7 +120,7 @@ namespace InventorySystem.UI
         {
             if (item == null) return false;
 
-            if (slotCategory != item.ItemBase.EquipmentSlot)
+            if (slotCategory != item.ItemConfig.EquipmentSlot)
                 return false;
 
             equipment.TryEquipItem(item, slotIndex);

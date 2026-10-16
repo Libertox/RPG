@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace InventorySystem.StatisticModifier
+namespace InventorySystem.StatisticModifiers
 {
     [CreateAssetMenu(fileName = "Health Modifier", menuName = "ScriptableObjects/Statistic Modifier/Health Modifier")]
     public class HealthModifierConfig : StatisticModifierConfig
     {
         public override StatisticModifier Create()
         {
-            return new HealthModifier(ModifierType, ModifierValue);
+            return new HealthModifier(this);
         }    
     }
 }

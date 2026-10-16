@@ -1,19 +1,23 @@
 ﻿using Entity;
+using InventorySystem.StatisticModifiers;
+using System;
 using System.Collections.Generic;
 
 namespace InventorySystem
 {
     public class InventorySlot
     {
-        public ItemConfigBase ItemBase { get; }
-        public List<StatisticModifier.StatisticModifier> statisticModifiers;
+        public ItemConfigBase ItemConfig { get; }  
         public int Amount;
+
+        public StatisticModifier MainModifier { get; private set; }
+        public List<StatisticModifier> AllModifiers { get; private set; }
 
         public InventorySlot(ItemConfigBase itemBase, int amount)
         {
-            ItemBase = itemBase;
+            ItemConfig = itemBase;
             Amount = amount;
-            statisticModifiers = new();
+            AllModifiers = new();
 
             SetupStatisticModifers(itemBase);
         }
@@ -21,29 +25,55 @@ namespace InventorySystem
         private void SetupStatisticModifers(ItemConfigBase itemBase)
         {
             if (itemBase.MainStatisticModifier)
-                statisticModifiers.Add(itemBase.MainStatisticModifier.Create());
+            {
+                var statisticModifier = itemBase.MainStatisticModifier.Create();
+
+                MainModifier = statisticModifier;
+            }
+             
 
             foreach (var modifier in itemBase.AdditionalStatisticModifiers)
             {
-                statisticModifiers.Add(modifier.Create());
+                AllModifiers.Add(modifier.Create());
             }
-        }
-
-        public List<StatisticModifier.StatisticModifier> GetStatisticModifiers()
-        {
-            return statisticModifiers;
         }
 
         public void ApplyAllModifiers(EntityStatistic entityStatistic)
         {
-            foreach (var modifier in statisticModifiers)
+            MainModifier.Apply(entityStatistic);
+
+            foreach (var modifier in AllModifiers)
                 modifier.Apply(entityStatistic);
         }
 
         public void RevertAllModifiers(EntityStatistic entityStatistic)
         {
-            foreach (var modifier in statisticModifiers)
+            MainModifier.Revert(entityStatistic);
+
+            foreach (var modifier in AllModifiers)
                 modifier.Revert(entityStatistic);
+        }
+
+        public bool ContainModifierType(Type modifierType)
+        {
+            foreach (var modifier in AllModifiers)
+            {
+                if (modifier.GetType() == modifierType)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public StatisticModifier GetModifierByType(Type modifierType) 
+        {
+            foreach (var modifier in AllModifiers)
+            {
+                if (modifier.GetType() == modifierType)
+                    return modifier;
+            }
+
+            return null;
         }
     }
 }

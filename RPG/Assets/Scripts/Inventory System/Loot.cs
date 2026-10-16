@@ -34,7 +34,7 @@ namespace InventorySystem
         {
             if (item == null) return;
 
-            var findedItem = items.Find((targetItem) => targetItem.ItemBase == item.ItemBase);
+            var findedItem = items.Find((targetItem) => targetItem.ItemConfig == item.ItemConfig);
 
             if (findedItem != null)
             {
@@ -42,7 +42,7 @@ namespace InventorySystem
             }
             else
             {
-                items.Add(new InventorySlot(item.ItemBase, item.Amount));
+                items.Add(new InventorySlot(item.ItemConfig, item.Amount));
             }
         }
     }

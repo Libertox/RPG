@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using InventorySystem.StatisticModifiers;
 
 namespace InventorySystem
 {
@@ -37,10 +38,10 @@ namespace InventorySystem
 
         public bool TryEquipItem(InventorySlot inventoryItem)
         {
-            if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
+            if (inventoryItem == null || !inventoryItem.ItemConfig.CanEquip)
                 return false;
 
-            EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;
+            EquipmentSlotCategory category = inventoryItem.ItemConfig.EquipmentSlot;
             int slot = GetEmptySlotIndex(category);
 
             return TryEquipItem(inventoryItem, slot);
@@ -48,13 +49,13 @@ namespace InventorySystem
 
         public bool TryEquipItem(InventorySlot inventoryItem, int slot)
         {
-            if (inventoryItem == null || !inventoryItem.ItemBase.CanEquip)
+            if (inventoryItem == null || !inventoryItem.ItemConfig.CanEquip)
                 return false;
 
-            if (inventoryItem.ItemBase.RequiredLevel > playerController.Statistic.Level.Value)
+            if (inventoryItem.ItemConfig.RequiredLevel > playerController.Statistic.Level.Value)
                 return false;
 
-            EquipmentSlotCategory category = inventoryItem.ItemBase.EquipmentSlot;
+            EquipmentSlotCategory category = inventoryItem.ItemConfig.EquipmentSlot;
 
             if (slot == INVALID_SLOT)
                 slot = equipmentItems[category].Length - 1;
@@ -68,7 +69,7 @@ namespace InventorySystem
                 OnItemSwapped?.Invoke(inventoryItem, replaced);
                 inventoryStorage.RemoveItem(inventoryItem);
                 inventoryStorage.AddItem(replaced);
-                CurrentWeight -= replaced.ItemBase.Weight;
+                CurrentWeight -= replaced.ItemConfig.Weight;
             }
 
             if (replaced == null)
@@ -76,7 +77,7 @@ namespace InventorySystem
                 inventoryStorage.RemoveItemAndNotify(inventoryItem);
             }
 
-            CurrentWeight += inventoryItem.ItemBase.Weight;
+            CurrentWeight += inventoryItem.ItemConfig.Weight;
             equipmentItems[category][slot] = inventoryItem;
 
             inventoryItem.ApplyAllModifiers(playerController.Statistic);
@@ -101,7 +102,7 @@ namespace InventorySystem
 
         private void RefreshItemModifiers()
         {
-            List<StatisticModifier.StatisticModifier> statisticModifiers = new();
+            List<StatisticModifier> statisticModifiers = new();
 
             foreach (var item in equipmentItems)
             {
@@ -111,15 +112,17 @@ namespace InventorySystem
 
                     item.Value[i].RevertAllModifiers(playerController.Statistic);
 
-                    statisticModifiers.AddRange(item.Value[i].GetStatisticModifiers());
+                    if (item.Value[i].MainModifier != null)
+                        statisticModifiers.Add(item.Value[i].MainModifier);
+
+                    statisticModifiers.AddRange(item.Value[i].AllModifiers);
                 }            
             }
 
-            statisticModifiers = statisticModifiers.OrderByDescending(modifier => modifier.Type).ToList();
+            statisticModifiers = statisticModifiers.OrderByDescending(modifier => modifier.Config.ModifierType).ToList();
 
             foreach (var modifier in statisticModifiers)
             {
-                Debug.Log(modifier.Type);
                 modifier.Apply(playerController.Statistic);
             }
                       
@@ -133,7 +136,7 @@ namespace InventorySystem
 
             if (item == null) return false;
 
-            CurrentWeight -= item.ItemBase.Weight;
+            CurrentWeight -= item.ItemConfig.Weight;
 
             item.RevertAllModifiers(playerController.Statistic);
 
@@ -148,6 +151,11 @@ namespace InventorySystem
         public InventorySlot GetEquipped(EquipmentSlotCategory slotCategory, int slotIndex)
         {
             return equipmentItems[slotCategory][slotIndex];
+        }
+
+        public bool IsEquipmentSlotEmpty(EquipmentSlotCategory slotCategory, int slotIndex)
+        {
+            return equipmentItems[slotCategory][slotIndex] == null;
         }
     }
 }

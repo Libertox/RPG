@@ -1,31 +1,43 @@
-﻿
-
-using Entity.Player;
+﻿using Entity.Player;
+using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
+using Utility;
 using Zenject;
 
 namespace InventorySystem.UI
 {
     public class ItemInformationUI : UIElement<ItemInformationUI>
     {
-        [Header("Item Information Refernces")]
-        [SerializeField] private TextMeshProUGUI itemName;
-        [SerializeField] private TextMeshProUGUI categoryName;
-        [SerializeField] private TextMeshProUGUI rarityName;
+        [Header("Base References")]
+        [SerializeField] private TextMeshProUGUI itemNameText;
+        [SerializeField] private TextMeshProUGUI categoryNameText;
+        [SerializeField] private TextMeshProUGUI rarityNameText;
 
-        [SerializeField] private TextMeshProUGUI requiredLevelLabel;
-        [SerializeField] private TextMeshProUGUI weightLabel;
-        [SerializeField] private TextMeshProUGUI goldLabel;
+        [SerializeField] private TextMeshProUGUI weightText;
+        [SerializeField] private TextMeshProUGUI goldText;
+
+        [Header("Required Level References")]
+        [SerializeField] private TextMeshProUGUI requiredLevelText;
+        [SerializeField] private Color requiredLevelMetColor;
+        [SerializeField] private Color requiredLevelNotMetColor;
+
+        [Header("Statistic Refernces")]
+
+        [SerializeField] private StatisticText mainStatsText;
+
+        [SerializeField] private StatisticText statTextPrefab;
+        [SerializeField] private Transform statsContainer;
+
 
         [Header("Comparison References")]
-        [SerializeField] private GameObject comparisonItemLabel;
-        [SerializeField] private TextMeshProUGUI comparisonValue;
-        [SerializeField] private Color betterComparisonColor;
-        [SerializeField] private Color worseComparisonColor;
+        [SerializeField] private GameObject comparisonInputLabel;
 
         private PlayerController playerController;
+        private ComponentPool<StatisticText> additionalStatsPool;
+        private List<StatisticText> displayedStatisticTexts = new();
 
         [Inject]
         private void Construct(PlayerController playerController)
@@ -33,38 +45,102 @@ namespace InventorySystem.UI
             this.playerController = playerController;
         }
 
-
-        public void Setup(ItemConfigBase item)
+        private void Awake()
         {
-            itemName.SetText(item.Name);
-            categoryName.SetText(item.Category.Name);
-            rarityName.SetText(item.Rarity.Name);
-            rarityName.color = item.Rarity.Color;
+            additionalStatsPool = new(statTextPrefab, statsContainer);
+        }
 
-            Color requiredLevelColor = item.RequiredLevel > playerController.Statistic.Level.Value ? worseComparisonColor : itemName.color;
+        public void Setup(InventorySlot item)
+        {
+            ItemConfigBase itemConfig = item.ItemConfig;
+
+            itemNameText.SetText(itemConfig.Name);
+            weightText.SetText(itemConfig.Weight.ToString());
+            goldText.SetText(itemConfig.Gold.ToString());
+
+            UpdateCategory(itemConfig.Category);
+            UpdateRarity(itemConfig.Rarity);
+
+            UpdateRequiredLevel(itemConfig);
+            UpdateItemStats(item);
+        }
+
+        private void UpdateItemStats(InventorySlot item)
+        {
+            string mainStatDescription = item.MainModifier != null ? item.MainModifier.Config.GetDescription() : "";
+            mainStatsText.UpdateDescription(mainStatDescription);
+
+            foreach (var text in displayedStatisticTexts)
+                additionalStatsPool.Release(text);
+
+            displayedStatisticTexts.Clear();
+
+            foreach (var modifier in item.AllModifiers)
+            {
+                var statText = additionalStatsPool.Get();
+
+                statText.UpdateDescription(modifier.Config.GetDescription());
+                displayedStatisticTexts.Add(statText);
+            }
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(statsContainer.transform as RectTransform);
+        }
+
+        private void UpdateRequiredLevel(ItemConfigBase itemConfig)
+        {
+            Color requiredLevelColor = itemConfig.RequiredLevel > playerController.Statistic.Level.Value ? requiredLevelNotMetColor : requiredLevelMetColor;
             string levelColor = ColorUtility.ToHtmlStringRGB(requiredLevelColor);
-            requiredLevelLabel.SetText($"Required Level: <color=#{levelColor}>{item.RequiredLevel}</color>");
-            weightLabel.SetText(item.Weight.ToString());
-            goldLabel.SetText(item.Gold.ToString());
+            requiredLevelText.SetText($"Required Level: <color=#{levelColor}>{itemConfig.RequiredLevel}</color>");
+        }
 
+        private void UpdateRarity(RarityCategory rarity)
+        {
+            rarityNameText.SetText(rarity.Name);
+            rarityNameText.color = rarity.Color;
+        }
 
+        private void UpdateCategory(ItemCategory category)
+        {
+            categoryNameText.SetText(category.Name);
         }
 
         public void ActiveComparisonItemLabel(bool active)
         {
-            comparisonItemLabel.SetActive(active);
+            comparisonInputLabel.SetActive(active);
+        }
+        public void SetupComparisonItems(InventorySlot currentItem, InventorySlot comparedItem)
+        {
+            UpdateMainStatComparison(currentItem, comparedItem);
+            UpdateAdditionalStatComparisons(currentItem, comparedItem);
         }
 
-        public void UpdateComparisonResult(float value)
+        private void UpdateMainStatComparison(InventorySlot currentItem, InventorySlot comparedItem)
         {
-            comparisonValue.SetText($"{(value > 0 ? '+' : '-')}{value}");
-            comparisonValue.color = value > 0 ? betterComparisonColor : worseComparisonColor;
+            mainStatsText.ActiveComparisonResult(true);
+
+            float currentValue = currentItem.MainModifier.GetModifiedValue(playerController.Statistic);
+            float comparedValue = comparedItem.MainModifier.GetModifiedValue(playerController.Statistic);
+
+            mainStatsText.UpdateComparisonResult(currentValue - comparedValue);
         }
 
-        public void ActiveComparisonResult(bool active)
+        private void UpdateAdditionalStatComparisons(InventorySlot currentItem, InventorySlot comparedItem)
         {
-            comparisonValue.gameObject.SetActive(active);
+            for (int i = 0; i < currentItem.AllModifiers.Count && i < displayedStatisticTexts.Count; i++)
+            {
+                var currentModifier = currentItem.AllModifiers[i];
+                var comparedModifier = comparedItem.GetModifierByType(currentModifier.GetType());
+
+                float currentValue = currentModifier.GetModifiedValue(playerController.Statistic);
+                float comparedValue = comparedModifier != null
+                    ? comparedModifier.GetModifiedValue(playerController.Statistic)
+                    : 0f;
+
+                displayedStatisticTexts[i].ActiveComparisonResult(true);
+                displayedStatisticTexts[i].UpdateComparisonResult(currentValue - comparedValue);
+            }
         }
+
 
         public void ShowAtPosition(Vector3 worldPosition)
         {
@@ -87,6 +163,14 @@ namespace InventorySystem.UI
         public void Hide()
         {
             gameObject.SetActive(false);
+        }
+
+        public void HideComparisonResults()
+        {
+            mainStatsText.ActiveComparisonResult(false);
+
+            foreach (var statText in displayedStatisticTexts)
+                statText.ActiveComparisonResult(false);
         }
 
     }

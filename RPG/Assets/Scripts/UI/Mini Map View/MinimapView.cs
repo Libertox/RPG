@@ -1,7 +1,8 @@
-﻿using MiniMapSystem;
-using Entity.Player;
+﻿using Entity.Player;
+using MiniMapSystem;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 using Zenject;
 
 namespace UI.MinimapView
@@ -18,7 +19,7 @@ namespace UI.MinimapView
         private Vector2 miniMapScale;
         private PlayerController playerController;
         private MinimapController minimapController;
-        private MinimapIconPool iconPool;
+        private ComponentPool<MinimapIcon> iconPool;
 
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _staticIcons = new();
         private readonly Dictionary<IMinimapEntity, MinimapIcon> _dynamicIcons = new();
@@ -60,12 +61,12 @@ namespace UI.MinimapView
                 _dynamicIcons.Remove(minimapEntity);
             }
 
-            iconPool.ReleaseMinimapIcon(icon);
+            iconPool.Release(icon);
         }
 
         private void OnMinimapEntityAdded(IMinimapEntity minimapEntity)
         {
-            MinimapIcon icon = iconPool.GetMinimapIcon()
+            MinimapIcon icon = iconPool.Get()
                 .SetIcon(minimapEntity.MarkerData.Icon)
                 .SetSize(minimapEntity.MarkerData.Size)
                 .SetPosition(ConvertWorldPositionToMinimapPosition(minimapEntity.Position));

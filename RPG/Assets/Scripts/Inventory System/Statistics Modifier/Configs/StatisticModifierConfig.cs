@@ -2,7 +2,7 @@
 using Utility;
 using Utility.Attribute;
 
-namespace InventorySystem.StatisticModifier
+namespace InventorySystem.StatisticModifiers
 {
     public abstract class StatisticModifierConfig : ScriptableObject
     {
@@ -15,5 +15,13 @@ namespace InventorySystem.StatisticModifier
         [field: SerializeField, ShowIf(nameof(IsRangeModifier))] public RandomValue ModifierValueRange {  get; private set; }
 
         public abstract StatisticModifier Create();
+
+        public string GetDescription()
+        {
+            string sign = ModifierType == ModifierType.Addition ? "" : "%";
+            float value = ModifierType == ModifierType.Addition ? ModifierValue : ModifierValue * 100;
+
+            return $"+{value}{sign} {Description}";
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using InputSystem;
-using TMPro;
-using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -10,7 +8,6 @@ namespace InventorySystem.UI
     public class ItemDescriptionView : MonoBehaviour
     {
         [SerializeField] private ItemInformationUI selectedItemInformation;
-
         [SerializeField] private ItemInformationUI equippedItemInformation;
 
         private SelectInventorySlotSignal selectInventorySlotSignal;
@@ -18,7 +15,7 @@ namespace InventorySystem.UI
         private InputManager inputManager;
         private PlayerInventory playerInventory;
 
-        private ItemConfigBase selectedItem;
+        private InventorySlot selectedItem;
 
         [Inject]
         private void Construct(SelectInventorySlotSignal selectInventorySlotSignal, 
@@ -37,7 +34,7 @@ namespace InventorySystem.UI
 
         private void OnItemSlotSelected(InventorySlotUI slot)
         {
-            selectedItem = slot.Item.ItemBase;
+            selectedItem = slot.Item;
 
             selectedItemInformation.ShowAtPosition(slot.GetRightBottomCornerPosition());
             selectedItemInformation.Setup(selectedItem);
@@ -57,35 +54,29 @@ namespace InventorySystem.UI
         {
             if (!CanShowEquippedItemInformation()) return;
 
-            var equippedItem = playerInventory.Equipment.GetEquipped(selectedItem.EquipmentSlot, 0);
+            var equippedItem = playerInventory.Equipment.GetEquipped(selectedItem.ItemConfig.EquipmentSlot, 0);
 
             equippedItemInformation.ShowAtPosition(selectedItemInformation.GetRightTopCornerPosition());
-            equippedItemInformation.Setup(equippedItem.ItemBase);
+            equippedItemInformation.Setup(equippedItem);
 
-            var equippedItemComparable = equippedItem.ItemBase as IComparableItem;
-            var selectedItemComparable = selectedItem as IComparableItem;
-
-            equippedItemInformation.ActiveComparisonResult(true);
-            selectedItemInformation.ActiveComparisonResult(true);
-
-            equippedItemInformation.UpdateComparisonResult(equippedItemComparable.ComparisonValue - selectedItemComparable.ComparisonValue);
-            selectedItemInformation.UpdateComparisonResult(selectedItemComparable.ComparisonValue - equippedItemComparable.ComparisonValue);
+            equippedItemInformation.SetupComparisonItems(equippedItem, selectedItem);
+            selectedItemInformation.SetupComparisonItems(selectedItem, equippedItem);
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(equippedItemInformation.transform as RectTransform);
         }
 
         private bool CanShowEquippedItemInformation()
         {
-            return selectedItem is IComparableItem 
-                && playerInventory.Equipment.GetEquipped(selectedItem.EquipmentSlot, 0) != null;
+            return selectedItem.ItemConfig.CanCompare
+                && !playerInventory.Equipment.IsEquipmentSlotEmpty(selectedItem.ItemConfig.EquipmentSlot, 0);
         }
 
         private void HideEquippedItemInformation()
         {
             equippedItemInformation.Hide();
 
-            equippedItemInformation.ActiveComparisonResult(false);
-            selectedItemInformation.ActiveComparisonResult(false);
+            equippedItemInformation.HideComparisonResults();
+            selectedItemInformation.HideComparisonResults();
         }
 
         private void OnItemSlotDeselected()

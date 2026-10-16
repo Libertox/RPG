@@ -10,8 +10,12 @@ namespace Entity
         public ObservableFloat AttackRange { get; private set; }
         public ObservableFloat MovementSpeed { get; private set; }
 
+        public EntityData EntityData { get; private set; }
+
         public EntityStatistic(EntityData entityData)
         {
+            EntityData = entityData;
+
             Health = new (entityData.BaseHealth);
             Level = new (entityData.BaseLevel);
             AttackDamage = new(entityData.BaseAttackDamage);

@@ -18,7 +18,7 @@ namespace InventorySystem.UI
             gameObject.SetActive(true);
             HoldItem = item;
             this.startSlot = startSlot;
-            SetIcon(HoldItem.ItemBase.Icon);
+            SetIcon(HoldItem.ItemConfig.Icon);
         }
 
         private void SetIcon(Sprite icon)

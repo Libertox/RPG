@@ -37,7 +37,7 @@ namespace InventorySystem.UI
         {
             if(item == null) return false;
 
-            if (item.ItemBase.Category != itemCategory) return false;
+            if (item.ItemConfig.Category != itemCategory) return false;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(SlotsContainer, InputManager.GetMousePosition(), null, out Vector2 localPoint);
 
@@ -65,7 +65,7 @@ namespace InventorySystem.UI
 
             if (node == null) return null;
 
-            if (node.Slot.Item.ItemBase.RequiredLevel > playerController.Statistic.Level.Value)
+            if (node.Slot.Item.ItemConfig.RequiredLevel > playerController.Statistic.Level.Value)
                 return null;
 
             return node.Slot.Item;
@@ -156,7 +156,7 @@ namespace InventorySystem.UI
 
         public void RemoveItemFromGrid(InventorySlot item)
         {
-            Debug.Log("RemoveItemFromGrid: " + item.ItemBase.Name);
+            Debug.Log("RemoveItemFromGrid: " + item.ItemConfig.Name);
 
             var node = FindNodeByItem(item);
             if (node == null) return;
@@ -179,14 +179,14 @@ namespace InventorySystem.UI
                 return false;
             }
 
-            var itemSettings = item.ItemBase;
+            var itemSettings = item.ItemConfig;
 
             SlotsContainer.sizeDelta = new Vector2(SlotsContainer.sizeDelta.x, CONTAINER_HEIGHT);
 
             currentColumn = column;
             currentRow = row;
 
-            while (!CanPlaceItem(new Vector2Int(currentColumn, currentRow), item.ItemBase.InventorySize))
+            while (!CanPlaceItem(new Vector2Int(currentColumn, currentRow), item.ItemConfig.InventorySize))
             {
                 IncreaseColumnCount();
             }
@@ -221,7 +221,7 @@ namespace InventorySystem.UI
 
             IncreaseColumnCount();
 
-            Debug.Log("AddItemToGrid: " + item.ItemBase.Name);
+            Debug.Log("AddItemToGrid: " + item.ItemConfig.Name);
 
             return true;
         }

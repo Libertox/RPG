@@ -48,7 +48,7 @@ namespace InventorySystem.UI
 
         private void OnItemSwapInInventory(InventorySlot currentItem, InventorySlot newItem)
         {
-            var grid = inventoryCategorySelector.GetGrid(newItem.ItemBase.Category);
+            var grid = inventoryCategorySelector.GetGrid(newItem.ItemConfig.Category);
 
             if (grid == null) return;
 
@@ -64,7 +64,7 @@ namespace InventorySystem.UI
         {
             if (item == null) return;
 
-            var grid = inventoryCategorySelector.GetGrid(item.ItemBase.Category);
+            var grid = inventoryCategorySelector.GetGrid(item.ItemConfig.Category);
 
             if (grid == null) return;
 

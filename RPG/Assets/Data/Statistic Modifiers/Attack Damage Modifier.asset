@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b52f65c213ca9b4c97c88b9b32c2a48, type: 3}
   m_Name: Attack Damage Modifier
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem.StatisticModifier.AttackDamageModifier
-  <Description>k__BackingField: 
+  <Description>k__BackingField: Damage
   <ModifierType>k__BackingField: 0
   <IsRangeModifier>k__BackingField: 0
   <ModifierValue>k__BackingField: 20

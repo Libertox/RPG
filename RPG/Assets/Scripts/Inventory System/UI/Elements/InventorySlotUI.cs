@@ -41,12 +41,12 @@ namespace InventorySystem.UI
         {
             Item = item;
 
-            icon.sprite = item.ItemBase.Icon;
-            background.sprite = item.ItemBase.Rarity.Presentation;
+            icon.sprite = item.ItemConfig.Icon;
+            background.sprite = item.ItemConfig.Rarity.Presentation;
             amount.SetText(item.Amount.ToString());
-            amount.gameObject.SetActive(item.ItemBase.CanStack);
+            amount.gameObject.SetActive(item.ItemConfig.CanStack);
 
-            paddlockIcon.SetActive(item.ItemBase.RequiredLevel > playerController.Statistic.Level.Value);
+            paddlockIcon.SetActive(item.ItemConfig.RequiredLevel > playerController.Statistic.Level.Value);
 
             return this;
         }

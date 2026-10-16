@@ -24,5 +24,8 @@ MonoBehaviour:
   <EquipmentSlot>k__BackingField: {fileID: 11400000, guid: e8b922373622f6a4f9c4db05404bb564, type: 2}
   <CanStack>k__BackingField: 0
   <MaxStackSize>k__BackingField: 1
+  <CanCompare>k__BackingField: 1
   <MainStatisticModifier>k__BackingField: {fileID: 11400000, guid: 41ccd0e83883b914ab82064ce52b5392, type: 2}
-  <AdditionalStatisticModifiers>k__BackingField: []
+  <AdditionalStatisticModifiers>k__BackingField:
+  - {fileID: 11400000, guid: d8f1df935f8c33d4f8e813d26aecf3da, type: 2}
+  - {fileID: 11400000, guid: a44973091d1066d469b27f6f22a038ef, type: 2}

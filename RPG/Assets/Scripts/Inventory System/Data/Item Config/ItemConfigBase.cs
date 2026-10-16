@@ -1,5 +1,4 @@
-﻿using Entity.Player;
-using InventorySystem.StatisticModifier;
+﻿using InventorySystem.StatisticModifiers;
 using UnityEngine;
 using Utility.Attribute;
 
@@ -14,7 +13,7 @@ namespace InventorySystem
         [field: SerializeField] public RarityCategory Rarity { get; private set; }
 
 
-        [field: Header("Statistics")]
+        [field: Header("Base Statistics")]
         [field: SerializeField] public float Weight { get; private set; }
         [field: SerializeField] public float Gold { get; private set; }
         [field: SerializeField] public float RequiredLevel { get; private set; }
@@ -26,7 +25,10 @@ namespace InventorySystem
         [field: SerializeField, ShowIf(nameof(CanEquip))] public EquipmentSlotCategory EquipmentSlot { get; private set; }
         [field: SerializeField] public bool CanStack { get; private set; } = true;
         [field: SerializeField, ShowIf(nameof(CanStack))] public int MaxStackSize { get; private set; } = 1;
+        [field: SerializeField] public bool CanCompare { get; private set; }
 
+
+        [field: Header("Modifiers")]
         [field: SerializeField] public StatisticModifierConfig MainStatisticModifier { get; private set; }
         [field: SerializeField] public StatisticModifierConfig[] AdditionalStatisticModifiers { get; private set; }
     }

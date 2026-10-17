@@ -1,9 +1,7 @@
 ﻿using Entity.Player;
 using InputSystem;
-using System;
 using UI;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace InventorySystem.UI
@@ -11,8 +9,12 @@ namespace InventorySystem.UI
     public class InventoryView : UIViewBase
     {
         [Header("Refernces")]
+        [SerializeField] private InventoryDragController dragController;
+        [SerializeField] private InventorySortController sortController;
         [SerializeField] private InventoryCategorySelector inventoryCategorySelector;
         [SerializeField] private UIVisualizer[] inventoryVisualizers;
+
+        [SerializeField] private UIViewSO itemFilteringView;
 
         private PlayerController playerController;
         private InputManager inputManager;
@@ -83,20 +85,27 @@ namespace InventorySystem.UI
             inputManager.EnableUIActions(true);
 
             inputManager.OnCancelPressed += OpenPreviousView;
-            inputManager.OnSortItemsPressed += SortGrid;
+            inputManager.OnFilterItemsPressed += OpenFilteringView;
+
+            dragController.SubscribeInputEvents();
+            sortController.SubscribeInputEvents();
         }
 
-        private void SortGrid()
+        private void OpenFilteringView()
         {
-            inventoryCategorySelector.GetCurrentGrid().Sort();
+            _= viewManager.TryOpenView(itemFilteringView, false, false);
         }
 
+ 
         public override void UnsubscribeToInputEvents()
         {
             inputManager.EnableUIActions(false);
 
             inputManager.OnCancelPressed -= OpenPreviousView;
-            inputManager.OnSortItemsPressed -= SortGrid;
+            inputManager.OnFilterItemsPressed -= OpenFilteringView;
+
+            dragController.UnsubscribeInputEvents();
+            sortController.UnsubscribeInputEvents();
         }
 
         private async void OpenPreviousView()

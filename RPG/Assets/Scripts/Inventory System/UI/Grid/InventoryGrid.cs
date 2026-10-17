@@ -84,9 +84,11 @@ namespace InventorySystem.UI
             RemoveUnusedNodes(items);
         }
 
-        public void Sort()
+        public void Sort(InventorySortStrategy inventorySortStrategy)
         {
             List<InventorySlot> inventorySlots = nodes.Keys.ToList();
+
+            inventorySortStrategy.Sort(inventorySlots);
 
             foreach (InventorySlot slot in inventorySlots)
             {

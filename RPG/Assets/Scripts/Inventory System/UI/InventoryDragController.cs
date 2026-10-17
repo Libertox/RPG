@@ -12,6 +12,8 @@ namespace InventorySystem.UI
         [SerializeField] private GraphicRaycaster raycaster;
         [SerializeField] private EventSystem eventSystem;
 
+        [SerializeField] private bool enableOnAwake;
+
         [SerializeField] private ItemHolder itemHolder;
 
         private InputManager inputManager;
@@ -22,10 +24,26 @@ namespace InventorySystem.UI
             this.inputManager = inputManager;
         }
 
-        private void Start()
+        private void OnEnable()
+        {
+            if (enableOnAwake)
+                SubscribeInputEvents();
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeInputEvents();
+        }
+
+        public void SubscribeInputEvents()
         {
             inputManager.OnLeftMouseHoldStarted += OnLeftMouseStartHolded;
             inputManager.OnLeftMouseHoldCanceled += OnLeftMouseCancelHolded;
+        }
+        public void UnsubscribeInputEvents()
+        {
+            inputManager.OnLeftMouseHoldStarted -= OnLeftMouseStartHolded;
+            inputManager.OnLeftMouseHoldCanceled -= OnLeftMouseCancelHolded;
         }
 
         private void OnLeftMouseCancelHolded()

@@ -711,6 +711,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FilterItems"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e20154d-2c35-41df-90f6-b4c19089f97f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1175,6 +1184,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""SortItems"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb8d197f-94de-42c4-8b03-eb4768ed6b1c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FilterItems"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1270,6 +1290,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_HoldLeftMouseButton = m_UI.FindAction("HoldLeftMouseButton", throwIfNotFound: true);
         m_UI_Compare = m_UI.FindAction("Compare", throwIfNotFound: true);
         m_UI_SortItems = m_UI.FindAction("SortItems", throwIfNotFound: true);
+        m_UI_FilterItems = m_UI.FindAction("FilterItems", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -1560,6 +1581,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_HoldLeftMouseButton;
     private readonly InputAction m_UI_Compare;
     private readonly InputAction m_UI_SortItems;
+    private readonly InputAction m_UI_FilterItems;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1628,6 +1650,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @SortItems => m_Wrapper.m_UI_SortItems;
         /// <summary>
+        /// Provides access to the underlying input action "UI/FilterItems".
+        /// </summary>
+        public InputAction @FilterItems => m_Wrapper.m_UI_FilterItems;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1695,6 +1721,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @SortItems.started += instance.OnSortItems;
             @SortItems.performed += instance.OnSortItems;
             @SortItems.canceled += instance.OnSortItems;
+            @FilterItems.started += instance.OnFilterItems;
+            @FilterItems.performed += instance.OnFilterItems;
+            @FilterItems.canceled += instance.OnFilterItems;
         }
 
         /// <summary>
@@ -1748,6 +1777,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @SortItems.started -= instance.OnSortItems;
             @SortItems.performed -= instance.OnSortItems;
             @SortItems.canceled -= instance.OnSortItems;
+            @FilterItems.started -= instance.OnFilterItems;
+            @FilterItems.performed -= instance.OnFilterItems;
+            @FilterItems.canceled -= instance.OnFilterItems;
         }
 
         /// <summary>
@@ -2029,5 +2061,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSortItems(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FilterItems" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFilterItems(InputAction.CallbackContext context);
     }
 }

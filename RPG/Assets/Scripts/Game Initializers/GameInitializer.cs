@@ -25,6 +25,7 @@ namespace Initializers
         {
             Container.DeclareSignal<DeselectInventorySlotSignal>();
             Container.DeclareSignal<SelectInventorySlotSignal>();
+            Container.DeclareSignal<SelectSortStrategySignal>();
 
             Container.BindInterfacesAndSelfTo<InputManager>().AsSingle();
 

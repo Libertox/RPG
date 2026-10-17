@@ -22,6 +22,7 @@ namespace InputSystem
         public event Action OnCompareHoldCanceled;
 
         public event Action OnSortItemsPressed;
+        public event Action OnFilterItemsPressed;
 
         public event Action OnLeftMouseClicked;
         public event Action OnRightMouseClicked;
@@ -69,11 +70,17 @@ namespace InputSystem
             inputActions.UI.Compare.canceled += OnHoldCompareButtonEnded;
 
             inputActions.UI.SortItems.started += OnSortItemsButtonPerformed;
+            inputActions.UI.FilterItems.started += OnFilterItemButtonStarted;
         }
 
         private void OnSortItemsButtonPerformed(InputAction.CallbackContext action)
         {
             OnSortItemsPressed?.Invoke();
+        }
+
+        private void OnFilterItemButtonStarted(InputAction.CallbackContext action)
+        {
+            OnFilterItemsPressed?.Invoke();
         }
 
         private void OnHoldCompareButtonEnded(InputAction.CallbackContext action)
@@ -199,6 +206,7 @@ namespace InputSystem
             inputActions.UI.Compare.canceled -= OnHoldCompareButtonEnded;
 
             inputActions.UI.SortItems.started -= OnSortItemsButtonPerformed;
+            inputActions.UI.FilterItems.started -= OnFilterItemButtonStarted;
         }
 
         public void Dispose()

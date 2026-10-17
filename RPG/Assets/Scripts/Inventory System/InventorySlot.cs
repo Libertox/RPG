@@ -40,7 +40,7 @@ namespace InventorySystem
 
         public void ApplyAllModifiers(EntityStatistic entityStatistic)
         {
-            MainModifier.Apply(entityStatistic);
+            MainModifier?.Apply(entityStatistic);
 
             foreach (var modifier in AllModifiers)
                 modifier.Apply(entityStatistic);
@@ -48,7 +48,7 @@ namespace InventorySystem
 
         public void RevertAllModifiers(EntityStatistic entityStatistic)
         {
-            MainModifier.Revert(entityStatistic);
+            MainModifier?.Revert(entityStatistic);
 
             foreach (var modifier in AllModifiers)
                 modifier.Revert(entityStatistic);

@@ -149,7 +149,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -158,6 +158,50 @@ TextureImporter:
       bones: []
       spriteID: 1ebabc2cc8d15ed41af71f6d25697285
       internalID: -175235826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-&-mouse_sheet_default_3
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 392
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a041bbc0d402354caea36e347b621d8
+      internalID: -746687995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard-&-mouse_sheet_default_4
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 392
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e91c9cc648491864b9b3d93ae833946e
+      internalID: 472374787
       vertices: []
       indices: 
       edges: []
@@ -179,6 +223,8 @@ TextureImporter:
       keyboard-&-mouse_sheet_default_0: 935735691
       keyboard-&-mouse_sheet_default_1: -2084893529
       keyboard-&-mouse_sheet_default_2: -175235826
+      keyboard-&-mouse_sheet_default_3: -746687995
+      keyboard-&-mouse_sheet_default_4: 472374787
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

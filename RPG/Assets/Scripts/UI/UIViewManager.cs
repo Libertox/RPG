@@ -8,18 +8,17 @@ namespace UI
 {
     public class UIViewManager : MonoBehaviour
     {
-        private Dictionary<UIViewSO, UIViewBase> views;
-
+        private readonly Dictionary<UIViewSO, UIViewBase> views = new();
         private readonly Stack<UIViewBase> viewsStack = new();
 
         private bool isOpeningView;
 
         private void Awake()
         {
-            GatherViews();
+            GatherChildViews(transform);
         }
 
-        public async Task TryOpenView(UIViewSO menuID, bool closeOpenedViewFirst = false)
+        public async Task TryOpenView(UIViewSO menuID, bool closeOpenedViewFirst = false, bool closeCurrentView = true)
         {
             if (isOpeningView) return;
 
@@ -32,16 +31,18 @@ namespace UI
             UIViewBase peekView = TryPeekView();
             peekView?.UnsubscribeToInputEvents();
 
-            if (closeOpenedViewFirst)
+            if (closeOpenedViewFirst && closeCurrentView)
                 await peekView?.CloseAsync();
 
             await view.OpenAsync();
 
+            if (!closeOpenedViewFirst && closeCurrentView)
+                peekView?.Close();
+
+            await Awaitable.NextFrameAsync();
+
             view.SubscribeToInputEvents();
 
-            if (!closeOpenedViewFirst)
-                peekView?.Close();
-   
             viewsStack.Push(view);
 
             isOpeningView = false;
@@ -70,6 +71,9 @@ namespace UI
             view.UnsubscribeToInputEvents();
 
             peekView?.Open();
+
+            await Awaitable.NextFrameAsync();
+
             peekView?.SubscribeToInputEvents();
 
             await view.CloseAsync();
@@ -91,11 +95,9 @@ namespace UI
             viewsStack.Clear();
         }
 
-        private void GatherViews()
+        private void GatherChildViews(Transform root)
         {
-            views = new();
-
-            foreach (Transform child in transform)
+            foreach (Transform child in root)
             {
                 if (child.TryGetComponent(out UIViewBase view))
                 {
@@ -107,6 +109,8 @@ namespace UI
                         _= TryOpenView(view.ViewID);
                     }
                 }
+
+                GatherChildViews(child);
             }
         }
 

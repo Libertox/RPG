@@ -625,6 +625,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FilterItems",
+                    "type": "Button",
+                    "id": "7e20154d-2c35-41df-90f6-b4c19089f97f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1087,6 +1096,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SortItems",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb8d197f-94de-42c4-8b03-eb4768ed6b1c",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FilterItems",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

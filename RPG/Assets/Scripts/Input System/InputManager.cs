@@ -1,4 +1,3 @@
-using InputSystem.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;

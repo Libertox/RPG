@@ -17,8 +17,10 @@ namespace MiniMapSystem
         public bool IsStatic => isStaticMarker;
         public MinimapMarkerData MarkerData => markerData;
         public Vector3 Position => transform.position;
+        public bool IsSelected => isSelected;
 
         private MinimapController minimapController;
+        private bool isSelected; 
 
         [Inject]
         public void Construct(MinimapController minimapController)
@@ -32,7 +34,7 @@ namespace MiniMapSystem
                 Register();
         }
 
-        public void Register()
+        public virtual void Register()
         {
             minimapController.RegisterMinimapEntity(this);
         }
@@ -40,6 +42,18 @@ namespace MiniMapSystem
         public void Unregister()
         {
             minimapController?.UnregisterMinimapEntity(this);
+
+            Deselect();
+        }
+
+        public void Select()
+        {
+            isSelected = true;
+        }
+
+        public void Deselect()
+        {
+            isSelected = false;
         }
 
         protected virtual void OnDestroy()

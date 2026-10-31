@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   <BaseMovementSpeed>k__BackingField: 2
-  <BaseHealth>k__BackingField: 10
+  <BaseHealth>k__BackingField: 20
   <BaseLevel>k__BackingField: 1
   <TargetsLayerMask>k__BackingField:
     serializedVersion: 2

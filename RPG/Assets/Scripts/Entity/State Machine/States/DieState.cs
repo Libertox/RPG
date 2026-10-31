@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 namespace Entity
 {
     public class DieState : BaseState
@@ -10,7 +11,14 @@ namespace Entity
 
         public override void OnEnter()
         {
-            entityController.GetController<IAnimationController>().SetDieAnimation();
+            var animationController = entityController.GetController<IAnimationController>();
+
+            animationController.SetDieAnimation();
+
+            animationController.WaitForEndAnimation(AnimationName.DIE, () =>
+            {
+                Object.Destroy(entityController.gameObject);
+            });
         }
 
     }

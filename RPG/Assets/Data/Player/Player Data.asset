@@ -19,7 +19,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <BaseAttackRange>k__BackingField: 2
-  <BaseAttackDamage>k__BackingField: 10
+  <BaseAttackDamage>k__BackingField: 1
   <EncumberedSpeed>k__BackingField: 2
   <RotationSpeed>k__BackingField: 3
   <MaxLiftingCapacity>k__BackingField: 100

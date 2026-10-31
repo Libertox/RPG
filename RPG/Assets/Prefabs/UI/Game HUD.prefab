@@ -103,6 +103,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -186,6 +187,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af700e4cbc8cb3f4286a87e8d8e3d7cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ViewID>k__BackingField: {fileID: 0}
+  <OpenOnStart>k__BackingField: 0
+  inventoryViewID: {fileID: 0}
 --- !u!1 &4365347741928296254
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -19.800049, y: -298.40002}
+  m_AnchoredPosition: {x: -19.800049, y: -350.3}
   m_SizeDelta: {x: 270, y: 152.8985}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &6999805437804664507
@@ -417,6 +421,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

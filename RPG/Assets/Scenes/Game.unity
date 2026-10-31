@@ -1099,6 +1099,7 @@ GameObject:
   - component: {fileID: 659365983}
   - component: {fileID: 659365984}
   - component: {fileID: 659365985}
+  - component: {fileID: 659365986}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -1221,6 +1222,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7ae322060e603240903427729908758, type: 2}
   - {fileID: 11400000, guid: 2d290db53f7e55041a24103f1d3350a5, type: 2}
   entityController: {fileID: 659365977}
+--- !u!114 &659365986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659365976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a6cd83d8d51224db5a5c9f2215e060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniMapSystem.MinimapMarker
+  registerMarkerOnAwake: 1
+  isStaticMarker: 0
+  markerData: {fileID: 11400000, guid: e501cc9ea71b1b34c873634567257989, type: 2}
 --- !u!224 &732717406 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9040752540320868302, guid: b88f5cdae39a1ac4e82b377c21edfa2c, type: 3}

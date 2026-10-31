@@ -7,7 +7,6 @@ namespace QuestSystem
     public class QuestMiniMapMarker : MinimapMarker
     {
         [SerializeField] private Quest quest;
-
         [SerializeField] private QuestStep questStep;
 
         private QuestManager questManager;
@@ -53,6 +52,12 @@ namespace QuestSystem
         private void OnQuestStepStart()
         {
             Register();
+        }
+
+        public override void Register()
+        {
+            Select();
+            base.Register();        
         }
 
         protected override void OnDestroy()

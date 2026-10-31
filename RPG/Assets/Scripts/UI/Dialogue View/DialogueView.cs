@@ -47,6 +47,14 @@ namespace UI.DialogueView
         public void OpenView()
         {
             _= uIViewManager.TryOpenView(ViewID, true);
+
+            inputManager.EnableUIActions(true);
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            inputManager.EnableUIActions(false);
         }
 
         public async void OpenPreviewView()

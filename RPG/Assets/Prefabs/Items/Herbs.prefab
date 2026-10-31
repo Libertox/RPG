@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406caf48b3f6ac5429f29720cd43694f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBase: {fileID: 0}
+  itemBase: {fileID: 11400000, guid: 4d6ef54971324e34091b99dda4105632, type: 2}
   amount: 0
 --- !u!114 &4413056926687335262
 MonoBehaviour:
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d10392da1ab43441bbe2c4845872e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptIcon: {fileID: 0}
+  promptIcon: {fileID: 11400000, guid: 6c5e85537b5ff1044b0a112123566fce, type: 2}
   promptPosition: {fileID: 3176005142722073958}
 --- !u!135 &4391876080093874696
 SphereCollider:

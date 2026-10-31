@@ -1,5 +1,4 @@
 ﻿
-
 namespace InputSystem.Enums
 {
     public enum ControllerType

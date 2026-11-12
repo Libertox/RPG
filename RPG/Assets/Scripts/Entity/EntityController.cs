@@ -101,6 +101,11 @@ namespace Entity
             this.isDead = isDead;
         }
 
+        public virtual void DestroySelf()
+        {
+            
+        }
+
         private void OnDestroy()
         {
             foreach (var controller in controllers)

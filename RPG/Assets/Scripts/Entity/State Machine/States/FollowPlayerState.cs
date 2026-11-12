@@ -1,11 +1,11 @@
 ﻿
 namespace Entity.Enemy
 {
-    public class FollowState : BaseState
+    public class FollowPlayerState : BaseState
     {
         private readonly EnemyController enemyController;
 
-        public FollowState(EntityController entityController) : base(entityController)
+        public FollowPlayerState(EntityController entityController) : base(entityController)
         {
             enemyController = (EnemyController)entityController;
         }
@@ -26,7 +26,8 @@ namespace Entity.Enemy
             {
                 enemyController.RotateTowardsTarget();
 
-                enemyController.GetController<ICombatController>().SetIsAttacking(true);
+                if (enemyController.IsTargetAlive())
+                    enemyController.GetController<ICombatController>().SetIsAttacking(true);
             }
         }
     }

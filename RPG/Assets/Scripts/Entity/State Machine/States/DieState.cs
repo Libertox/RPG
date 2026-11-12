@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 namespace Entity
 {
     public class DieState : BaseState
@@ -17,7 +16,7 @@ namespace Entity
 
             animationController.WaitForEndAnimation(AnimationName.DIE, () =>
             {
-                Object.Destroy(entityController.gameObject);
+                entityController.DestroySelf();
             });
         }
 

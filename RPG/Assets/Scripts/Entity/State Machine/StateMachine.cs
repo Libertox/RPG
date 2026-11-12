@@ -40,8 +40,6 @@ namespace StateMachines
                 ChangeState(transition.To);
 
             current.State?.Update();
-
-            //Debug.Log(current.State?.ToString());
         }
 
         private void FixedUpdate()

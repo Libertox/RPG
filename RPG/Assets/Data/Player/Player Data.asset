@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player Data
   m_EditorClassIdentifier: Assembly-CSharp::Entity.Player.PlayerData
   <BaseMovementSpeed>k__BackingField: 4
-  <BaseHealth>k__BackingField: 100
+  <BaseHealth>k__BackingField: 20
   <BaseLevel>k__BackingField: 1
   <TargetsLayerMask>k__BackingField:
     serializedVersion: 2

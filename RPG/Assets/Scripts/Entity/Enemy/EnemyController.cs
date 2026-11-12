@@ -65,6 +65,11 @@ namespace Entity.Enemy
             return _agent.remainingDistance < 1.1f;
         }
 
+        public bool IsTargetAlive()
+        {
+            return !playerController.IsDead;
+        }
+
         public void FindFollowTarget()
         {
             if(playerController.IsDead)
@@ -108,6 +113,12 @@ namespace Entity.Enemy
         public void SetPatroling(bool isPatroling)
         {
             this.isPatroling = isPatroling;
+        }
+
+        public override void DestroySelf()
+        {
+            base.DestroySelf();
+            Destroy(gameObject);
         }
 
     }
